@@ -1,4 +1,4 @@
-import 'model/constants.js'
+import { WHITE, BLACK, SQUARES } from './constants.js'
 
 class Board {
 	constructor(player_white, player_black) {
@@ -9,39 +9,41 @@ class Board {
 		this.kings_positions = [0, 0];
 		this.has_castled = [false, false];
 		this.history = [];
-		this.initialize_board(this.player_white, this.player_black);
+		this.initializeBoard(this.player_white, this.player_black);
 	}
 
-	get_legal_moves_from_player(color){
-		all_legal_moves = [];
-		for (square=0; square < 128; square++) {
-			piece = this.board[square]
+	getLegalMovesFromPiece(piece, square){
+		return piece.GetLegalMoves(this.board, square);
+	}
+
+	getLegalMovesFromPlayer(color){
+		let all_legal_moves = [];
+		for (let square = 0; square < 128; square++) {
+			const piece = this.board[square]
 			// If there's a piece on this square and this piece belongs to the player
 			if (piece && piece.color === color){
-				all_legal_moves.push(get_legal_moves_from_piece(piece, square));
+				all_legal_moves.push(this.getLegalMovesFromPiece(piece, square));
 			}
 		}
 		return all_legal_moves;
 	}
 
-	get_legal_moves_from_piece(piece, square){
-		return piece.get_legal_moves(this.board, square);
-	}
-
-	initialize_board(player1, player2){
+	initializeBoard(player1, player2){
 		// TODO
 		// Get the deck of each player
 		// Put the pieces in the right squares
+		this.board[7] = {'name': 'ClassicPawn', 'color':WHITE}
+		this.board[67] = {'name': 'ClassicKing', 'color':BLACK}
 	}
 
-	make_move(move){
-		this.update_history(move);
+	makeMove(move){
+		this.updateHistory(move);
 
 		// Move the piece
-		this.board = this.board[move.from].move(move, board)
+		this.board = this.board[move.from].move(move, this.board)
 	}
 
-	update_history(move){
+	updateHistory(move){
 		this.history.push(move)
 	}
 }
@@ -57,9 +59,4 @@ function _file(i) {
 	return i & 15
 }
 
-function _swap_color(color){
-	if (color == WHITE){
-		return BLACK;
-	}
-	return WHITE;
-}
+export default Board
