@@ -1,5 +1,5 @@
 /**************************************************
-* GAME
+* CHESSBOARD
 ***************************************************/
 
 .chess-board {
@@ -70,4 +70,29 @@
 .chess-board .piece-container .piece {
     width: 100%;
     position: relative;
+}
+
+/**************************************************
+* GAME
+***************************************************/
+.chess-board-container .player-info{
+    display: flex;
+    align-items: left;
+}
+
+.chess-board-container .name-elo{
+    margin-left: 2em;
+    margin-bottom: 0.5em;
+    color: #b8b8b8;
+}
+
+.chess-board-container .name-elo .name{
+    font-weight: 600;
+    font-size: 0.7em;
+}
+
+.chess-board-container .name-elo .elo{
+    margin-left: 0.3em;
+    font-weight: 100;
+    font-size: 0.6em;
 }

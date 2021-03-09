@@ -1,20 +1,18 @@
-import { WHITE, BLACK, SQUARES } from './constants.js'
-import ClassicRook from './pieces/ClassicRook.js'
-import ClassicBishop from './pieces/ClassicBishop.js'
-import ClassicPawn from './pieces/ClassicPawn.js'
-import ClassicKnight from './pieces/ClassicKnight.js'
-import ClassicKing from './pieces/ClassicKing.js'
-import ClassicQueen from './pieces/ClassicQueen.js'
+import { WHITE, BLACK, SQUARES, swapColor } from './constants.js'
+import { createClassicDeck } from './utils.js';
+import { PIECE_MAPPING } from './pieces'
 
 class Board {
-	constructor(player_white, player_black) {
+	constructor(deck_white, deck_black) {
 		this.board = new Array(128);
 		this.color_to_move = WHITE; // White starts the game
-		this.player_white = player_white;
-		this.player_black = player_black;
-		this.kings_positions = [0, 0];
-		this.has_castled = [false, false];
+		this.deck_white = createClassicDeck();
+		this.deck_black = createClassicDeck();
+		this.kings_positions = {}
 		this.history = [];
+		this.game_over = false;
+		this.is_draw = false;
+		this.winner = null;
 		this.initializeBoard(this.player_white, this.player_black);
 	}
 
@@ -34,42 +32,79 @@ class Board {
 		return all_legal_moves;
 	}
 
-	initializeBoard(player1, player2){
-		// TODO
-		// Get the deck of each player
-		// Put the pieces in the right squares
-		//this.board[7] = {'name': 'ClassicPawn', 'color':WHITE}
-		//this.board[67] = {'name': 'ClassicKing', 'color':BLACK}
-		this.board[4] = new ClassicKing(BLACK);
-		this.board[0] = new ClassicRook(BLACK);
-		this.board[7] = new ClassicRook(BLACK);
-		this.board[68] = new ClassicBishop(BLACK);
-		this.board[116] = new ClassicKing(WHITE);
-		this.board[112] = new ClassicRook(WHITE);
-		this.board[119] = new ClassicRook(WHITE);
+	initializeBoard(){
+		let white_pieces = this.deck_white.getPiecesAsWhite()
+		let black_pieces = this.deck_black.getPiecesAsBlack()
+		for (const [square, piece_name] of Object.entries(white_pieces)){
+			this.board[square] = new PIECE_MAPPING[piece_name](WHITE);
+		}
+
+		for (const [square, piece_name] of Object.entries(black_pieces)){
+			this.board[square] = new PIECE_MAPPING[piece_name](BLACK);
+		}
+		this.updateKingPosition();
 	}
 
 	makeMove(move){
+		// If game is over we can't make moves anymore
+		if (this.game_over){
+			return this.game_over, this.is_draw, this.winner;
+		}
 		this.updateHistory(move);
 
 		// Move the piece
-		this.board = this.board[move.from].move(move, this.board)
+		this.board = this.board[move.from].move(move, this.board);
+
+		// Update where the kings are
+		this.updateKingPosition();
+
+		// Change turn
+		this.color_to_move = swapColor(this.color_to_move);
+
+		// Check if game is over
+		this.updateHasGameEnded();
+		return this.game_over, this.is_draw, this.winner;
 	}
 
 	updateHistory(move){
 		this.history.push(move)
 	}
-}
 
-/*****************************************************************************
-* UTILITY FUNCTIONS
-****************************************************************************/
-function _rank(i) {
-	return i >> 4
-}
+	updateKingPosition(){
+		for(let square = 0; square < 128; square++){
+			let piece = this.board[square];
+			if(piece && piece.isKing){
+				this.kings_positions[piece.color] = square;
+			}
+		}
+	}
 
-function _file(i) {
-	return i & 15
+	updateHasGameEnded(){
+		let is_checkmate = this.isCheckmate(this.color_to_move);
+		let is_stalemate = this.isStalemate(this.color_to_move);
+		if (is_checkmate || is_stalemate){
+			this.game_over = true
+			if (is_checkmate){
+				// The winner made the last move
+				this.winner = swapColor(this.color_to_move);
+			} else {
+				this.is_draw = true
+			}
+		}
+	}
+
+	isCheck(color){
+		let opponent_moves = this.getLegalMovesFromPlayer(swapColor(color))
+		return opponent_moves.includes(this.kings_positions[color]);
+	}
+
+	isCheckmate(color){
+		return !this.getLegalMovesFromPlayer(color) && this.isCheck(color);
+	}
+
+	isStalemate(color){
+		return !this.getLegalMovesFromPlayer(color) && !this.isCheck(color);
+	}
 }
 
 export default Board
