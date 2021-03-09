@@ -23,3 +23,6 @@ export function swapColor(color){
 	}
 	return WHITE;
 }
+
+// Elo Constant
+export const K = 18;
