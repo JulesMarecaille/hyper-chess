@@ -1,4 +1,10 @@
 import { WHITE, BLACK, SQUARES } from './constants.js'
+import ClassicRook from './pieces/ClassicRook.js'
+import ClassicBishop from './pieces/ClassicBishop.js'
+import ClassicPawn from './pieces/ClassicPawn.js'
+import ClassicKnight from './pieces/ClassicKnight.js'
+import ClassicKing from './pieces/ClassicKing.js'
+import ClassicQueen from './pieces/ClassicQueen.js'
 
 class Board {
 	constructor(player_white, player_black) {
@@ -13,7 +19,7 @@ class Board {
 	}
 
 	getLegalMovesFromPiece(piece, square){
-		return piece.GetLegalMoves(this.board, square);
+		return piece.getLegalMoves(this.board, square);
 	}
 
 	getLegalMovesFromPlayer(color){
@@ -32,8 +38,15 @@ class Board {
 		// TODO
 		// Get the deck of each player
 		// Put the pieces in the right squares
-		this.board[7] = {'name': 'ClassicPawn', 'color':WHITE}
-		this.board[67] = {'name': 'ClassicKing', 'color':BLACK}
+		//this.board[7] = {'name': 'ClassicPawn', 'color':WHITE}
+		//this.board[67] = {'name': 'ClassicKing', 'color':BLACK}
+		this.board[4] = new ClassicKing(BLACK);
+		this.board[0] = new ClassicRook(BLACK);
+		this.board[7] = new ClassicRook(BLACK);
+		this.board[68] = new ClassicBishop(BLACK);
+		this.board[116] = new ClassicKing(WHITE);
+		this.board[112] = new ClassicRook(WHITE);
+		this.board[119] = new ClassicRook(WHITE);
 	}
 
 	makeMove(move){
