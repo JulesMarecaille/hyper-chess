@@ -4,7 +4,6 @@
   "private": true,
   "description": "chess, but more.",
   "author": "Jules Marécaille & Octave Boutrolle",
-  "homepage": "https://github.com/JulesMarecaille/hyper-chess#readme",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",

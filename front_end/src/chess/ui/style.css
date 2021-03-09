@@ -1,0 +1,73 @@
+/**************************************************
+* GAME
+***************************************************/
+
+.chess-board {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.chess-board th.outer{
+    padding-right: .5em;
+}
+.chess-board td {
+    /*border: 1px solid #f1faee;*/
+    width: 2em;
+    height: 2em;
+    position: relative;
+}
+
+.chess-board td.clickable{
+    cursor: pointer;
+}
+.chess-board td.light {
+    background: #f1faee;
+}
+.chess-board td.light.selected{
+    background: #457b9d;
+}
+.chess-board td.dark {
+    background: #1d3557;
+}
+.chess-board td.dark.selected{
+    background: #457b9d;
+}
+
+.chess-board .option-marker-container{
+    z-index: 200;
+    height: 100%;
+    width: 100%;
+    position:absolute;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    top:0;
+    left:0;
+    pointer-events: none;
+}
+
+.chess-board .option-marker{
+    width: 0.8em;
+    height: 0.8em;
+    border-radius: 50%;
+    background: black;
+    opacity: 0.35;
+    margin: auto;
+}
+
+.chess-board td:hover .option-marker{
+    opacity: 0.7;
+}
+
+.chess-board .piece-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    z-index: 130;
+    position: relative;
+    margin: auto;
+}
+
+.chess-board .piece-container .piece {
+    width: 100%;
+    position: relative;
+}

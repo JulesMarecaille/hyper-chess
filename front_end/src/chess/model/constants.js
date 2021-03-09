@@ -1,7 +1,7 @@
-const WHITE = 0;
-const BLACK = 1;
+export const WHITE = 0;
+export const BLACK = 1;
 
-const SQUARES = {
+export const SQUARES = {
   a8:   0, b8:   1, c8:   2, d8:   3, e8:   4, f8:   5, g8:   6, h8:   7,
   a7:  16, b7:  17, c7:  18, d7:  19, e7:  20, f7:  21, g7:  22, h7:  23,
   a6:  32, b6:  33, c6:  34, d6:  35, e6:  36, f6:  37, g6:  38, h6:  39,
@@ -11,3 +11,15 @@ const SQUARES = {
   a2:  96, b2:  97, c2:  98, d2:  99, e2: 100, f2: 101, g2: 102, h2: 103,
   a1: 112, b1: 113, c1: 114, d1: 115, e1: 116, f1: 117, g1: 118, h1: 119
 };
+
+export const COLORS_NAME = {
+    0: "White",
+    1: "Black"
+}
+
+export function swapColor(color){
+	if (color === WHITE){
+		return BLACK;
+	}
+	return WHITE;
+}
