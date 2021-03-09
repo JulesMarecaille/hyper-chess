@@ -11,7 +11,7 @@ class Game extends React.Component {
             boardObject: new Board(null, null),
             player_to_move: WHITE,
             dragged_square: null,
-            selected_square: null,
+            selected_square: -1,
             highlighted_moves: []
         };
     }
@@ -19,14 +19,14 @@ class Game extends React.Component {
     // Events
     clickedSquare(square) {
         let piece = this.state.boardObject.board[square]
-        if (!this.state.selected_square && piece && piece.color === this.state.player_to_move){
+        if (this.state.selected_square === -1 && piece && piece.color === this.state.player_to_move){
             // Select player piece
             let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(piece, square);
             this.setState({
                 selected_square: square,
                 highlighted_moves: legal_piece_moves
             });
-        } else if (this.state.selected_square && this.state.highlighted_moves.includes(square)) {
+        } else if (this.state.selected_square !== -1 && this.state.highlighted_moves.includes(square)) {
             // Make move
             let move = {
                 from: this.state.selected_square,
@@ -35,14 +35,14 @@ class Game extends React.Component {
             };
             this.state.boardObject.makeMove(move);
             this.setState({
-                selected_square: null,
+                selected_square: -1,
                 highlighted_moves: [],
                 player_to_move: swapColor(this.state.player_to_move)
             });
         } else {
             // Reset click state
             this.setState({
-                selected_square: null,
+                selected_square: -1,
                 highlighted_moves: []
             });
         }
