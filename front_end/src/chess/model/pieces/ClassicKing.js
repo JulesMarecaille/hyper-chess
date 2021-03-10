@@ -1,16 +1,16 @@
 import { WHITE, BLACK, SQUARES } from '../constants.js'
 import Piece from './Piece.js'
 
-function isSquareChecked(board, square, color)
+function isSquareChecked(board, square, color, last_move)
 {
 	let index = 0;
 	let list = [];
-		
+
 	while (index < 128)
-	{	
+	{
 		if (board[index] && board[index].color !== color && board[index])
 		{
-			list = board[index].getLegalMoves(board, index, 0); 
+			list = board[index].getLegalMoves(board, index, last_move, 0);
 			if (list.includes(square))
 				return (true);
 		}
@@ -42,7 +42,7 @@ class ClassicKing extends Piece
 		this.is_king = true;
 	}
 
-	isRockable(board, target_pos, pos, index)
+	isRockable(board, target_pos, pos, index, last_move)
 	{
 		let target = this.behavior[index];
 		if (target & (1 << 4) && !this.moved)
@@ -53,7 +53,7 @@ class ClassicKing extends Piece
 				mate = board[target_pos - 2];
 				for (let k = 1; k <  4; k++)
 				{
-					if (isSquareChecked(board, pos - k, this.color)
+					if (isSquareChecked(board, pos - k, this.color, last_move)
 						|| !this.isEmpty(board, pos - k))
 						return (false);
 				}
@@ -63,7 +63,7 @@ class ClassicKing extends Piece
 				mate = board[target_pos + 1];
 				for (let k = 1; k <  3; k++)
 				{
-					if (isSquareChecked(board, pos + k, this.color)
+					if (isSquareChecked(board, pos + k, this.color, last_move)
 						|| !this.isEmpty(board, pos + k))
 						return (false);
 				}

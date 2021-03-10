@@ -1,6 +1,22 @@
 import { WHITE, BLACK, SQUARES } from '../constants.js'
 import Piece from './Piece.js'
 
+function passedByPawn(move)
+{
+	let list = [];
+	let min = Math.min(move.to, move.from);
+	let max = Math.max(move.to, move.from);
+
+	while (min < max)
+	{
+		min += 16;
+		if (min !== max)
+			list.push(min);
+		return (list);
+	}
+
+}
+
 class ClassicPawn extends Piece
 {
 	constructor(color)
@@ -10,7 +26,7 @@ class ClassicPawn extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 6, 5, 6, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -21,15 +37,32 @@ class ClassicPawn extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		super(color, behavior, 'ClassicPawn', 1);
+		this.is_pawn = true;
 	}
 
-	move(move_struct, board)
+	move(move_struct, board, last_move)
 	{
-		this.moved = true;
 		this.behavior[87] = 0;
-		board[move_struct.to] = board[move_struct.from];
-		board[move_struct.from] = null;
-		return (board);
+		this.behavior[151] = 0;
+
+		//Check if it is enPassant, if so, delete the pawn
+		if (this.checkPassant(board, move_struct.to, move_struct.from, last_move))
+			board[last_move.to] = null;
+		return (super.move(move_struct, board, last_move));
+	}
+
+	checkPassant(board, target_pos, pos, last_move)
+	{
+		if (board[pos] && board[pos].is_pawn)
+		{
+			if (last_move && board[last_move.to] && board[last_move.to].is_pawn)
+			{
+				let listes = passedByPawn(last_move);
+				if (listes && listes.includes(target_pos))
+					return (true);
+			}
+		}
+		return (false);
 	}
 
 }

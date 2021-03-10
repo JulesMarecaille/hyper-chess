@@ -109,7 +109,7 @@ function getLegalMovesFromPieceFromBoard(
 	opponent_last_move,
 	check_king_safety=true){
 	// Get where the piece can go to
-	let piece = board[square]
+	let piece = board[square];
 	let candidate_squares = piece.getLegalMoves(board, square, opponent_last_move);
 	let legal_moves = []
 	for (let candidate_square of candidate_squares){
