@@ -122,11 +122,16 @@ function getLegalMovesFromPieceFromBoard(
 				'player': piece.color
 			};
 			let tmp_board = cloneDeep(board)
+			let tmp_kings_positions = cloneDeep(kings_positions)
 			tmp_board = tmp_board[square].move(move, tmp_board, opponent_last_move);
+			// The king can escape
+			if (piece.is_king){
+				tmp_kings_positions[piece.color] = candidate_square;
+			}
 			// See if our opponent can capture our king after our move
 			// The opponent can capture our king regardless of his king safety
-			let opponent_moves = getLegalMovesFromPlayerFromBoard(tmp_board, swapColor(piece.color), kings_positions, move, false);
-			if (opponent_moves.includes(kings_positions[piece.color])){
+			let opponent_moves = getLegalMovesFromPlayerFromBoard(tmp_board, swapColor(piece.color), tmp_kings_positions, move, false);
+			if (opponent_moves.includes(tmp_kings_positions[piece.color])){
 				continue;
 			}
 		}

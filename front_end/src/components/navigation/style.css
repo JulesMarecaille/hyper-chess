@@ -1,0 +1,74 @@
+body{
+    --menu-background-color: #212529;
+    --menu-color: #f8f9fa;
+    --menu-border-color: #ced4da;
+    --menu-entry-selected-color: #1d3557;
+    --menu-entry-hover-background-color: #343a40;
+}
+
+
+
+a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.leftmenu{
+    background-color: var(--menu-background-color);
+    color: var(--menu-color);
+    height: 100vh;
+    width: 200px;
+    z-index: 1000;
+    /*border-right: 1.1px solid var(--menu-border-color);*/
+    position: fixed
+}
+
+.leftmenu .menu-title{
+    height: 48px;
+    padding: 2px 0px;
+    border-bottom: 1px dashed var(--menu-border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    overflow: hidden;
+}
+
+.leftmenu .content{
+    padding-top: 8px;
+}
+
+.leftmenu .content .entry{
+    font-size: 0.8em;
+    font-weight: 200;
+    height: 36px;
+    width: 100%;
+    margin: 0;
+    font-weight: 400;
+    position: relative;
+    text-decoration: none;
+    text-transform: none;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.leftmenu .content .entry:hover{
+    background-color: var(--menu-entry-hover-background-color);
+}
+
+.leftmenu .content .entry.selected{
+    background-color: var(--menu-entry-hover-color);
+    color: var(--menu-entry-selected-color);
+}
+
+.leftmenu .content .entry .name{
+    margin: 0;
+}
+
+.leftmenu .content .entry .icon{
+    font-size: 1.3em;
+    margin: 0 12px;
+}
