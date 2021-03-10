@@ -1,4 +1,25 @@
-import '../constants.js'
+import { WHITE, BLACK, SQUARES } from '../constants.js'
+
+function reverseBehavior(table)
+{
+	let top = 0;
+	let bottom = 224;
+
+	while (top < bottom)
+	{
+		let k = 0;
+		while (k < 16)
+		{
+			let tmp = table[top + k];
+			table[top + k] = table[bottom + k];
+			table[bottom + k] = tmp;
+			k++;
+		}
+		top += 16;
+		bottom -= 16;
+	}
+	return (table);
+}
 
 class Piece
 {
@@ -13,20 +34,26 @@ class Piece
 		this.behavior_size = 239;
 		this.behavior_offset = (this.behavior_size - 1) / 2;
 		this.is_king = false;
+		this.is_pawn = false;
 		this.name = name;
-    		this.color = color;
+    this.color = color;
 		this.moved = false;
-  	}
+		if (this.color === BLACK)
+		{
+			this.behavior = reverseBehavior(this.behavior);
+		}
+  }
+
 
 	//pour une BOARD donnée et une case SQUARE donnée, verifie toute les cases atteignables
 	//return une liste de case possible sous forme texte.
-	getLegalMoves(board, square, is_rock_check = true)
+	getLegalMoves(board, square, last_move, is_rock_check = true)
 	{
 		let pos;
 		let legal_move = [];
 		for (let k = 0; k < this.behavior_size; k++) //ballade sur les case d'attack
 		{
-			if ((pos = this.checkAvailableSquare(square, k, board, is_rock_check)) !== -1) 
+			if ((pos = this.checkAvailableSquare(square, k, board, last_move, is_rock_check)) !== -1)
 				legal_move.push(pos);
 		}
 		return legal_move;
@@ -34,7 +61,7 @@ class Piece
 
 	// Pour une piece d'ID defini, en position POS : verifie si la case d'index INDEX de sa matrice est possible à atteindre su la BOARD
 	// return le nom de la case si possible, null sinon
-	checkAvailableSquare(pos, index, board, is_rock_check)
+	checkAvailableSquare(pos, index, board, last_move, is_rock_check)
 	{
 		let target_pos = this.getTargetPos(index, pos);
 		if ((this.behavior[index] && this.isOnBoard(target_pos)))//si c'est une case atteignable et existante
@@ -46,12 +73,19 @@ class Piece
 				if (this.canSeeThrough(index))
 					return (target_pos);
 				else if (this.isInSight(board, pos, target_pos))
-					return (target_pos);
+					 return (target_pos);
 			}
-			if (is_rock_check && this.isRockable(board, target_pos, pos, index))
+			if (is_rock_check && this.isRockable(board, target_pos, pos, index, last_move))
+				return (target_pos);
+			if (this.checkPassant(board, target_pos, pos, last_move))
 				return (target_pos);
 		}
 		return (-1);
+	}
+
+	checkPassant(board, target_pos, pos, last_move)
+	{
+		return (false);
 	}
 
 	canAttackAlly(index)
@@ -176,7 +210,7 @@ class Piece
 		return true;
 	}
 
-	move(move_struct, board)
+	move(move_struct, board, last_move)
 	{
 		this.moved = true;
 		board[move_struct.to] = board[move_struct.from];
