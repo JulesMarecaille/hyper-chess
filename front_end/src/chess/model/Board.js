@@ -1,5 +1,6 @@
 import { WHITE, BLACK, SQUARES, swapColor } from './constants.js'
 import { createClassicDeck } from './utils.js';
+import { cloneDeep } from "lodash"
 import { PIECE_MAPPING } from './pieces'
 
 class Board {
@@ -9,6 +10,7 @@ class Board {
 		this.deck_white = createClassicDeck();
 		this.deck_black = createClassicDeck();
 		this.kings_positions = {}
+		this.is_check = {}
 		this.history = [];
 		this.game_over = false;
 		this.is_draw = false;
@@ -16,20 +18,12 @@ class Board {
 		this.initializeBoard(this.player_white, this.player_black);
 	}
 
-	getLegalMovesFromPiece(piece, square){
-		return piece.getLegalMoves(this.board, square);
+	getLegalMovesFromPiece(square){
+		return getLegalMovesFromPieceFromBoard(this.board, square, this.kings_positions, this.getLastMove(), true)
 	}
 
 	getLegalMovesFromPlayer(color){
-		let all_legal_moves = [];
-		for (let square = 0; square < 128; square++) {
-			const piece = this.board[square]
-			// If there's a piece on this square and this piece belongs to the player
-			if (piece && piece.color === color){
-				all_legal_moves.push(this.getLegalMovesFromPiece(piece, square));
-			}
-		}
-		return all_legal_moves;
+		return getLegalMovesFromPlayerFromBoard(this.board, color, this.kings_positions, this.getLastMove(), true)
 	}
 
 	initializeBoard(){
@@ -50,18 +44,14 @@ class Board {
 		if (this.game_over){
 			return this.game_over, this.is_draw, this.winner;
 		}
-		this.updateHistory(move);
-
 		// Move the piece
-		this.board = this.board[move.from].move(move, this.board);
+		this.board = this.board[move.from].move(move, this.board, this.getLastMove());
 
-		// Update where the kings are
+		this.updateHistory(move);
 		this.updateKingPosition();
 
 		// Change turn
 		this.color_to_move = swapColor(this.color_to_move);
-
-		// Check if game is over
 		this.updateHasGameEnded();
 		return this.game_over, this.is_draw, this.winner;
 	}
@@ -73,8 +63,9 @@ class Board {
 	updateKingPosition(){
 		for(let square = 0; square < 128; square++){
 			let piece = this.board[square];
-			if(piece && piece.isKing){
+			if(piece && piece.is_king){
 				this.kings_positions[piece.color] = square;
+				this.is_check[piece.color] = this.isCheck(piece.color);
 			}
 		}
 	}
@@ -105,6 +96,61 @@ class Board {
 	isStalemate(color){
 		return !this.getLegalMovesFromPlayer(color) && !this.isCheck(color);
 	}
+
+	getLastMove(){
+		return this.history.slice(-1)[0];
+	}
+}
+
+function getLegalMovesFromPieceFromBoard(
+	board,
+	square,
+	kings_positions,
+	opponent_last_move,
+	check_king_safety=true){
+	// Get where the piece can go to
+	let piece = board[square]
+	let candidate_squares = piece.getLegalMoves(board, square, opponent_last_move);
+	let legal_moves = []
+	for (let candidate_square of candidate_squares){
+		// Check if this move put our king in danger
+		if (check_king_safety){
+			// Simulate the piece move
+			let move = {
+				'to': candidate_square,
+				'from': square,
+				'player': piece.color
+			};
+			let tmp_board = cloneDeep(board)
+			tmp_board = tmp_board[square].move(move, tmp_board, opponent_last_move);
+			// See if our opponent can capture our king after our move
+			// The opponent can capture our king regardless of his king safety
+			let opponent_moves = getLegalMovesFromPlayerFromBoard(tmp_board, swapColor(piece.color), kings_positions, move, false);
+			if (opponent_moves.includes(kings_positions[piece.color])){
+				continue;
+			}
+		}
+		legal_moves.push(candidate_square);
+	}
+	return legal_moves;
+}
+
+function getLegalMovesFromPlayerFromBoard(
+	board,
+	color,
+	kings_positions,
+	opponent_last_move,
+	check_king_safety=true){
+	let all_legal_moves = [];
+	for (let square = 0; square < 128; square++) {
+		const piece = board[square]
+		// If there's a piece on this square and this piece belongs to the player
+		if (piece && piece.color === color){
+			let piece_moves = getLegalMovesFromPieceFromBoard(board, square, kings_positions, opponent_last_move, check_king_safety)
+			all_legal_moves = all_legal_moves.concat(piece_moves);
+		}
+	}
+	return all_legal_moves;
 }
 
 export default Board

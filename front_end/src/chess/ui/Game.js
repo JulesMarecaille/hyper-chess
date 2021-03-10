@@ -38,10 +38,15 @@ class Game extends React.Component {
 
     // Events
     clickedSquare(square) {
+        if (this.state.game_over){ return; }
         let piece = this.state.boardObject.board[square]
-        if (this.state.selected_square === -1 && piece && piece.color === this.state.boardObject.color_to_move){
+        if (this.state.selected_square !== square &&
+            piece &&
+            piece.color === this.state.boardObject.color_to_move &&
+            !this.state.highlighted_moves.includes(square))
+        {
             // Select player piece
-            let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(piece, square);
+            let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square);
             this.setState({
                 selected_square: square,
                 highlighted_moves: legal_piece_moves
@@ -94,6 +99,7 @@ class Game extends React.Component {
                 let is_selected = this.state.selected_square === square;
                 // The square can be clicked if it's a move option or if there's a piece belonging to the player on it
                 let is_clickable = (is_an_option || (piece && (piece.color === this.state.boardObject.color_to_move)));
+                let is_check = (piece && piece.is_king && this.state.boardObject.is_check[piece.color]);
                 row.push(
                     <Square square={square}
                             color={square_color}
@@ -102,6 +108,7 @@ class Game extends React.Component {
                             isSelected={is_selected}
                             isAnOption={is_an_option}
                             isClickable={is_clickable}
+                            isCheck={is_check}
                     />);
             }
             files.push(<th className="outer">{files_label[i]}</th>)

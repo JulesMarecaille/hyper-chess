@@ -8,6 +8,7 @@
 }
 .chess-board th.outer{
     padding-right: .5em;
+    font-size: 0.5em;
 }
 .chess-board td {
     /*border: 1px solid #f1faee;*/
@@ -32,8 +33,7 @@
     background: #457b9d;
 }
 
-.chess-board .option-marker-container{
-    z-index: 200;
+.chess-board .marker-container{
     height: 100%;
     width: 100%;
     position:absolute;
@@ -45,6 +45,14 @@
     pointer-events: none;
 }
 
+.chess-board .check.marker-container{
+    z-index: 50;
+}
+
+.chess-board .option.marker-container{
+    z-index: 200;
+}
+
 .chess-board .option-marker{
     width: 0.8em;
     height: 0.8em;
@@ -52,6 +60,16 @@
     background: black;
     opacity: 0.35;
     margin: auto;
+}
+
+.chess-board .check-marker{
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    background: red;
+    opacity: 0.8;
+    margin: auto;
+    filter: blur(0.5rem);
 }
 
 .chess-board td:hover .option-marker{
