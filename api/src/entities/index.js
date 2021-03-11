@@ -1,13 +1,20 @@
-const {Deck, initDeck} = require("./Deck.js");
-const {User, initUser} = require("./User.js");
-const { Sequelize, DataTypes } = require('sequelize');
+const {initDeck} = require("./Deck.js");
+const {initUser} = require("./User.js");
+const { Sequelize } = require('sequelize');
 
 module.exports = (connection) => {
-    initUser(connection)
-    initDeck(connection)
+    const User = initUser(connection)
+    const Deck = initDeck(connection)
 
     User.hasMany(Deck, {
-      foreignKey: 'user_id'
+      foreignKey: 'UserId'
     });
-    Deck.belongsTo(Player);
+    Deck.belongsTo(User);
+
+    User.addScope('decks', {
+        include: [
+            { model: Deck }
+        ]
+    });
+    return { User, Deck }
 }

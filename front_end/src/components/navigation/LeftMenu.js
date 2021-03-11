@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { MdHome, MdVideogameAsset, MdStore } from 'react-icons/md';
+import { MdHome, MdVideogameAsset, MdStore, MdPowerSettingsNew } from 'react-icons/md';
 import { FaChessBishop } from 'react-icons/fa';
-import './style.css'
+import '../style.css'
 
 class LeftMenu extends React.Component {
     state = {
@@ -40,6 +40,12 @@ class LeftMenu extends React.Component {
                             <span className="name">Shop</span>
                         </div>
                     </Link>
+                </div>
+                <div className="bottom content">
+                    <div className="entry" onClick={this.props.onLogout}>
+                        <MdPowerSettingsNew className="icon"/>
+                        <span className="name">Logout</span>
+                    </div>
                 </div>
             </div>
         </React.Fragment>)

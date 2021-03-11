@@ -1,5 +1,5 @@
 import Deck from './Deck'
-import Player from './Player'
+import User from './User'
 
 export function createClassicDeck(){
     let pieces = ['ClassicPawn', 'ClassicPawn', 'ClassicPawn', 'ClassicPawn',
@@ -9,6 +9,6 @@ export function createClassicDeck(){
     return new Deck(null, 'Classic Deck', pieces, null);
 }
 
-export function createPlayer(name){
-    return new Player(name);
+export function createUser(name){
+    return new User(name);
 }

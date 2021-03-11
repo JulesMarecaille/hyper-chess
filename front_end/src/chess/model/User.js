@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createClassicDeck } from './utils.js';
 import { K } from './constants.js';
 
-class Player {
+class User {
     constructor(name, id=null, elo=1000, decks=[]) {
         if(!id){
             this.id = uuidv4();
@@ -25,4 +25,4 @@ class Player {
     }
 }
 
-export default Player
+export default User

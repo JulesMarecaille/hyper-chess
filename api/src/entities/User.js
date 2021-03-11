@@ -1,16 +1,16 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
-class User extends Model{}
-module.exports.User = User
 module.exports.initUser = (connection) => {
-    User.init({
+    const User = connection.define('User', {
         id: {
             type: DataTypes.UUID,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true
         },
 
-        create_at:{
-            type: DataTypes.DATETIME,
+        created_at:{
+            type: DataTypes.DATE,
+            allowNull: false,
             defaultValue: Sequelize.NOW
         },
 
@@ -24,16 +24,25 @@ module.exports.initUser = (connection) => {
             allowNull: false
         },
 
-        elo: {
-            type: DataTypes.NUMBER,
+        password:{
+            type: DataTypes.STRING,
             allowNull: false
         },
 
-        decks: {
-
+        elo: {
+            type: DataTypes.INTEGER,
+            defaultValue: 1000,
+            allowNull: false
         }
     }, {
-        connection,
-        modelName: 'user'
+        defaultScope: {
+            attributes: ["id", "created_at", "name", "elo"]
+        },
+        scopes: {
+            logging: {
+                attributes: ["id", "email", "password"]
+            }
+        }
     })
+    return User;
 }

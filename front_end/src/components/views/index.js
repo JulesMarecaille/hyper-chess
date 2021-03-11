@@ -2,11 +2,7 @@ import ViewDecks from './ViewDecks'
 import ViewGame from './ViewGame'
 import ViewHome from './ViewHome'
 import ViewShop from './ViewShop'
+import ViewLogin from './ViewLogin'
+import ViewNewAccount from './ViewNewAccount'
 
-const views = {
-    ViewDecks: ViewDecks,
-    ViewGame: ViewGame,
-    ViewHome: ViewHome,
-    ViewShop: ViewShop
-}
-export default views
+export { ViewDecks, ViewGame, ViewHome, ViewShop, ViewLogin, ViewNewAccount}

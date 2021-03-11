@@ -7,8 +7,42 @@ class HyperChessAPI {
     }
 
     /*DEFINE FUNCTIONS*/
-    getPlayers(payload: any) {
-        return this._get(this.api_url + "players");
+    // Users
+    login(payload) {
+        return this._post("login", payload);
+    }
+
+    getAllUsers() {
+        return this._get("users")
+    }
+
+    getUser(user_id) {
+        return this._get("users/" + user_id)
+    }
+
+    newUser(payload) {
+        return this._post("users", payload)
+    }
+
+    // Decks
+    getAllDecksFromUser(user_id){
+        return this._get("decks/user/" + user_id)
+    }
+
+    getDeck(deck_id) {
+        return this._get("decks/" + deck_id)
+    }
+
+    updateDeck(deck_id, deck) {
+        return this._put("decks/" + deck_id, deck)
+    }
+
+    deleteDeck(deck_id){
+        return this._delete("decks/" + deck_id)
+    }
+
+    newDeck(deck){
+        return this._post("decks", deck)
     }
 
     /*UTILS*/
@@ -100,6 +134,10 @@ class HyperChessAPI {
                 reject(error);
             });
         });
+    }
+
+    setToken(token){
+        this.token = token
     }
 }
 
