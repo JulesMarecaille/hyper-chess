@@ -1,5 +1,6 @@
 import { SQUARES } from './constants.js'
 import { v4 as uuidv4 } from 'uuid';
+import { WHITE, BLACK } from './constants.js'
 
 class Deck {
     constructor(id=uuidv4(), name='New Deck', pieces=new Array(16), prefered_color=null) {
@@ -7,6 +8,7 @@ class Deck {
         this.name = name;
         this.pieces = pieces;
         this.prefered_color = prefered_color;
+        this.color = color;
     }
 
     addPiece(piece, position){

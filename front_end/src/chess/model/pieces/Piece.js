@@ -26,7 +26,7 @@ class Piece
 	//matrice des déplacement des différente pièces en bitwise : pour chaque pièce deux bits sont assigné, un de poids faible pour la capacité de se mouvoir,
 	//l'autre pour la capacité de manger. Le centre en 7,7 représente la piece, et au tour les différents codes.
 	//
-	constructor(color, behavior, name, label, score)
+	constructor(color, behavior, name, score, description)
 	{
 		this.score = score;
 		this.rockable = false;
@@ -39,6 +39,7 @@ class Piece
 		this.label = label;
     this.color = color;
 		this.moved = false;
+		this.description = description;
 		if (this.color === BLACK)
 		{
 			this.behavior = reverseBehavior(this.behavior);

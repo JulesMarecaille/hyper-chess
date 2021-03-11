@@ -20,7 +20,8 @@ class ClassicQueen extends Piece
 			0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0,
 			0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0,
 			3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3];
-		super(color, behavior, 'ClassicQueen', 'Classic Queen', 9);
+		let description = "move on diagonals and on lines : one of the strongest pieces";
+		super(color, behavior, 'ClassicQueen', 9, description);
 	}
 
 }

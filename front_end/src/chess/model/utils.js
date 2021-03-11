@@ -11,4 +11,20 @@ export function createClassicDeck(){
 
 export function createUser(name){
     return new User(name);
+  }
+
+export function createClassicKnightDeck(){
+    let pieces = ['ClassicPawn', 'ClassicPawn', 'ClassicPawn', 'ClassicPawn',
+                  'ClassicPawn', 'ClassicPawn', 'ClassicPawn', 'ClassicPawn',
+                  'ClassicRook', 'ClassicKnight', 'ClassicKnight', 'ClassicQueen',
+                  'ClassicKing', 'ClassicKnight', 'ClassicKnight', 'ClassicRook']
+    return new Deck(null, 'Classic Knight Deck', pieces, null);
+}
+
+export function createClassicQueenDeck(){
+    let pieces = ['ClassicPawn', 'ClassicPawn', 'ClassicPawn', 'ClassicPawn',
+                  'ClassicPawn', 'ClassicPawn', 'ClassicPawn', 'ClassicPawn',
+                  'ClassicQueen', 'ClassicPawn', 'ClassicPawn', 'ClassicQueen',
+                  'ClassicKing', 'ClassicPawn', 'ClassicPawn', 'ClassicQueen']
+    return new Deck(null, 'Classic Queen Deck', pieces, null);
 }
