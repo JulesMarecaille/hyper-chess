@@ -38,7 +38,8 @@ class ClassicKing extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		super(color, behavior, 'ClassicKing', 'Classic King', 1);
+			let description = "Can move to 1 square, loose him, loose the game.";
+		super(color, behavior, 'ClassicKing', 1, description);
 		this.is_king = true;
 	}
 

@@ -1,3 +1,15 @@
+body{
+    --color-light: #f1faee;
+    --color-dark: #1d3557;
+    --color-dark-selected: #457b9d;
+    --color-light-selected: #457b9d;
+    --color-background: #343a40;
+    --color-typo: #ced4da;
+    --menu-color: #f8f9fa;
+    --menu-background-color: #212529;
+  }
+
+
 /**************************************************
 * CHESSBOARD
 ***************************************************/
@@ -17,20 +29,22 @@
     position: relative;
 }
 
+
+
 .chess-board td.clickable{
     cursor: grab;
 }
 .chess-board td.light {
-    background: #f1faee;
+    background: var(--color-light);
 }
 .chess-board td.light.selected{
-    background: #457b9d;
+    background: var(--color-light-selected);
 }
 .chess-board td.dark {
-    background: #1d3557;
+    background: var(--color-dark);
 }
 .chess-board td.dark.selected{
-    background: #457b9d;
+    background: var(--color-dark-selected);
 }
 
 .chess-board .marker-container{
@@ -124,4 +138,72 @@
     margin-left: 0.3em;
     font-weight: 100;
     font-size: 0.6em;
+}
+
+/**************************************************
+* DECK
+***************************************************/
+.pieceDeckDark{
+  width: 2em;
+  height: 2em;
+
+}
+
+.dark{
+    background: var(--color-dark);
+}
+
+.pieceDecklight{
+  width: 2em;
+  height: 2em;
+  background: var(--color-light);
+}
+
+.line{
+  align-content: center;
+  display: flex;
+}
+
+.deckInfo{
+  background: var(--menu-background-color);
+  width : 10em;
+  margin-bottom: 5%;
+}
+
+.allDeck{
+
+}
+
+.filter{
+  filter: contrast(30%);
+}
+
+.test{
+  align-content: center;
+  display: flex;
+  background: #ff0033;
+}
+
+.textWrap{
+  margin-left: 5%;
+  margin-bottom: 1.5%;
+  margin-right: 5%;
+}
+
+.deckCase{
+    margin-left: 1.5%;
+    margin-bottom: 1.5%;
+    margin-right: 1.5%;
+    margin-top: 0.2%;
+    width: 100%;
+}
+
+.totalDeckCase{
+      display: flex;
+      margin-bottom:1%;
+}
+
+.deck {
+  background: var(--menu-background-color);
+  width : 100%;
 }

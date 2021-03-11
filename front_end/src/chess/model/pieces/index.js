@@ -13,3 +13,7 @@ export const PIECE_MAPPING = {
     "ClassicKing": ClassicKing,
     "ClassicQueen": ClassicQueen,
 }
+
+export const piece_list = ["ClassicBishop", "ClassicPawn", "ClassicRook",
+                          "ClassicKnight", "ClassicKing", "ClassicQueen"];
+export const nbr_pieces = 6;

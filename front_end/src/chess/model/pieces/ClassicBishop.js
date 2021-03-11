@@ -20,7 +20,8 @@ class ClassicBishop extends Piece
 			0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0,
 			0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
 			3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3];
-		super(color, behavior, 'ClassicBishop', 'Classic Bishop', 3);
+			let description = "move in diagonals";
+		super(color, behavior, 'ClassicBishop', 3, description);
 	}
 
 }
