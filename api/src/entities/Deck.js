@@ -1,16 +1,16 @@
-const { Model } = require('sequelize');
-class Deck extends Model{}
-module.exports.Deck = Deck
+const { Sequelize, Model, DataTypes } = require('sequelize');
 module.exports.initDeck = (connection) => {
-    Deck.init({
+    const Deck = connection.define('Deck', {
         id: {
             type: DataTypes.UUID,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            defaultValue: Sequelize.UUIDV4,
+            primaryKey: true
         },
 
-        create_at:{
-            type: DataTypes.DATETIME,
+        created_at:{
+            type: DataTypes.DATE,
+            allowNull: false,
             defaultValue: Sequelize.NOW
         },
 
@@ -19,12 +19,21 @@ module.exports.initDeck = (connection) => {
             allowNull: false
         },
 
-        elo: {
-            type: DataTypes.NUMBER,
-            allowNull: false
+        pieces: {
+            type: DataTypes.ARRAY(DataTypes.STRING),
+            allowNull:false,
+            defaultValue: []
         },
+
+        prefered_color: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        }
     }, {
-        connection,
-        modelName: 'deck'
-    })
+        defaultScope: {
+        },
+        scopes: {
+        }
+    });
+    return Deck;
 }

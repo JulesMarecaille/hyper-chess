@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 class ViewGame extends React.Component {
     state = {
     }

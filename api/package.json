@@ -5,10 +5,13 @@
     "description": "chess but more, The API.",
     "author": "Jules Marécaille & Octave Boutrolle",
     "dependencies": {
+        "bcrypt-nodejs": "^0.0.3",
         "body-parser": "^1.19.0",
         "cors": "^2.8.5",
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
+        "pg": "^8.5.1",
+        "pg-hstore": "^2.3.3",
         "sequelize": "^6.5.0"
     }
 }
