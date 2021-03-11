@@ -8,8 +8,8 @@ class ViewDeck extends React.Component {
     render() {
         return (
         <React.Fragment>
-            <Decks name="Your Library Of Decks"
-            user={createUser("Octave")}/>
+            <p>This is the Decks pages</p>
+            <Decks name="first library of decks" owner={createPlayer("Octave")}/>
         </React.Fragment>)
     }
 }
