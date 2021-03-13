@@ -1,7 +1,4 @@
 import React from 'react'
-import Game from '../../chess/ui/Game.js'
-import { WHITE, BLACK } from '../../chess/model/constants.js';
-import { createUser } from '../../chess/model/utils.js';
 
 class ViewHome extends React.Component {
     state = {
@@ -10,9 +7,7 @@ class ViewHome extends React.Component {
     render() {
         return (
         <React.Fragment>
-            <Game side={WHITE}
-                  whitePlayer={createUser("Jules")}
-                  blackPlayer={createUser("Octave")}/>
+            <p>This is the home</p>
         </React.Fragment>)
     }
 }

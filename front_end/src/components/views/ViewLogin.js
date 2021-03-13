@@ -72,7 +72,7 @@ class ViewLogin extends React.Component {
                         </div>
                         <div className="input-container">
                             <label for="passwordInput">Password</label>
-                            <input type="password" id="passwordInput" name="password" maxlength="300"
+                            <input type="password" id="passwordInput" name="password" maxLength="300"
                             value={this.state.password} onChange={this.handleTextTyped.bind(this)}/>
                         </div>
                         <div className="form-buttons">

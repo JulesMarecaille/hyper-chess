@@ -3,12 +3,13 @@ import Board from '../model/Board'
 import Square from './Square'
 import './style.css'
 import { WHITE, BLACK } from '../model/constants.js'
+import { socket } from '../../connection/socket';
 
 class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            boardObject: new Board(null, null),
+            boardObject: new Board(this.props.whiteDeck, this.props.blackDeck),
             dragged_square: -1,
             selected_square: -1,
             highlighted_moves: [],
@@ -17,23 +18,12 @@ class Game extends React.Component {
             draw: null
         };
     }
-    // Logic
-    endGame() {
-        // update elo
-        let white_elo = this.props.whitePlayer.elo;
-        let black_elo = this.props.blackPlayer.elo;
-        let white_result = 0;
-        let black_result = 0;
-        if (this.state.winner === BLACK){
-            black_result = 1;
-        } else if (this.state.winner == WHITE) {
-            white_result = 1;
-        } else {
-            white_result = 0.5;
-            black_result = 0.5;
-        }
-        this.props.whitePlayer.updateElo(white_result, black_elo);
-        this.props.blackPlayer.updateElo(black_result, white_elo);
+
+    componentDidMount(){
+        socket.on("opponentMove", (move) => {
+            console.log(move)
+            this.makeMove(move);
+        });
     }
 
     // Events
@@ -43,6 +33,7 @@ class Game extends React.Component {
         if (this.state.selected_square !== square &&
             piece &&
             piece.color === this.state.boardObject.color_to_move &&
+            piece.color === this.props.side &&
             !this.state.highlighted_moves.includes(square))
         {
             // Select player piece
@@ -54,27 +45,33 @@ class Game extends React.Component {
         } else if (this.state.selected_square !== -1 && this.state.highlighted_moves.includes(square)) {
             // Make move
             let move = {
+                game_id: this.props.game_id,
                 from: this.state.selected_square,
                 to: square,
-                player: this.state.boardObject.color_to_move
+                player_color: this.state.boardObject.color_to_move
             };
-            let game_over, is_draw, winner = this.state.boardObject.makeMove(move);
-            this.setState({
-                selected_square: -1,
-                highlighted_moves: [],
-                game_over: game_over,
-                is_draw: is_draw,
-                winner: winner
-            });
-            if (this.state.game_over){
-                this.endGame();
-            }
+            this.makeMove(move);
+            socket.emit("makeMove", move);
         } else {
             // Reset click state
             this.setState({
                 selected_square: -1,
                 highlighted_moves: []
             });
+        }
+    }
+
+    makeMove(move){
+        let game_over, is_draw, winner = this.state.boardObject.makeMove(move);
+        this.setState({
+            selected_square: -1,
+            highlighted_moves: [],
+            game_over: game_over,
+            is_draw: is_draw,
+            winner: winner
+        });
+        if (this.state.game_over){
+            this.props.onGameOver(winner);
         }
     }
 
@@ -119,22 +116,13 @@ class Game extends React.Component {
         return chessboard;
     }
 
-    drawPlayerInfo(player){
-        let player_name = [<span className="name">{player.name}</span>, <span className="elo">({player.elo})</span>]
-        let player_name_elo = [<div className="name-elo">{player_name}</div>]
-        let player_info = [<div class="player-info">{player_name_elo}</div>]
-        return player_info;
-    }
-
     render() {
         return (
         <React.Fragment>
-        <div className="chess-board-container">
-            {this.props.side === BLACK ? this.drawPlayerInfo(this.props.whitePlayer) : this.drawPlayerInfo(this.props.blackPlayer)}
+        <div>
             <table className="chess-board">
                 {this.drawChessBoard()}
             </table>
-            {this.props.side === BLACK ? this.drawPlayerInfo(this.props.blackPlayer) : this.drawPlayerInfo(this.props.whitePlayer)}
         </div>
         </React.Fragment>)
     }

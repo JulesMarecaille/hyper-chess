@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt-nodejs");
+const config = require("../config.js")
 
 exports.sendOkResponse = (res, object) => {
     res.setHeader("Content-Type", "application/json");
@@ -13,7 +14,6 @@ exports.checkAuth = (connection, token) => {
         if (!token) {
             reject({ auth: false, message: "No token provided." });
         }
-
         jwt.verify(token, config.secret, (err, decoded) => {
             if (err) {
                 reject({ auth: false, message: "Failed to authenticate token." });
@@ -21,14 +21,30 @@ exports.checkAuth = (connection, token) => {
             User.findOne({ where: {id: decoded.id}}).then((user) => {
                 resolve(user);
             });
+        })
+    });
+}
+
+exports.checkAuthNoDatabase = (token) => {
+    return new Promise((resolve, reject) => {
+        if (!token) {
+            reject({ auth: false, message: "No token provided." });
+        }
+        jwt.verify(token, config.secret, (err, decoded) => {
+            if (err) {
+                reject({ auth: false, message: "Failed to authenticate token." });
+            }
+            resolve();
         });
     });
 }
 
 
 exports.initializeDatabase = async (connection) => {
+    const { GameOffer } = require("./entities")(connection)
     //await cleanDatabase(connection)
     //await createBaseUsers(connection)
+    GameOffer.destroy({where: {}})
 }
 
 async function cleanDatabase(connection){

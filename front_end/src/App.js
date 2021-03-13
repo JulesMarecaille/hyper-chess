@@ -2,9 +2,10 @@ import './App.css';
 import React from 'react'
 import { LeftMenu, Loader } from './components/navigation';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { ViewDecks, ViewGame, ViewHome, ViewShop, ViewLogin, ViewNewAccount} from './components/views';
+import { ViewDecks, ViewPlay, ViewHome, ViewShop, ViewLogin, ViewNewAccount} from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
+import { socket, initSocket } from './connection/socket';
 
 
 class App extends React.Component {
@@ -13,7 +14,8 @@ class App extends React.Component {
         this.state = {
             api: new HyperChessAPI("http://localhost:5000/", ""),
             user: null,
-            new_account_created: false
+            new_account_created: false,
+            token: null
         };
     }
 
@@ -23,21 +25,25 @@ class App extends React.Component {
         const token = cookies.get('HyperChessToken');
         if (user && token){
             this.setState({
-                user: user
+                user: user,
+                token: token
             })
             this.state.api.setToken(token);
+            initSocket(token)
         }
     }
 
     handleLogin(user, token){
         this.setState({
-            user: user
+            user: user,
+            token: token
         })
         this.state.api.setToken(token);
         const cookies = new Cookies();
         //The cookies expires in 30 days
         cookies.set('HyperChessUser', user, { path: '/', expires: new Date(Date.now()+2592000) });
         cookies.set('HyperChessToken', token, { path: '/', expires: new Date(Date.now()+2592000) });
+        initSocket(token)
     }
 
     handleLogout(){
@@ -45,9 +51,11 @@ class App extends React.Component {
         cookies.remove('HyperChessUser', { path: '/' });
         cookies.remove('HyperChessToken', { path: '/' });
         this.setState({
-            user: null
+            user: null,
+            token: null
         })
         this.state.api.setToken("")
+        socket = null;
     }
 
     handleNewAccount(){
@@ -69,7 +77,7 @@ class App extends React.Component {
                                render={() => (<ViewLogin api={this.state.api}
                                                          onLoginSuccess={this.handleLogin.bind(this)}/>
                                              )}>
-                        </Route>onNewAccountSuccess
+                        </Route>
                         <Route exact path='/newAccount'
                                render={() => (<ViewNewAccount api={this.state.api}
                                                               onNewAccountSuccess={this.handleNewAccount.bind(this)}/>
@@ -84,11 +92,15 @@ class App extends React.Component {
         if (this.state.user){
             app = (
                 <div>
-                    <LeftMenu onLogout={this.handleLogout.bind(this)}/>
+                    <LeftMenu onLogout={this.handleLogout.bind(this)}
+                              user={this.state.user}/>
                     <div className="view-container">
                         <Switch>
                             <Route exact path='/home' component={ViewHome}></Route>
-                            <Route exact path='/game' component={ViewGame}></Route>
+                            <Route exact path='/play' render={() => (<ViewPlay api={this.state.api}
+                                                                               user={this.state.user}
+                                                                     />
+                                                                    )}></Route>
                             <Route exact path='/decks' component={ViewDecks}></Route>
                             <Route exact path='/shop' component={ViewShop}></Route>
                             <Route render={() => <Redirect to="/home" />} />
