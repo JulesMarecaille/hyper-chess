@@ -4,6 +4,8 @@ body{
     --menu-border-color: #ced4da;
     --menu-entry-selected-color: #1d3557;
     --menu-entry-hover-background-color: #343a40;
+    --navigation-green: #43aa8b;
+    --navigation-red: #f94144;
 }
 
 
@@ -129,7 +131,7 @@ td,th{
  }
 
  .l-container.medium{
-     height: 150px;
+     height: 135px;
      font-size: 4em;
  }
 
@@ -195,12 +197,15 @@ td,th{
     overflow: auto;
     border-radius: 2px;
     position: relative;
+    background-color: var(--app-background-color);
 }
 
 .lobby-container .lobby{
     width: 100%;
     text-align: left;
     overflow: auto;
+    z-index: 600;
+    position: relative;
 }
 
 .lobby-container .info-container{
@@ -212,9 +217,8 @@ td,th{
     display: flex;
     align-items: center;
     justify-content:center;
-    z-index:1000;
-    pointer-events: none;
     font-weight: 200;
+    z-index: 500;
 }
 
 .lobby-container .lobby th {
@@ -268,6 +272,7 @@ td,th{
     justify-content: center;
     top:0;
     left: 0;
+    z-index: 2000;
 }
 
 .overlay .box{
@@ -275,10 +280,40 @@ td,th{
     height: 250px;
     background-color: #fff;
     border-radius: 15px;
+    display: block;
+    color: #212529;
+    position: relative;
+    overflow: hidden;
+}
+
+.overlay .box .title{
+    position: relative;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #212529;
+    width: 100%;
+    padding: 12px 0;
+    color: white;
+    font-weight: 500;
+}
+
+.overlay .box .title.grey{
+    background-color: #333;
+}
+
+.overlay .box .title.green{
+    background-color: var(--navigation-green);
+}
+
+.overlay .box .title.red{
+    background-color: var(--navigation-red);
+}
+
+.overlay .box .content{
+
+    width: 100%;
 }
 
 .overlay .box .button-container{
@@ -286,4 +321,55 @@ td,th{
     align-items: center;
     justify-content: center;
     width: 100%;
+}
+
+/**************************************************
+* INFO PANEL
+***************************************************/
+
+.info-panel{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--navigation-red);
+    width: 100%;
+    padding-left: 12px;
+    display: flex;
+    align-items: center;
+    z-index: 1500;
+    height: 28px;
+    overflow:hidden;
+    transition: 0.25s;
+    color: #fff;
+}
+
+.info-panel.open{
+    height: 28px;
+}
+
+.info-panel.close{
+    height: 0px;
+}
+
+.info-panel.error{
+    background-color: var(--navigation-red);
+}
+
+.info-panel.success{
+    background-color: var(--navigation-green);
+}
+
+.info-panel .message{
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.info-panel .close{
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+}
+
+.info-panel .close:hover{
+    color: #000;
 }

@@ -41,10 +41,8 @@ exports.checkAuthNoDatabase = (token) => {
 
 
 exports.initializeDatabase = async (connection) => {
-    const { GameOffer } = require("./entities")(connection)
     //await cleanDatabase(connection)
     //await createBaseUsers(connection)
-    GameOffer.destroy({where: {}})
 }
 
 async function cleanDatabase(connection){

@@ -47,15 +47,15 @@ module.exports = (app, connection) => {
                         sendOkResponse(res, {user, token});
                     })
                     .catch((err) => {
-                        res.status(204).send("No user");
+                        res.status(404).send("No user");
                     });
                 } else {
-                    res.status(204).send("Wrong password");
+                    res.status(401).send("Wrong password");
                 }
             });
         })
         .catch((err) => {
-            res.status(204).send(err);
+            res.status(500).send(err);
         });
     });
 

@@ -7,7 +7,9 @@ class GameState {
         this.players = {};
         this.color_to_move = WHITE;
         this.winner = null;
-        this.on_going = false;
+        this.is_joinable = true;
+        this.is_playing = false;
+        this.creator = null;
     }
 
     addPlayer(user){
@@ -19,11 +21,18 @@ class GameState {
             } else {
                 this.players[WHITE] = user;
             }
+            this.is_joinable = false;
         } else {
             // pick a random color
             let random_color = getRandomColor()
             this.players[random_color] = user;
+            this.creator = user;
         }
+    }
+
+    gameOver(winner){
+        this.is_playing = false;
+        this.winner = winner;
     }
 
     shiftTurn(){
@@ -31,7 +40,24 @@ class GameState {
     }
 
     startGame(){
+        this.is_playing = true;
         return { players: this.players };
+    }
+
+    isJoinable(){
+        return this.is_joinable
+    }
+
+    playerLeft(socket_id){
+        // Find out which player left
+        let player_leaving = WHITE
+        if(this.players[BLACK] && this.players[BLACK].socket_id === socket_id){
+            let player_leaving = BLACK
+        }
+        if(this.is_playing){
+            this.is_playing = false
+            this.gameOver(swapColor(player_leaving))
+        }
     }
 
     rematch(){
