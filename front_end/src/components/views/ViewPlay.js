@@ -2,13 +2,13 @@ import React from 'react'
 import { ViewPlayLobby, ViewPlayGame } from './play'
 import { socket } from '../../connection/socket'
 import { WHITE, BLACK } from '../../chess/model/constants'
+import { v4 as uuidv4 } from 'uuid';
 
 class ViewPlay extends React.Component {
     state = {
         // lobby
-        is_creator: false,
-        game_offer_was_deleted: false,
         error_msg: "",
+        error: false,
 
         // Game
         game_id: null
@@ -18,34 +18,23 @@ class ViewPlay extends React.Component {
         socket.on("joinError", (error_msg) => {
             this.setState({
                 game_id: null,
-                error_msg: error_msg
+                error_msg: error_msg,
+                error: true
             })
         });
     }
 
     componentWillUnmount(){
-        this.exitGame()
+        this.exitGame();
+        socket.removeAllListeners();
     }
 
     createGame(){
-        this.props.api.createGameOffer().then((game) => {
-            this.setState({
-                game_id: game.id,
-                is_creator: true,
-                game_offer_was_deleted: false
-            })
-            socket.emit("createNewGame", {game_id: game.id, user: this.props.user})
-        }).catch((err) => {
-        });
-    }
-
-    deleteGameOfferIfNecessary(){
-        if(!this.state.game_offer_was_deleted && this.state.is_creator){
-            this.props.api.deleteGameOffer(this.state.game_id)
-            this.setState({
-                game_offer_was_deleted: true
-            });
-        }
+        let game_id = uuidv4()
+        socket.emit("createNewGame", {game_id: game_id, user: this.props.user})
+        this.setState({
+            game_id: game_id
+        })
     }
 
     joinGame(game_id){
@@ -57,7 +46,6 @@ class ViewPlay extends React.Component {
     }
 
     exitGame(){
-        this.deleteGameOfferIfNecessary();
         if (this.state.game_id){
             socket.emit("leaveGame", this.state.game_id)
             this.setState({
@@ -74,8 +62,6 @@ class ViewPlay extends React.Component {
                               user={this.props.user}
                               game_id={this.state.game_id}
                               onExitGame={this.exitGame.bind(this)}
-                              onGameStart={this.deleteGameOfferIfNecessary.bind(this)}
-                              onOpponentJoined={this.deleteGameOfferIfNecessary.bind(this)}
                               />
             );
         } else {
@@ -84,6 +70,7 @@ class ViewPlay extends React.Component {
                                user={this.props.user}
                                onCreateGame={this.createGame.bind(this)}
                                onAcceptGameOffer={this.joinGame.bind(this)}
+                               error={this.state.error}
                                errorMsg={this.state.error_msg}/>
             );
         }

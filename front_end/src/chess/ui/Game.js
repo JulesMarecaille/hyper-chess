@@ -21,9 +21,12 @@ class Game extends React.Component {
 
     componentDidMount(){
         socket.on("opponentMove", (move) => {
-            console.log(move)
             this.makeMove(move);
         });
+    }
+
+    componentWillUnmount(){
+        socket.removeAllListeners("opponentMove");
     }
 
     // Events

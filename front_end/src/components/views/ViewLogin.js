@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { Loader } from '../navigation';
+import { InfoPanel } from '../navigation'
 
 class ViewLogin extends React.Component {
     state = {
@@ -20,12 +21,14 @@ class ViewLogin extends React.Component {
             is_error: false
         })
         this.props.api.login(payload).then((res) => {
+            console.log(res)
             this.props.onLoginSuccess(res.user, res.token);
             this.setState({
                 is_loading: false
             });
         })
         .catch((err) => {
+            console.log(err)
             this.setState({
                 is_loading: false,
                 is_error: true
@@ -58,6 +61,7 @@ class ViewLogin extends React.Component {
         if (!this.state.is_loading) {
             form = (
                 <div class="form-container">
+                    <InfoPanel message="Oops! Wrong email or password." type="error" isOpen={this.state.is_error}/>
                     <div className="form-title">
                         <span className="page-title">Login</span>
                         <Link to="/newAccount">

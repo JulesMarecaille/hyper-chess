@@ -15,6 +15,7 @@ function connection(sio, socket) {
         game_socket.on("createNewGame", onCreateNewGame);
         game_socket.on("playerJoinedGame", onPlayerJoinedGame);
         game_socket.on("makeMove", onMakeMove);
+        game_socket.on("requestGameOffers", onRequestGameOffers);
     } catch (e) {
         console.log(e)
     }
@@ -25,9 +26,29 @@ function onDisconnect() {
 }
 
 function onDisconnecting() {
-    for(room of this.rooms){
-        this.to(room.id).emit('opponentLeft', this.id);
+    for(room of Array.from(this.rooms)){
+        let game_id = room;
+        if(games_state[game_id]){
+            this.to(game_id).emit('opponentLeft', this.id);
+            games_state[game_id].playerLeft(this.id)
+            delete games_state[game_id];
+        }
+        this.leave(game_id);
     }
+}
+
+function onRequestGameOffers(){
+    let gameoffers = []
+    for([game_id, game_state] of Object.entries(games_state)){
+        let game_state = games_state[game_id]
+        if(game_state.isJoinable()){
+            gameoffers.push({
+                id: game_state.game_id,
+                user: game_state.creator
+            })
+        }
+    }
+    this.emit("receiveGameOffers", gameoffers)
 }
 
 function onMakeMove(move) {
@@ -39,7 +60,8 @@ function onMakeMove(move) {
 }
 
 function onCreateNewGame(data) {
-    this.emit('newGameCreated', {my_socket_id: this.id});
+    this.emit('newGameCreated');
+    data.user.socket_id = this.id;
     games_state[data.game_id] = new GameState(data.game_id)
     games_state[data.game_id].addPlayer(data.user)
     this.join(data.game_id)
@@ -47,6 +69,10 @@ function onCreateNewGame(data) {
 
 function onLeaveGame(game_id){
     this.to(game_id).emit('opponentLeft', this.id);
+    if(games_state[game_id]){
+        games_state[game_id].playerLeft(this.id)
+        delete games_state[game_id];
+    }
     this.leave(game_id)
 }
 
@@ -61,7 +87,7 @@ function onPlayerJoinedGame(data) {
 
     // Check number of players in the room
     if (room.size < 2) {
-        data.my_socket_id = this.id;
+        data.user.socket_id = this.id;
 
         this.join(game_id);
         games_state[game_id].addPlayer(data.user);
@@ -69,7 +95,7 @@ function onPlayerJoinedGame(data) {
             io.sockets.in(game_id).emit('startGame', games_state[game_id].startGame())
         }
     } else if (room.size >= 2) {
-        this.emit('joinError' , "There are already 2 people playing in this room.");
+        this.emit('joinError' , "This game does not exist anymore.");
     }
 }
 

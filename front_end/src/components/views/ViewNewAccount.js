@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { Loader } from '../navigation';
+import { Loader, InfoPanel } from '../navigation';
 
 class ViewLogin extends React.Component {
     state = {
         email: "",
         password: "",
         is_loading: false,
-        is_error: false
+        is_error: false,
+        is_success: false,
     }
 
     tryCreateAccount(evt){
@@ -22,7 +23,8 @@ class ViewLogin extends React.Component {
         this.props.api.newUser(payload).then((res) => {
             this.props.onNewAccountSuccess();
             this.setState({
-                is_loading: false
+                is_loading: false,
+                is_success: true
             });
         })
         .catch((err) => {
@@ -58,6 +60,8 @@ class ViewLogin extends React.Component {
         if(!this.state.is_loading){
             form = (
                 <div class="form-container">
+                    <InfoPanel message="Oops! The account creation failed." type="error" isOpen={this.state.is_error}/>
+                    <InfoPanel message="Account created !" type="success" isOpen={this.state.is_success}/>
                     <div className="form-title">
                         <span className="page-title">Create a new account</span>
                         <Link to="/login">

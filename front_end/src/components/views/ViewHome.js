@@ -7,6 +7,7 @@ class ViewHome extends React.Component {
     render() {
         return (
         <React.Fragment>
+
             <p>This is the home</p>
         </React.Fragment>)
     }

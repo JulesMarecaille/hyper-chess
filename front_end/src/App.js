@@ -55,7 +55,6 @@ class App extends React.Component {
             token: null
         })
         this.state.api.setToken("")
-        socket = null;
     }
 
     handleNewAccount(){
@@ -99,6 +98,7 @@ class App extends React.Component {
                             <Route exact path='/home' component={ViewHome}></Route>
                             <Route exact path='/play' render={() => (<ViewPlay api={this.state.api}
                                                                                user={this.state.user}
+                                                                               token={this.state.token}
                                                                      />
                                                                     )}></Route>
                             <Route exact path='/decks' component={ViewDecks}></Route>

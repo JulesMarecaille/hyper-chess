@@ -10,26 +10,25 @@ class Lobby extends React.Component {
     }
 
     componentDidMount(){
+        socket.on("receiveGameOffers", (data) => {
+            this.setState({
+                gameoffers: data,
+                is_loading: false
+            });
+        });
         this.getGameOffers();
-        //setInterval(this.getGameOffers.bind(this), 10000);
+        setInterval(this.getGameOffers.bind(this), 5000);
+    }
+
+    componentWillUnmount(){
+        socket.removeAllListeners("receiveGameOffers");
     }
 
     getGameOffers(){
         this.setState({
             is_loading: true
         })
-        this.props.api.getLobby().then((gameoffers) => {
-            this.setState({
-                gameoffers: gameoffers,
-                is_loading: false
-            })
-        })
-        .catch((err) => {
-            this.setState({
-                gameoffers: [],
-                is_loading: false
-            })
-        });
+        socket.emit("requestGameOffers")
     }
 
     handleAcceptGameOffer(game_id){
@@ -42,8 +41,8 @@ class Lobby extends React.Component {
             let row = (
                 <tr class="entry" onClick={this.handleAcceptGameOffer.bind(this, gameoffer.id)}>
                     <td class="icon"><ImContrast/></td>
-                    <td class="player-name">{gameoffer.User.name}</td>
-                    <td class="player-elo">{gameoffer.User.elo}</td>
+                    <td class="player-name">{gameoffer.user.name}</td>
+                    <td class="player-elo">{gameoffer.user.elo}</td>
                 </tr>
             )
             lobby.push(row)

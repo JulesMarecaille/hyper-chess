@@ -1,5 +1,6 @@
 import React from 'react'
 import Lobby from './Lobby'
+import { InfoPanel } from '../../navigation'
 
 class ViewPlayLobby extends React.Component {
     state = {
@@ -8,6 +9,7 @@ class ViewPlayLobby extends React.Component {
     render() {
         return (
         <React.Fragment>
+            <InfoPanel isOpen={this.props.error} type="error" message={this.props.errorMsg} />
             <div class="button-container">
                 <button class="button" onClick={this.props.onCreateGame}>Create Game</button>
             </div>

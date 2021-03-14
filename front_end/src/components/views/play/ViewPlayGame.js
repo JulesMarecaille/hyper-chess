@@ -8,11 +8,12 @@ import { socket } from '../../../connection/socket';
 
 class ViewPlayGame extends React.Component {
     state = {
-        is_game_ongoing: false,
         is_game_over: false,
         winner: null,
         side: null,
-        players: null
+        players: null,
+        endgame_msg: "",
+        is_overlay_open: true
     }
 
     componentDidMount(){
@@ -23,29 +24,41 @@ class ViewPlayGame extends React.Component {
                 side = WHITE;
             }
             this.setState({
-                game_offer_was_deleted: false,
                 side: side,
                 players: data.players,
-                is_game_ongoing: true
             });
-            this.props.onGameStart();
         })
 
         socket.on("opponentLeft", () => {
-            this.props.onExitGame();
+            this.setState({
+                winner: this.state.side,
+                is_game_over: true
+            })
         });
     }
 
     componentWillUnmount(){
         this.props.onExitGame();
+        socket.removeAllListeners("startGame");
+        socket.removeAllListeners("opponentLeft");
     }
 
-    drawEndGameScreen(result){
+    drawEndGameScreen(){
+        let box_title;
+        if(this.state.winner === null){
+            box_title = <div className="title grey">Draw.</div>
+        } else if (this.state.winner === this.state.side){
+            box_title = <div className="title green">You won!</div>
+        } else {
+            box_title = <div className="title red">You lost.</div>
+        }
         return (
-            <div>
-                <div>game over</div>
-                <div class="button-container">
-                    <button class="button" onClick={this.props.onExitGame}>Exit</button>
+            <div class="box">
+                {box_title}
+                <div className="content">
+                    <div class="button-container">
+                        <button class="button" onClick={this.props.onExitGame}>Back to Lobby</button>
+                    </div>
                 </div>
             </div>
         )
@@ -53,11 +66,13 @@ class ViewPlayGame extends React.Component {
 
     drawWaitingScreen(){
         return (
-            <div>
-                <div>Waiting for an opponent...</div>
-                <Loader size="medium"/>
-                <div class="button-container">
-                    <button class="button" onClick={this.props.onExitGame}>Cancel</button>
+            <div class="box">
+                <div className="title grey">Waiting for an opponent...</div>
+                <div className="content">
+                    <Loader size="medium"/>
+                    <div class="button-container">
+                        <button class="button" onClick={this.props.onExitGame}>Cancel</button>
+                    </div>
                 </div>
             </div>
         )
@@ -66,9 +81,7 @@ class ViewPlayGame extends React.Component {
     drawOverlay(overlay_content){
         return (
             <div class="overlay">
-                <div class="box">
-                    {overlay_content}
-                </div>
+                {overlay_content}
             </div>
         )
     }
@@ -84,14 +97,20 @@ class ViewPlayGame extends React.Component {
         this.setState({
             winner: winner,
             is_game_over: true,
-            is_game_ongoing: false
+        })
+    }
+
+    closeOverlay(){
+        this.setState({
+            is_overlay_open: false
         })
     }
 
     render() {
-        let content = '';
-        if(this.state.is_game_ongoing){
-            content = (
+        let overlay = '';
+        let game = '';
+        if(this.state.players){
+            game = (
                 <div className="chess-board-container">
                     {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[WHITE]) : this.drawPlayerInfo(this.state.players[BLACK])}
                     <Game side={this.state.side}
@@ -105,17 +124,20 @@ class ViewPlayGame extends React.Component {
                     {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[BLACK]) : this.drawPlayerInfo(this.state.players[WHITE])}
                 </div>
             )
-        } else if (this.state.is_game_over){
-            content = this.drawOverlay(this.drawEndGameScreen());
         } else {
-            content = this.drawOverlay(this.drawWaitingScreen());
+            overlay = this.drawOverlay(this.drawWaitingScreen());
+        }
+
+        if (this.state.is_game_over && this.state.is_overlay_open){
+            overlay = this.drawOverlay(this.drawEndGameScreen());
         }
         return (
         <React.Fragment>
             <div>
-                {content}
+                {overlay}
+                {game}
             </div>
-        </React.Fragment>)
+        </React.Fragment>);
     }
 }
 
