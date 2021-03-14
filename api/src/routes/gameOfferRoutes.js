@@ -1,17 +1,18 @@
 const bcrypt = require("bcrypt-nodejs");
 const User = require("../entities/User.js");
-const Deck = require("../entities/Deck.js");
+const GameOffer = require("../entities/GameOffer.js");
 const jwt = require("jsonwebtoken");
 const { checkAuth, sendOkResponse } = require("../utils.js")
 
 module.exports = (app, connection) => {
-    const { Deck } = require("../entities")(connection)
+    const { GameOffer } = require("../entities")(connection)
 
-    // Get all decks
-    app.get("/decks", (req, res) => {
+    // Get all gameoffers
+    app.get("/gameoffers", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
-            Deck.findAll().then((decks) => {
-                sendOkResponse(res, decks)
+            GameOffer.scope('user').findAll().then((gameoffers) => {
+                //{where: "UserId": {[connection.Op.not]: user.id}}
+                sendOkResponse(res, gameoffers)
             })
             .catch((err) => {
                 res.status(500).send(err);
@@ -22,11 +23,11 @@ module.exports = (app, connection) => {
         });
     });
 
-    // Get specific deck
-    app.get("/decks/:id", (req, res) => {
+    // Get specific gameoffer
+    app.get("/gameoffers/:id", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
-            Deck.findOne({where: {id: req.params.id}}).then((deck) => {
-                sendOkResponse(res, deck);
+            GameOffer.scope('user').findOne({where: {id: req.params.id}}).then((gameoffer) => {
+                sendOkResponse(res, gameoffer);
             })
             .catch((err) => {
                 res.status(500).send(err);
@@ -37,29 +38,14 @@ module.exports = (app, connection) => {
         });
     });
 
-    // Get all decks from user
-    app.get("/decks/user/:id", (req, res) => {
+    // Update gameoffer
+    app.put("/gameoffers/:id", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
-            Deck.findAll({where: {UserId: req.params.id}}).then((decks) => {
-                sendOkResponse(res, decks);
-            })
-            .catch((err) => {
-                res.status(500).send(err);
-            });
-        })
-        .catch((err) => {
-            res.status(500).send(err);
-        });
-    });
-
-    // Update deck
-    app.put("/decks/:id", (req, res) => {
-        checkAuth(connection, req.headers["x-access-token"]).then((user) => {
-            Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
-                if (found_deck.UserId == user.id){
+            GameOffer.findOne({where: {id: req.params.id}}).then((found_gameoffer) => {
+                if (found_gameoffer.UserId == user.id){
                     req.body.id = req.params.id;
-                    Deck.update(req.body).then((deck) => {
-                        sendOkResponse(res, deck);
+                    GameOffer.update(req.body).then((gameoffer) => {
+                        sendOkResponse(res, gameoffer);
                     })
                     .catch((err) => {
                         res.status(500).send(err);
@@ -77,12 +63,12 @@ module.exports = (app, connection) => {
         });
     });
 
-    // Create deck
-    app.post("/decks", (req, res) => {
+    // Create gameoffer
+    app.post("/gameoffers", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             req.body.UserId = user.id;
-            Deck.create(req.body).then((deck) => {
-                sendOkResponse(res, deck);
+            GameOffer.create(req.body).then((gameoffer) => {
+                sendOkResponse(res, gameoffer);
             })
             .catch((err) => {
                 res.status(500).send(err);
@@ -93,13 +79,13 @@ module.exports = (app, connection) => {
         });
     });
 
-    // Delete deck
-    app.delete("/decks/:id", (req, res) => {
+    // Delete gameoffer
+    app.delete("/gameoffers/:id", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
-            Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
-                if (found_deck.UserId == user.id){
-                    Deck.destroy({where: {id: req.params.id}}).then((deck) => {
-                        sendOkResponse(res, deck);
+            GameOffer.findOne({where: {id: req.params.id}}).then((found_gameoffer) => {
+                if (found_gameoffer.UserId == user.id){
+                    GameOffer.destroy({where: {id: req.params.id}}).then((gameoffer) => {
+                        sendOkResponse(res, gameoffer);
                     })
                     .catch((err) => {
                         res.status(500).send(err);

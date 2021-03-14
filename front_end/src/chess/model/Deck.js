@@ -2,12 +2,9 @@ import { SQUARES } from './constants.js'
 import { v4 as uuidv4 } from 'uuid';
 
 class Deck {
-    constructor(id=null, name='New Deck', pieces=new Array(16), prefered_color=null) {
-        if(!id){
-            this.id = uuidv4();
-        } else {
-            this.id = id;
-        }
+    constructor(id=uuidv4(), name='New Deck', pieces=new Array(16), prefered_color=null) {
+        this.id = id;
+        this.name = name;
         this.pieces = pieces;
         this.prefered_color = prefered_color;
     }

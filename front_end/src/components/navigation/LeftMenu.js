@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { MdHome, MdVideogameAsset, MdStore, MdPowerSettingsNew } from 'react-icons/md';
+import { MdHome, MdVideogameAsset, MdStore, MdPowerSettingsNew, MdPerson } from 'react-icons/md';
 import { FaChessBishop } from 'react-icons/fa';
 import '../style.css'
 
@@ -22,7 +22,7 @@ class LeftMenu extends React.Component {
                             <span className="name">Home</span>
                         </div>
                     </Link>
-                    <Link to="/game">
+                    <Link to="/play">
                         <div className="entry">
                             <MdVideogameAsset className="icon"/>
                             <span className="name">Play</span>
@@ -42,6 +42,10 @@ class LeftMenu extends React.Component {
                     </Link>
                 </div>
                 <div className="bottom content">
+                    <div className="entry" onClick={this.props.onLogout}>
+                        <MdPerson className="icon"/>
+                        <span className="name">{this.props.user.name}</span>
+                    </div>
                     <div className="entry" onClick={this.props.onLogout}>
                         <MdPowerSettingsNew className="icon"/>
                         <span className="name">Logout</span>

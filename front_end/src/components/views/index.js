@@ -1,8 +1,8 @@
 import ViewDecks from './ViewDecks'
-import ViewGame from './ViewGame'
+import ViewPlay from './ViewPlay'
 import ViewHome from './ViewHome'
 import ViewShop from './ViewShop'
 import ViewLogin from './ViewLogin'
 import ViewNewAccount from './ViewNewAccount'
 
-export { ViewDecks, ViewGame, ViewHome, ViewShop, ViewLogin, ViewNewAccount}
+export { ViewDecks, ViewPlay, ViewHome, ViewShop, ViewLogin, ViewNewAccount}

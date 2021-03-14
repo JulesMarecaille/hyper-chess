@@ -5,6 +5,19 @@ const bodyParser = require("body-parser");
 const { Sequelize } = require('sequelize');
 const { initializeDatabase } = require("./src/utils.js")
 const config = require("./config.js")
+const socket_server = require('./src/socket')
+const http = require("http")
+
+// Init the app
+const app = express()
+app.use(cors({origin: "*"}))
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.json());
+app.set("json spaces", 2)
+
+// Init socket server
+const server = new http.Server(app);
+socket_server(server)
 
 // Connect to the DB
 const connection = new Sequelize(
@@ -25,20 +38,21 @@ connection.authenticate().then(() => {
         console.log('Database synced.');
         // Create placeholders
         initializeDatabase(connection).then(() => {
-            // Init the app
+            // Init the API
             const port = 5000
-            const app = express()
-            app.use(cors({origin: "*"}))
-            app.use(bodyParser.urlencoded({ extended: true}));
-            app.use(bodyParser.json());
-            app.set("json spaces", 2)
+
 
             // Import the routes
             require("./src/routes")(app, connection)
 
-            // Start the app
+            // Start the API
             app.listen(port, () => {
                 console.log("We are live on " + port);
+            })
+
+            // Start the socket server
+            server.listen(port + 1, () => {
+                console.log("We are live on " + (port + 1));
             })
         })
         .catch((err) => {

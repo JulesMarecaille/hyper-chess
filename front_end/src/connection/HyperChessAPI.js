@@ -45,6 +45,19 @@ class HyperChessAPI {
         return this._post("decks", deck)
     }
 
+    //Game Offers
+    getLobby(){
+        return this._get("gameoffers")
+    }
+
+    createGameOffer(gameoffer){
+        return this._post("gameoffers", gameoffer)
+    }
+
+    deleteGameOffer(gameoffer_id){
+        return this._delete("gameoffers/" + gameoffer_id)
+    }
+
     /*UTILS*/
     _get(route) {
         const that = this;

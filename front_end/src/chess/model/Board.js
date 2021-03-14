@@ -1,5 +1,4 @@
 import { WHITE, BLACK, SQUARES, swapColor } from './constants.js'
-import { createClassicDeck } from './utils.js';
 import { cloneDeep } from "lodash"
 import { PIECE_MAPPING } from './pieces'
 
@@ -7,8 +6,8 @@ class Board {
 	constructor(deck_white, deck_black) {
 		this.board = new Array(128);
 		this.color_to_move = WHITE; // White starts the game
-		this.deck_white = createClassicDeck();
-		this.deck_black = createClassicDeck();
+		this.deck_white = deck_white;
+		this.deck_black = deck_black;
 		this.kings_positions = {}
 		this.is_check = {}
 		this.history = [];
