@@ -11,11 +11,14 @@ class Game extends React.Component {
         this.state = {
             boardObject: new Board(this.props.whiteDeck, this.props.blackDeck),
             dragged_square: -1,
+            dragged_element: null,
             selected_square: -1,
+            mouse_over_square: -1,
             highlighted_moves: [],
             game_over: false,
             winner: null,
-            draw: null
+            draw: null,
+            blank_img: new Image()
         };
     }
 
@@ -64,6 +67,70 @@ class Game extends React.Component {
         }
     }
 
+    dragPieceStart(evt, square){
+        if (this.state.game_over){ return; }
+        evt.dataTransfer.setDragImage(this.state.blank_img, 0, 0);
+        let piece = this.state.boardObject.board[square]
+        if (this.state.dragged_square === -1 &&
+            piece &&
+            piece.color === this.state.boardObject.color_to_move &&
+            piece.color === this.props.side &&
+            !this.state.highlighted_moves.includes(square))
+        {
+            // Select player piece
+            let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square);
+            this.setState({
+                selected_square: square,
+                dragged_square: square,
+                dragged_element: evt.target,
+                highlighted_moves: legal_piece_moves
+            });
+        }
+    }
+
+    draggingPiece(evt){
+        let element = evt.target;
+        let parent = element.parentElement.getBoundingClientRect()
+        let mouse_x = Math.round(evt.clientX - parent.x - (element.clientWidth/2));
+        let mouse_y = Math.round(evt.clientY - parent.y - (element.clientHeight/2));
+        element.style.position = "absolute";
+        element.style.left = `${mouse_x}px`;
+        element.style.top = `${mouse_y}px`;
+        element.style.pointerEvents = "none";
+    }
+
+    dragPieceEnd(){
+        let square = this.state.mouse_over_square;
+        if (this.state.highlighted_moves.includes(square)) {
+            // Make move
+            let move = {
+                game_id: this.props.game_id,
+                from: this.state.selected_square,
+                to: square,
+                player_color: this.state.boardObject.color_to_move
+            };
+            this.makeMove(move);
+            socket.emit("makeMove", move);
+        } else {
+            this.state.dragged_element.style.position = "relative";
+            this.state.dragged_element.style.left = 0;
+            this.state.dragged_element.style.top = 0;
+            this.state.dragged_element.style.pointerEvents = "auto";
+        }
+        // Reset Dragging
+        this.setState({
+            dragged_square: -1,
+            dragged_element: null
+        });
+    }
+
+    dragOverSquare(square){
+        this.setState({
+            mouse_over_square: square
+        });
+    }
+
+    // Action
     makeMove(move){
         let game_over, is_draw, winner = this.state.boardObject.makeMove(move);
         this.setState({
@@ -105,6 +172,10 @@ class Game extends React.Component {
                             color={square_color}
                             piece={piece}
                             onClick={this.clickedSquare.bind(this)}
+                            dragStart={this.dragPieceStart.bind(this)}
+                            dragging={this.draggingPiece.bind(this)}
+                            dragEnd={this.dragPieceEnd.bind(this)}
+                            dragOver={this.dragOverSquare.bind(this)}
                             isSelected={is_selected}
                             isAnOption={is_an_option}
                             isClickable={is_clickable}

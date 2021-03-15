@@ -18,7 +18,7 @@
 }
 
 .chess-board td.clickable{
-    cursor: pointer;
+    cursor: grab;
 }
 .chess-board td.light {
     background: #f1faee;
@@ -86,8 +86,15 @@
 }
 
 .chess-board .piece-container .piece {
-    width: 100%;
+    width: 1.8em;
+    height: 1.8em;
     position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.chess-board .piece-container .piece:active {
+    cursor: grabbing;
 }
 
 /**************************************************

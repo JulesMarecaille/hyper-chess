@@ -5,7 +5,7 @@ class Piece extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: false
+            error: false,
         }
     }
 
@@ -16,21 +16,29 @@ class Piece extends React.Component {
     }
 
     render() {
-        let img = '/assets/pieces/' + this.props.piece.name + COLORS_NAME[this.props.piece.color] + '.svg';
+        let img = process.env.PUBLIC_URL + '/assets/pieces/' + this.props.piece.name + COLORS_NAME[this.props.piece.color] + '.svg';
         if (this.state.error){
-            img = '/assets/pieces/Error.svg';
+            img = process.env.PUBLIC_URL + '/assets/pieces/Error.svg';
         }
         return (
         <React.Fragment>
             <div className="piece-container">
-                <img src={`${process.env.PUBLIC_URL}${img}`}
-                     alt=''
+                <div style={{backgroundImage: `url(${img})`}}
+                     onDragStart={this.props.dragStart}
+                     onDrag={this.props.dragging}
+                     onDragEnd={this.props.dragEnd}
                      className="piece"
-                     onError={this.errorImage.bind(this)}
-                ></img>
+                     draggable={this.props.isDraggable}>
+                </div>
             </div>
         </React.Fragment>)
     }
+
+    /*
+    onDragStart={this.props.onDragStart}
+    onDragEnd={this.props.onDragEnd}
+    draggable={true}
+    */
 
 }
 
