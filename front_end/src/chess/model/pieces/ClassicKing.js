@@ -38,7 +38,7 @@ class ClassicKing extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		super(color, behavior, 'ClassicKing', 1);
+		super(color, behavior, 'ClassicKing', 'Classic King', 1);
 		this.is_king = true;
 	}
 

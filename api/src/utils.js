@@ -41,18 +41,19 @@ exports.checkAuthNoDatabase = (token) => {
 
 
 exports.initializeDatabase = async (connection) => {
-    //await cleanDatabase(connection)
-    //await createBaseUsers(connection)
+    // await cleanDatabase(connection)
+    // await createBaseUsers(connection)
 }
 
 async function cleanDatabase(connection){
-    const { User, Deck } = require("./entities")(connection)
+    const { User, Deck, Collection } = require("./entities")(connection)
     User.destroy({where: {}})
     Deck.destroy({where: {}})
+    Collection.destroy({where: {}})
 }
 
 async function createBaseUsers(connection){
-    const { User, Deck } = require("./entities")(connection)
+    const { User, Deck, Collection } = require("./entities")(connection)
     const salt = bcrypt.genSaltSync(10);
 
     const jules = User.build({
@@ -84,8 +85,30 @@ async function createBaseUsers(connection){
                    'ClassicKing', 'ClassicBishop', 'ClassicKnight', 'ClassicRook'],
         "UserId": octave.id
     })
+
+    const collection_octave = Collection.build({
+        "ClassicPawn":true,
+        "ClassicRook":true,
+        "ClassicKnight":true,
+        "ClassicKing":true,
+        "ClassicBishop":true,
+        "ClassicQueen":true,
+        "UserId": octave.id
+    })
+
+    const collection_jules = Collection.build({
+        "ClassicPawn":true,
+        "ClassicRook":true,
+        "ClassicKnight":true,
+        "ClassicKing":true,
+        "ClassicBishop":true,
+        "ClassicQueen":true,
+        "UserId": jules.id
+    })
     await jules.save()
     await deck_jules.save()
     await octave.save()
     await deck_octave.save()
+    await collection_octave.save()
+    await collection_jules.save()
 }

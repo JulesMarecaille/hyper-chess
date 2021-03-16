@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react'
 import { LeftMenu, Loader } from './components/navigation';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { ViewDecks, ViewPlay, ViewHome, ViewShop, ViewLogin, ViewNewAccount} from './components/views';
+import { ViewDecks, ViewPlay, ViewHome, ViewShop, ViewLogin, ViewNewAccount, ViewCollection} from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
 import { socket, initSocket } from './connection/socket';
@@ -15,7 +15,8 @@ class App extends React.Component {
             api: new HyperChessAPI("http://localhost:5000/", ""),
             user: null,
             new_account_created: false,
-            token: null
+            token: null,
+            location: ""
         };
     }
 
@@ -92,7 +93,8 @@ class App extends React.Component {
             app = (
                 <div>
                     <LeftMenu onLogout={this.handleLogout.bind(this)}
-                              user={this.state.user}/>
+                              user={this.state.user}
+                              location={this.state.location.pathname}/>
                     <div className="view-container">
                         <Switch>
                             <Route exact path='/home' component={ViewHome}></Route>
@@ -100,9 +102,13 @@ class App extends React.Component {
                                                                                user={this.state.user}
                                                                                token={this.state.token}
                                                                      />
-                                                                    )}></Route>
+                                                              )}></Route>
                             <Route exact path='/decks' component={ViewDecks}></Route>
                             <Route exact path='/shop' component={ViewShop}></Route>
+                            <Route exact path='/collection' render={() => (<ViewCollection api={this.state.api}
+                                                                                           user={this.state.user}
+                                                                            />
+                                                                    )}></Route>
                             <Route render={() => <Redirect to="/home" />} />
                         </Switch>
                     </div>

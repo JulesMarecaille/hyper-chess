@@ -1,4 +1,6 @@
 import React from 'react'
+import 'simplebar';
+import 'simplebar/dist/simplebar.css';
 import { ImContrast } from 'react-icons/im'
 import { Loader } from '../../navigation'
 import { socket } from '../../../connection/socket'
@@ -67,7 +69,7 @@ class Lobby extends React.Component {
 
         return (
         <React.Fragment>
-            <div class="lobby-container">
+            <div class="lobby-container" data-simplebar>
                 <table className="lobby">
                     <colgroup span="3" class="columns"></colgroup>
                     <tbody>

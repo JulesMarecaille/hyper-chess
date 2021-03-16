@@ -36,7 +36,7 @@ class ClassicPawn extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		super(color, behavior, 'ClassicPawn', 1);
+		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1);
 		this.is_pawn = true;
 	}
 

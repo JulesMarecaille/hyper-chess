@@ -20,7 +20,7 @@ class ClassicKnight extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		super(color, behavior, 'ClassicKnight', 3);
+		super(color, behavior, 'ClassicKnight', 'Classic Knight', 3);
 	}
 
 }
