@@ -7,13 +7,18 @@ import { createClassicDeck } from '../../../chess/model/utils.js';
 import { socket } from '../../../connection/socket';
 
 class ViewPlayGame extends React.Component {
-    state = {
-        is_game_over: false,
-        winner: null,
-        side: null,
-        players: null,
-        endgame_msg: "",
-        is_overlay_open: true
+    constructor(props){
+        super(props);
+        this.state = {
+            is_game_over: false,
+            winner: null,
+            side: null,
+            players: null,
+            endgame_msg: "",
+            is_overlay_open: true
+        }
+        this.game_start_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/GameStart.mp3")
+        this.game_end_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/GameEnd.mp3")
     }
 
     componentDidMount(){
@@ -27,6 +32,7 @@ class ViewPlayGame extends React.Component {
                 side: side,
                 players: data.players,
             });
+            this.game_start_sound.play()
         })
 
         socket.on("opponentLeft", () => {
@@ -34,6 +40,7 @@ class ViewPlayGame extends React.Component {
                 winner: this.state.side,
                 is_game_over: true
             })
+            this.game_end_sound.play()
         });
     }
 
