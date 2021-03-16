@@ -21,14 +21,12 @@ class ViewLogin extends React.Component {
             is_error: false
         })
         this.props.api.login(payload).then((res) => {
-            console.log(res)
             this.props.onLoginSuccess(res.user, res.token);
             this.setState({
                 is_loading: false
             });
         })
         .catch((err) => {
-            console.log(err)
             this.setState({
                 is_loading: false,
                 is_error: true

@@ -20,7 +20,7 @@ class ClassicRook extends Piece
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0];
-		super(color, behavior, 'ClassicRook', 5);
+		super(color, behavior, 'ClassicRook', 'Classic Rook', 5);
 		this.rockable = true;
 	}
 

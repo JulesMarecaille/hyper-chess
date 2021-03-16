@@ -1,7 +1,3 @@
-const bcrypt = require("bcrypt-nodejs");
-const User = require("../entities/User.js");
-const Deck = require("../entities/Deck.js");
-const jwt = require("jsonwebtoken");
 const { checkAuth, sendOkResponse } = require("../utils.js")
 
 module.exports = (app, connection) => {

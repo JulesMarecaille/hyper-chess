@@ -45,6 +45,14 @@ class HyperChessAPI {
         return this._post("decks", deck)
     }
 
+    // Collection
+    unlockPiece(){
+    }
+
+    getUserCollection(user_id){
+        return this._get("collections/user/" + user_id)
+    }
+
     /*UTILS*/
     _get(route) {
         const that = this;

@@ -89,6 +89,7 @@
     width: 1.8em;
     height: 1.8em;
     position: relative;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
