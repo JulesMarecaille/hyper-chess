@@ -18,8 +18,13 @@ class Game extends React.Component {
             game_over: false,
             winner: null,
             draw: null,
-            blank_img: new Image()
+            is_check: false
+
         };
+        this.blank_img =  new Image()
+        this.move_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/ClassicMove.mp3");
+        this.capture_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/ClassicCapture.mp3")
+        this.check_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/ClassicCheck.mp3")
     }
 
     componentDidMount(){
@@ -69,7 +74,7 @@ class Game extends React.Component {
 
     dragPieceStart(evt, square){
         if (this.state.game_over){ return; }
-        evt.dataTransfer.setDragImage(this.state.blank_img, 0, 0);
+        evt.dataTransfer.setDragImage(this.blank_img, 0, 0);
         let piece = this.state.boardObject.board[square]
         if (this.state.dragged_square === -1 &&
             piece &&
@@ -112,12 +117,15 @@ class Game extends React.Component {
             this.makeMove(move);
             socket.emit("makeMove", move);
         } else {
-            this.state.dragged_element.style.position = "relative";
-            this.state.dragged_element.style.left = 0;
-            this.state.dragged_element.style.top = 0;
-            this.state.dragged_element.style.pointerEvents = "auto";
+            try{
+                this.state.dragged_element.style.position = "relative";
+                this.state.dragged_element.style.left = 0;
+                this.state.dragged_element.style.top = 0;
+                this.state.dragged_element.style.pointerEvents = "auto";
+            } catch (err){
+                console.log(err)
+            }
         }
-        // Reset Dragging
         this.setState({
             dragged_square: -1,
             dragged_element: null
@@ -132,13 +140,21 @@ class Game extends React.Component {
 
     // Action
     makeMove(move){
-        let game_over, is_draw, winner = this.state.boardObject.makeMove(move);
+        let {game_over, is_draw, winner, is_capture, is_check} = this.state.boardObject.makeMove(move);
+        if (is_check){
+            this.check_sound.play()
+        } else if(is_capture){
+            this.capture_sound.play()
+        } else {
+            this.move_sound.play();
+        }
         this.setState({
             selected_square: -1,
             highlighted_moves: [],
             game_over: game_over,
             is_draw: is_draw,
-            winner: winner
+            winner: winner,
+            is_check: is_check
         });
         if (this.state.game_over){
             this.props.onGameOver(winner);
@@ -166,7 +182,7 @@ class Game extends React.Component {
                 let is_selected = this.state.selected_square === square;
                 // The square can be clicked if it's a move option or if there's a piece belonging to the player on it
                 let is_clickable = (is_an_option || (piece && (piece.color === this.state.boardObject.color_to_move)));
-                let is_check = (piece && piece.is_king && this.state.boardObject.is_check[piece.color]);
+                let is_check = (piece && piece.is_king && this.state.is_check && piece.color === this.state.boardObject.color_to_move);
                 row.push(
                     <Square square={square}
                             color={square_color}

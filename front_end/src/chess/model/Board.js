@@ -41,8 +41,12 @@ class Board {
 	makeMove(move){
 		// If game is over we can't make moves anymore
 		if (this.game_over){
-			return this.game_over, this.is_draw, this.winner;
+			return this.game_over, this.is_draw, this.winner, false, false;
 		}
+
+		// Check if this move captures a piece
+		let is_capture = (!!this.board[move.to]);
+
 		// Move the piece
 		this.board = this.board[move.from].move(move, this.board, this.getLastMove());
 
@@ -51,8 +55,12 @@ class Board {
 
 		// Change turn
 		this.color_to_move = swapColor(this.color_to_move);
+		let is_check = this.is_check[this.color_to_move]
 		this.updateHasGameEnded();
-		return this.game_over, this.is_draw, this.winner;
+		let game_over = this.game_over;
+		let is_draw = this.is_draw;
+		let winner = this.is_winner;
+		return {game_over, is_draw, winner, is_capture, is_check};
 	}
 
 	updateHistory(move){
