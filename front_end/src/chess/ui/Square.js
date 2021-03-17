@@ -34,7 +34,7 @@ class Square extends React.Component {
                            dragStart={this.handleDragStart.bind(this)}
                            dragEnd={this.props.dragEnd}
                            dragging={this.props.dragging}
-                           isDraggable={true}/>
+                           isDraggable={this.props.isDraggable}/>
         }
         //Add check marker if this piece is in check
         if (this.props.isCheck){

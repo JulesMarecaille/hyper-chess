@@ -59,7 +59,7 @@ class Board {
 		this.updateHasGameEnded();
 		let game_over = this.game_over;
 		let is_draw = this.is_draw;
-		let winner = this.is_winner;
+		let winner = this.winner;
 		return {game_over, is_draw, winner, is_capture, is_check};
 	}
 
@@ -97,11 +97,11 @@ class Board {
 	}
 
 	isCheckmate(color){
-		return !this.getLegalMovesFromPlayer(color) && this.isCheck(color);
+		return (!(this.getLegalMovesFromPlayer(color).length > 0) && this.isCheck(color));
 	}
 
 	isStalemate(color){
-		return !this.getLegalMovesFromPlayer(color) && !this.isCheck(color);
+		return (!(this.getLegalMovesFromPlayer(color).length > 0) && !this.isCheck(color));
 	}
 
 	getLastMove(){

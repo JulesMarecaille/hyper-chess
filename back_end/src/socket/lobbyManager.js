@@ -3,10 +3,12 @@ var sockets_in_session = {};
 var games_state = {};
 var gameSocket;
 var io;
+var sequelize;
 
-function connection(sio, socket) {
+function connection(sio, socket, sequelize_connection) {
     try {
         io = sio;
+        sequelize = sequelize_connection;
         game_socket = socket;
         sockets_in_session[socket.id] = game_socket;
         game_socket.on("disconnect", onDisconnect);
@@ -16,6 +18,7 @@ function connection(sio, socket) {
         game_socket.on("playerJoinedGame", onPlayerJoinedGame);
         game_socket.on("makeMove", onMakeMove);
         game_socket.on("requestGameOffers", onRequestGameOffers);
+        game_socket.on("playerResign", onResign);
     } catch (e) {
         console.log(e)
     }
@@ -28,12 +31,7 @@ function onDisconnect() {
 function onDisconnecting() {
     for(room of Array.from(this.rooms)){
         let game_id = room;
-        if(games_state[game_id]){
-            this.to(game_id).emit('opponentLeft', this.id);
-            games_state[game_id].playerLeft(this.id)
-            delete games_state[game_id];
-        }
-        this.leave(game_id);
+        leaveGame(game_id, this);
     }
 }
 
@@ -44,36 +42,42 @@ function onRequestGameOffers(){
         if(game_state.isJoinable()){
             gameoffers.push({
                 id: game_state.game_id,
-                user: game_state.creator
+                user: game_state.creator,
+                time: game_state.time,
+                increment: game_state.increment
             })
         }
     }
     this.emit("receiveGameOffers", gameoffers)
 }
 
-function onMakeMove(move) {
-    const game_id = move.game_id
-    if(move.player_color === games_state[game_id].color_to_move){
-        this.to(game_id).emit('opponentMove', move);
-        games_state[game_id].shiftTurn();
+function onMakeMove(data) {
+    const game_id = data.game_id
+    if(data.move.player_color === games_state[game_id].color_to_move && !games_state[game_id].is_game_over){
+        if(data.is_game_over){
+            games_state[game_id].gameOver(data.winner, "By checkmate.");
+        } else {
+            time_remaining = games_state[game_id].shiftTurn();
+            let payload = {move: data.move, time_remaining: time_remaining};
+            this.to(game_id).emit('opponentMove', payload);
+        }
     }
 }
 
 function onCreateNewGame(data) {
     this.emit('newGameCreated');
     data.user.socket_id = this.id;
-    games_state[data.game_id] = new GameState(data.game_id)
+    games_state[data.game_id] = new GameState(data.game_id, data.time, data.increment, gameOver)
     games_state[data.game_id].addPlayer(data.user)
     this.join(data.game_id)
 }
 
 function onLeaveGame(game_id){
-    this.to(game_id).emit('opponentLeft', this.id);
-    if(games_state[game_id]){
-        games_state[game_id].playerLeft(this.id)
-        delete games_state[game_id];
-    }
-    this.leave(game_id)
+    leaveGame(game_id, this);
+}
+
+function onResign(data){
+    games_state[game_id].resign(data.color);
 }
 
 function onPlayerJoinedGame(data) {
@@ -96,6 +100,38 @@ function onPlayerJoinedGame(data) {
         }
     } else if (room.size >= 2) {
         this.emit('joinError' , "This game does not exist anymore.");
+    }
+}
+
+function gameOver(game_id, winner, time_remaining, reason, players, elo_differences){
+    let payload = {
+        winner: winner,
+        time_remaining: time_remaining,
+        reason: reason,
+        elo_differences: elo_differences
+    };
+    io.sockets.in(game_id).emit('gameOver', payload);
+    if(elo_differences){
+        updateElos(players, elo_differences);
+    }
+}
+
+function leaveGame(game_id, socket){
+    if(games_state[game_id]){
+        games_state[game_id].playerLeft(socket.id)
+        delete games_state[game_id];
+    }
+    socket.leave(game_id)
+}
+
+function updateElos(players, elo_differences){
+    const { User } = require("../entities")(sequelize)
+    for(const [color, player] of Object.entries(players)){
+        User.findOne({where: {id: player.id}}).then((user) => {
+            user.elo += elo_differences[color];
+            user.save();
+        }).catch((err) => {
+        });
     }
 }
 

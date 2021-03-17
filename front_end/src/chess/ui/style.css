@@ -102,12 +102,17 @@
 ***************************************************/
 .chess-board-container .player-info{
     display: flex;
-    align-items: left;
+    align-items: center;
+    position: relative;
+    padding: 12px 0;
+    height: 36px;
 }
 
 .chess-board-container .name-elo{
-    margin-left: 2em;
-    margin-bottom: 0.5em;
+    margin-left: 16px;
+    position: absolute;
+    display: flex;
+    align-items: center;
 }
 
 .chess-board-container .name-elo .name{

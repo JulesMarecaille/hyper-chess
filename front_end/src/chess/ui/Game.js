@@ -28,8 +28,8 @@ class Game extends React.Component {
     }
 
     componentDidMount(){
-        socket.on("opponentMove", (move) => {
-            this.makeMove(move);
+        socket.on("opponentMove", (data) => {
+            this.makeMove(data.move, data.time_remaining, false);
         });
     }
 
@@ -56,13 +56,11 @@ class Game extends React.Component {
         } else if (this.state.selected_square !== -1 && this.state.highlighted_moves.includes(square)) {
             // Make move
             let move = {
-                game_id: this.props.game_id,
                 from: this.state.selected_square,
                 to: square,
                 player_color: this.state.boardObject.color_to_move
             };
-            this.makeMove(move);
-            socket.emit("makeMove", move);
+            this.makeMove(move, null, true);
         } else {
             // Reset click state
             this.setState({
@@ -90,6 +88,8 @@ class Game extends React.Component {
                 dragged_element: evt.target,
                 highlighted_moves: legal_piece_moves
             });
+        } else {
+            evt.preventDefault();
         }
     }
 
@@ -109,22 +109,16 @@ class Game extends React.Component {
         if (this.state.highlighted_moves.includes(square)) {
             // Make move
             let move = {
-                game_id: this.props.game_id,
                 from: this.state.selected_square,
                 to: square,
                 player_color: this.state.boardObject.color_to_move
             };
-            this.makeMove(move);
-            socket.emit("makeMove", move);
-        } else {
-            try{
-                this.state.dragged_element.style.position = "relative";
-                this.state.dragged_element.style.left = 0;
-                this.state.dragged_element.style.top = 0;
-                this.state.dragged_element.style.pointerEvents = "auto";
-            } catch (err){
-                console.log(err)
-            }
+            this.makeMove(move, null, true);
+        } else if (this.state.dragged_element !== -1) {
+            this.state.dragged_element.style.position = "relative";
+            this.state.dragged_element.style.left = 0;
+            this.state.dragged_element.style.top = 0;
+            this.state.dragged_element.style.pointerEvents = "auto";
         }
         this.setState({
             dragged_square: -1,
@@ -139,7 +133,7 @@ class Game extends React.Component {
     }
 
     // Action
-    makeMove(move){
+    makeMove(move, time_remaining=null, emit=false){
         let {game_over, is_draw, winner, is_capture, is_check} = this.state.boardObject.makeMove(move);
         if (is_check){
             this.check_sound.play()
@@ -148,6 +142,16 @@ class Game extends React.Component {
         } else {
             this.move_sound.play();
         }
+        if(emit){
+            let payload = {
+                game_id: this.props.game_id,
+                move: move,
+                is_game_over: game_over,
+                winner: winner
+            }
+            socket.emit("makeMove", payload);
+        }
+        this.props.onPlayerMoved(time_remaining)
         this.setState({
             selected_square: -1,
             highlighted_moves: [],
@@ -183,6 +187,7 @@ class Game extends React.Component {
                 // The square can be clicked if it's a move option or if there's a piece belonging to the player on it
                 let is_clickable = (is_an_option || (piece && (piece.color === this.state.boardObject.color_to_move)));
                 let is_check = (piece && piece.is_king && this.state.is_check && piece.color === this.state.boardObject.color_to_move);
+                let is_draggable = (piece && (piece.color === this.props.side))
                 row.push(
                     <Square square={square}
                             color={square_color}
@@ -196,6 +201,7 @@ class Game extends React.Component {
                             isAnOption={is_an_option}
                             isClickable={is_clickable}
                             isCheck={is_check}
+                            isDraggable={is_draggable}
                     />);
             }
             files.push(<th className="outer">{files_label[i]}</th>)
