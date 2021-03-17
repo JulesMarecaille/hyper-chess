@@ -1,5 +1,6 @@
 import React from 'react'
 import Game from '../../../chess/ui/Game.js'
+import Clock from '../../../chess/ui/Clock.js'
 import { Loader } from '../../navigation'
 import { WHITE, BLACK, swapColor } from '../../../chess/model/constants.js';
 import { createUser } from '../../../chess/model/utils.js';
@@ -15,7 +16,11 @@ class ViewPlayGame extends React.Component {
             side: null,
             players: null,
             endgame_msg: "",
-            is_overlay_open: true
+            is_overlay_open: true,
+            time_remaining: {},
+            color_to_move: WHITE,
+            nb_half_moves: 0,
+            game_over_reason : ""
         }
         this.game_start_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/GameStart.mp3")
         this.game_end_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/GameEnd.mp3")
@@ -31,14 +36,17 @@ class ViewPlayGame extends React.Component {
             this.setState({
                 side: side,
                 players: data.players,
+                time_remaining: data.time_remaining
             });
             this.game_start_sound.play()
         })
 
-        socket.on("opponentLeft", () => {
+        socket.on("gameOver", (data) => {
             this.setState({
-                winner: this.state.side,
-                is_game_over: true
+                winner: data.winner,
+                is_game_over: true,
+                time_remaining: data.time_remaining,
+                game_over_reason: data.reason
             })
             this.game_end_sound.play()
         });
@@ -47,17 +55,32 @@ class ViewPlayGame extends React.Component {
     componentWillUnmount(){
         this.props.onExitGame();
         socket.removeAllListeners("startGame");
-        socket.removeAllListeners("opponentLeft");
+        socket.removeAllListeners("gameOver");
     }
 
     drawEndGameScreen(){
         let box_title;
-        if(this.state.winner === null){
-            box_title = <div className="title grey">Draw.</div>
+        if(this.state.winner == null){
+            box_title = (<div className="title grey">
+                            <div>
+                                <span class="main">Draw</span>
+                                <span class="sub">{this.state.game_over_reason}</span>
+                            </div>
+                        </div>);
         } else if (this.state.winner === this.state.side){
-            box_title = <div className="title green">You won!</div>
+            box_title = (<div className="title green">
+                            <div>
+                                <span class="main">You won</span>
+                                <span class="sub">{this.state.game_over_reason}</span>
+                            </div>
+                        </div>);
         } else {
-            box_title = <div className="title red">You lost.</div>
+            box_title = (<div className="title grey">
+                            <div>
+                                <span class="main">You lost</span>
+                                <span class="sub">{this.state.game_over_reason}</span>
+                            </div>
+                        </div>);
         }
         return (
             <div class="box">
@@ -93,10 +116,21 @@ class ViewPlayGame extends React.Component {
         )
     }
 
-    drawPlayerInfo(player){
-        let player_name = [<span className="name">{player.name}</span>, <span className="elo">({player.elo})</span>]
-        let player_name_elo = [<div className="name-elo">{player_name}</div>]
-        let player_info = [<div class="player-info">{player_name_elo}</div>]
+    drawPlayerInfo(player, color){
+        let player_info = (
+            <div class="player-info">
+                <div className="name-elo">
+                    <span className="name">{player.name}</span>
+                    <span className="elo">({player.elo})</span>
+                </div>
+                <Clock color={color}
+                       time={this.state.time_remaining[color]}
+                       is_running={!this.state.is_game_over &&
+                                   color === this.state.color_to_move &&
+                                   this.state.nb_half_moves >= 2}
+                />
+            </div>
+        );
         return player_info;
     }
 
@@ -113,13 +147,25 @@ class ViewPlayGame extends React.Component {
         })
     }
 
+    handlePlayerMoved(time_remaining=null){
+        if (time_remaining){
+            this.setState({
+                time_remaining: time_remaining,
+            });
+        }
+        this.setState({
+            color_to_move: swapColor(this.state.color_to_move),
+            nb_half_moves: this.state.nb_half_moves + 1
+        });
+    }
+
     render() {
         let overlay = '';
         let game = '';
         if(this.state.players){
             game = (
                 <div className="chess-board-container">
-                    {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[WHITE]) : this.drawPlayerInfo(this.state.players[BLACK])}
+                    {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[WHITE], WHITE) : this.drawPlayerInfo(this.state.players[BLACK], BLACK)}
                     <Game side={this.state.side}
                           game_id={this.props.game_id}
                           whitePlayer={this.state.players[WHITE]}
@@ -127,8 +173,9 @@ class ViewPlayGame extends React.Component {
                           whiteDeck={createClassicDeck()}
                           blackDeck={createClassicDeck()}
                           onGameOver={this.handleGameOver.bind(this)}
+                          onPlayerMoved={this.handlePlayerMoved.bind(this)}
                     />
-                    {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[BLACK]) : this.drawPlayerInfo(this.state.players[WHITE])}
+                    {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[BLACK], BLACK) : this.drawPlayerInfo(this.state.players[WHITE], WHITE)}
                 </div>
             )
         } else {

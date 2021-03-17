@@ -2,6 +2,7 @@ import React from 'react'
 import 'simplebar';
 import 'simplebar/dist/simplebar.css';
 import { ImContrast } from 'react-icons/im'
+import { MdTimer, MdShowChart } from 'react-icons/md'
 import { Loader } from '../../navigation'
 import { socket } from '../../../connection/socket'
 
@@ -45,6 +46,7 @@ class Lobby extends React.Component {
                     <td class="icon"><ImContrast/></td>
                     <td class="player-name">{gameoffer.user.name}</td>
                     <td class="player-elo">{gameoffer.user.elo}</td>
+                    <td class="time">{format_time(gameoffer.time)}+{format_increment(gameoffer.increment)}</td>
                 </tr>
             )
             lobby.push(row)
@@ -71,12 +73,13 @@ class Lobby extends React.Component {
         <React.Fragment>
             <div class="lobby-container" data-simplebar>
                 <table className="lobby">
-                    <colgroup span="3" class="columns"></colgroup>
+                    <colgroup span="4" class="columns"></colgroup>
                     <tbody>
                         <tr class="header">
                             <th class="icon"></th>
                             <th class="player-name">Player</th>
                             <th class="player-elo">Elo</th>
+                            <th class="time"><MdTimer/></th>
                         </tr>
                         {this.drawLobby()}
                     </tbody>
@@ -87,6 +90,19 @@ class Lobby extends React.Component {
             </div>
         </React.Fragment>)
     }
+}
+
+function format_time(time){
+    // Get time in seconds
+    time = time / 1000 ;
+
+    // Cut it in minutes
+    let minutes = Math.floor(time / 60);
+    return minutes
+}
+
+function format_increment(time){
+    return time / 1000
 }
 
 export default Lobby

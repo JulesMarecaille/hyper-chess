@@ -26,14 +26,20 @@ class ViewPlay extends React.Component {
 
     componentWillUnmount(){
         this.exitGame();
-        socket.removeAllListeners();
+        socket.removeAllListeners("joinError");
     }
 
-    createGame(){
+    createGame(time, increment){
         let game_id = uuidv4()
-        socket.emit("createNewGame", {game_id: game_id, user: this.props.user})
+        let data = {
+            time: time,
+            increment: increment,
+            game_id: game_id,
+            user: this.props.user
+        }
+        socket.emit("createNewGame", data)
         this.setState({
-            game_id: game_id
+            game_id: game_id,
         })
     }
 
