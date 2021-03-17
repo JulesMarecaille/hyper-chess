@@ -3,10 +3,12 @@ var sockets_in_session = {};
 var games_state = {};
 var gameSocket;
 var io;
+var sequelize;
 
-function connection(sio, socket) {
+function connection(sio, socket, sequelize_connection) {
     try {
         io = sio;
+        sequelize = sequelize_connection;
         game_socket = socket;
         sockets_in_session[socket.id] = game_socket;
         game_socket.on("disconnect", onDisconnect);
@@ -101,13 +103,17 @@ function onPlayerJoinedGame(data) {
     }
 }
 
-function gameOver(game_id, winner, time_remaining, reason){
+function gameOver(game_id, winner, time_remaining, reason, players, elo_differences){
     let payload = {
         winner: winner,
         time_remaining: time_remaining,
-        reason: reason
+        reason: reason,
+        elo_differences: elo_differences
     };
     io.sockets.in(game_id).emit('gameOver', payload);
+    if(elo_differences){
+        updateElos(players, elo_differences);
+    }
 }
 
 function leaveGame(game_id, socket){
@@ -116,6 +122,17 @@ function leaveGame(game_id, socket){
         delete games_state[game_id];
     }
     socket.leave(game_id)
+}
+
+function updateElos(players, elo_differences){
+    const { User } = require("../entities")(sequelize)
+    for(const [color, player] of Object.entries(players)){
+        User.findOne({where: {id: player.id}}).then((user) => {
+            user.elo += elo_differences[color];
+            user.save();
+        }).catch((err) => {
+        });
+    }
 }
 
 exports.connection = connection;

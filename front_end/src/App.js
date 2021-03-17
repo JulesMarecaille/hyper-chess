@@ -65,6 +65,14 @@ class App extends React.Component {
         });
     }
 
+    handleUpdateUser(){
+        this.state.api.getUser(this.state.user.id).then((user) => {
+            this.setState({
+                user: user
+            })
+        });
+    }
+
     render(){
         let app = (
             <div className="login-container">
@@ -101,6 +109,7 @@ class App extends React.Component {
                             <Route exact path='/play' render={() => (<ViewPlay api={this.state.api}
                                                                                user={this.state.user}
                                                                                token={this.state.token}
+                                                                               onUpdateUser={this.handleUpdateUser.bind(this)}
                                                                      />
                                                               )}></Route>
                             <Route exact path='/decks' component={ViewDecks}></Route>

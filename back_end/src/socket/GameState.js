@@ -40,13 +40,24 @@ class GameState {
     gameOver(winner, reason){
         this.is_playing = false;
         this.is_game_over = true;
-        this.winner = winner;
+        let elo_differences = null;
+
+        // Time
         this.clocks[WHITE].pause();
         this.clocks[BLACK].pause();
         let time_remaining = {};
         time_remaining[WHITE] = this.clocks[WHITE].getTimeRemaining();
         time_remaining[BLACK] = this.clocks[BLACK].getTimeRemaining();
-        this.game_over_callback(this.game_id, winner, time_remaining, reason);
+
+        // Elos
+        if (this.nb_half_moves >= 2){
+            this.winner = winner;
+            elo_differences = this.getEloDifferences();
+        } else {
+            this.winner = null;
+            reason = "The game was canceled."
+        }
+        this.game_over_callback(this.game_id, this.winner, time_remaining, reason, this.players, elo_differences);
     }
 
     resign(resign_color){
@@ -89,6 +100,26 @@ class GameState {
         if(this.is_playing){
             this.gameOver(swapColor(player_leaving), "Your opponent left.")
         }
+    }
+
+    getEloDifferences(){
+        let sb, sw = 0.5
+        if(this.winner === WHITE){
+            sw = 1;
+            sb = 0;
+        } else if(this.winner === BLACK){
+            sw = 0;
+            sb = 1;
+        }
+        let rw = Math.pow(10, this.players[WHITE].elo/400);
+        let rb = Math.pow(10, this.players[BLACK].elo/400);
+        let ew = rw / (rw + rb);
+        let eb = rb / (rb + rw);
+        let elo_differences = {};
+        // We use K=18, +9 for a win against a similar opponent
+        elo_differences[WHITE] = Math.round(18 * (sw - ew));
+        elo_differences[BLACK] = Math.round(18 * (sb - eb));
+        return elo_differences;
     }
 
     rematch(){

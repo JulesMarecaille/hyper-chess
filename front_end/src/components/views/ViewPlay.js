@@ -68,6 +68,7 @@ class ViewPlay extends React.Component {
                               user={this.props.user}
                               game_id={this.state.game_id}
                               onExitGame={this.exitGame.bind(this)}
+                              onUpdateUser={this.props.onUpdateUser}
                               />
             );
         } else {

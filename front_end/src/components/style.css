@@ -581,3 +581,34 @@ td,th{
 .clock-container .separator{
     padding: 0 2px;
 }
+
+/**************************************************
+* UPDATE ELO
+***************************************************/
+.update-elo {
+    width: 100%;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.update-elo .rating{
+    font-weight: 300;
+    display: block;
+}
+
+.update-elo .previous{
+    font-weight: 400;
+}
+
+.update-elo .difference{
+    margin-left: 6px;
+    font-weight: 600;
+}
+
+.update-elo .difference.positive{
+    color: var(--navigation-green);
+}
+
+.update-elo .difference.negative{
+    color: var(--navigation-red);
+}

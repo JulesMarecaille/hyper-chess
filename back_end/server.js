@@ -15,10 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 app.set("json spaces", 2)
 
-// Init socket server
-const server = new http.Server(app);
-socket_server(server)
-
 // Connect to the DB
 const connection = new Sequelize(
     'postgres://postgres:'+ config.db_password + '@' + config.db_adress + ':5432/hyperchess',
@@ -41,6 +37,9 @@ connection.authenticate().then(() => {
             // Init the API
             const port = 5000
 
+            // Init socket server
+            const server = new http.Server(app);
+            socket_server(server, connection)
 
             // Import the routes
             require("./src/routes")(app, connection)
