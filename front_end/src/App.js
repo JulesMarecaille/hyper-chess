@@ -2,10 +2,11 @@ import './App.css';
 import React from 'react'
 import { LeftMenu, Loader } from './components/navigation';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { ViewDecks, ViewPlay, ViewHome, ViewShop, ViewLogin, ViewNewAccount, ViewCollection} from './components/views';
+import { ViewDecks, ViewPlay, ViewHome, ViewShop, ViewLogin, ViewNewAccount, ViewCollection, ViewProfile, ViewLeaderboard} from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
 import { socket, initSocket } from './connection/socket';
+import { withRouter } from 'react-router-dom';
 
 
 class App extends React.Component {
@@ -101,8 +102,7 @@ class App extends React.Component {
             app = (
                 <div>
                     <LeftMenu onLogout={this.handleLogout.bind(this)}
-                              user={this.state.user}
-                              location={this.state.location.pathname}/>
+                              user={this.state.user}/>
                     <div className="view-container">
                         <Switch>
                             <Route exact path='/home' component={ViewHome}></Route>
@@ -118,6 +118,14 @@ class App extends React.Component {
                                                                                            user={this.state.user}
                                                                             />
                                                                     )}></Route>
+                            <Route exact path='/leaderboard' render={() => (<ViewLeaderboard api={this.state.api}
+                                                                                             user={this.state.user}
+                                                                            />
+                                                                    )}></Route>
+                            <Route exact path="/profile" render={(props) => (<ViewProfile api={this.state.api}
+                                                                                          search={props.location.search}
+                                                                            />
+                                                                 )}></Route>
                             <Route render={() => <Redirect to="/home" />} />
                         </Switch>
                     </div>

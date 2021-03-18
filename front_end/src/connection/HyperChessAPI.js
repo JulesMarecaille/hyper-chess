@@ -12,8 +12,8 @@ class HyperChessAPI {
         return this._post("login", payload);
     }
 
-    getAllUsers() {
-        return this._get("users")
+    getLeaderboard() {
+        return this._get("users/leaderboard")
     }
 
     getUser(user_id) {

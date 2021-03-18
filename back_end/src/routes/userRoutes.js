@@ -22,10 +22,26 @@ module.exports = (app, connection) => {
         });
     });
 
-    // Get specific user
+    // Get leaderboard (top 100 users + current user position)
+    app.get("/users/leaderboard", (req, res) => {
+        checkAuth(connection, req.headers["x-access-token"]).then((user) => {
+            User.findAll({order: [['elo', 'DESC']], limit: 100}).then((users) => {
+                console.log(users)
+                sendOkResponse(res, users)
+            })
+            .catch((err) => {
+                res.status(500).send(err);
+            });
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+    });
+
+    // Get specific user (for profile)
     app.get("/users/:id", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
-            User.scope('defaultScope', 'decks').findOne({where: {id: req.params.id}}).then((user) => {
+            User.scope('defaultScope').findOne({where: {id: req.params.id}}).then((user) => {
                 sendOkResponse(res, user);
             })
             .catch((err) => {

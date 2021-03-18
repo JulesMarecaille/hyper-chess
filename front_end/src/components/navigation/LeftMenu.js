@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom';
 import { MdHome, MdVideogameAsset, MdStore, MdPowerSettingsNew, MdPerson } from 'react-icons/md';
 import { FaChessBishop } from 'react-icons/fa';
 import { GiLockedChest } from 'react-icons/gi';
+import { ImTrophy } from 'react-icons/im';
 import '../style.css'
+import { withRouter } from 'react-router-dom';
 
 class LeftMenu extends React.Component {
     state = {}
 
 
-    isSelected(route){
-        return (route === this.props.location ? "selected" : "")
+    isSelected(route, search=''){
+        return ((route === this.props.location.pathname && search === this.props.location.search) ? "selected" : "")
     }
 
     render() {
@@ -51,12 +53,20 @@ class LeftMenu extends React.Component {
                             <span className="name">Collection</span>
                         </div>
                     </Link>
+                    <Link to="/leaderboard">
+                        <div className={`entry ${this.isSelected("/leaderboard")}`}>
+                            <ImTrophy className="icon"/>
+                            <span className="name">Leaderboard</span>
+                        </div>
+                    </Link>
                 </div>
                 <div className="bottom content">
-                    <div className={`entry ${this.isSelected("/profile")}`} onClick={this.props.onLogout}>
-                        <MdPerson className="icon"/>
-                        <span className="name">{this.props.user.name}</span>
-                    </div>
+                    <Link to={"/profile?id=" + this.props.user.id}>
+                        <div className={`entry ${this.isSelected("/profile", "?id="+this.props.user.id)}`}>
+                            <MdPerson className="icon"/>
+                            <span className="name">{this.props.user.name}</span>
+                        </div>
+                    </Link>
                     <div className="entry" onClick={this.props.onLogout}>
                         <MdPowerSettingsNew className="icon"/>
                         <span className="name">Logout</span>
@@ -67,4 +77,4 @@ class LeftMenu extends React.Component {
     }
 }
 
-export default LeftMenu
+export default withRouter(LeftMenu)
