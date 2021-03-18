@@ -3,8 +3,17 @@ import { v4 as uuidv4 } from 'uuid';
 import { WHITE, BLACK } from './constants.js'
 
 class Deck {
+<<<<<<< HEAD
     constructor(id=uuidv4(), name='New Deck', pieces=new Array(16), prefered_color=null) {
         this.id = id;
+=======
+    constructor(id=null, name='New Deck', pieces=new Array(16), prefered_color=null, color=WHITE) {
+        if(!id){
+            this.id = uuidv4();
+        } else {
+            this.id = id;
+        }
+>>>>>>> 0b5f172 (deck improvement)
         this.name = name;
         this.pieces = pieces;
         this.prefered_color = prefered_color;
