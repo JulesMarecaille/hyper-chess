@@ -5,8 +5,7 @@ import { WHITE, BLACK } from './constants.js'
 class Deck {
     constructor(id=uuidv4(), name='New Deck', pieces=new Array(16), prefered_color=null) {
         this.id = id;
-=======
->>>>>>> 32ef8de (esquisse de deck selector)
+
         this.name = name;
         this.pieces = pieces;
         this.prefered_color = prefered_color;
