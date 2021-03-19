@@ -12,7 +12,6 @@ class GameState {
         this.is_joinable = true;
         this.is_playing = false;
         this.is_game_over = false;
-        this.creator = null;
         this.nb_half_moves = 0;
         this.time = time;
         this.increment = increment;

@@ -31,7 +31,7 @@ class Lobby extends React.Component {
         this.setState({
             is_loading: true
         })
-        socket.emit("requestGameOffers")
+        socket.emit("requestGameOffers", this.props.user.id)
     }
 
     handleAcceptGameOffer(game_id){

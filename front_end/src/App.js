@@ -103,7 +103,7 @@ class App extends React.Component {
                 <div>
                     <LeftMenu onLogout={this.handleLogout.bind(this)}
                               user={this.state.user}/>
-                    <div className="view-container">
+                    <div className="view-container page-centered">
                         <Switch>
                             <Route exact path='/home' component={ViewHome}></Route>
                             <Route exact path='/play' render={() => (<ViewPlay api={this.state.api}
