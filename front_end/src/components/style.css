@@ -840,3 +840,46 @@ td,th{
     width: 60px;
     text-align: center;
 }
+
+/********************************************************
+* GAME ACTIONS
+*********************************************************/
+.actions-container{
+    font-size: 12px;
+    font-weight: 200;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 16px;
+}
+
+.actions-container .actions{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.actions-container .info{
+    font-style: italic;
+}
+
+.actions-container .action{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 3px;
+    border: 1px solid black;
+    margin: 4px 8px;
+    cursor: pointer;
+}
+
+.actions-container .action.red{
+    color: var(--navigation-red);
+}
+
+.actions-container .action.green{
+    color: var(--navigation-green);
+}

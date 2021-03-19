@@ -42,6 +42,14 @@ module.exports.initGameResult = (connection) => {
         white_won:{
             type: DataTypes.BOOLEAN,
             allowNull: false,
+        },
+
+        time:{
+            type: DataTypes.INTEGER,
+        },
+
+        time_increment:{
+            type: DataTypes.INTEGER,
         }
 
     }, {

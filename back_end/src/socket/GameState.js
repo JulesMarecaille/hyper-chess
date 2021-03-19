@@ -16,6 +16,9 @@ class GameState {
         this.time = time;
         this.increment = increment;
         this.game_over_callback = game_over_callback;
+        this.draw_offers = {};
+        this.draw_offers[WHITE] = false;
+        this.draw_offers[BLACK] = false;
     }
 
     addPlayer(user){
@@ -56,7 +59,7 @@ class GameState {
             this.winner = null;
             reason = "The game was canceled."
         }
-        this.game_over_callback(this.game_id, this.winner, time_remaining, reason, this.players, elo_differences);
+        this.game_over_callback(this.game_id, this.winner, time_remaining, reason, this.players, elo_differences, this.time, this.increment);
     }
 
     resign(resign_color){
@@ -73,6 +76,9 @@ class GameState {
         let res = {}
         res[WHITE] = this.clocks[WHITE].getTimeRemaining();
         res[BLACK] = this.clocks[BLACK].getTimeRemaining();
+
+        this.draw_offers[WHITE] = false;
+        this.draw_offers[BLACK] = false;
         return res;
     }
 
@@ -119,6 +125,17 @@ class GameState {
         elo_differences[WHITE] = Math.round(18 * (sw - ew));
         elo_differences[BLACK] = Math.round(18 * (sb - eb));
         return elo_differences;
+    }
+
+    offerDraw(color){
+        this.draw_offers[color] = true;
+    }
+
+    acceptDraw(color){
+        this.draw_offers[color] = true;
+        if(this.draw_offers[WHITE] && this.draw_offers[BLACK]){
+            this.gameOver(null, "By mutual agreement.")
+        }
     }
 
     rematch(){
