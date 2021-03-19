@@ -2,7 +2,7 @@ const utils = require("../utils.js");
 const bcrypt = require("bcrypt-nodejs");
 const config = require("../../config.js");
 const jwt = require("jsonwebtoken");
-const { checkAuth, sendOkResponse } = require("../utils.js")
+const { checkAuth, sendOkResponse, dynamicSort } = require("../utils.js")
 
 module.exports = (app, connection) => {
     const { User } = require("../entities")(connection)
@@ -26,7 +26,6 @@ module.exports = (app, connection) => {
     app.get("/users/leaderboard", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             User.findAll({order: [['elo', 'DESC']], limit: 100}).then((users) => {
-                console.log(users)
                 sendOkResponse(res, users)
             })
             .catch((err) => {
@@ -38,10 +37,32 @@ module.exports = (app, connection) => {
         });
     });
 
-    // Get specific user (for profile)
+    // Get specific user
     app.get("/users/:id", (req, res) => {
-        checkAuth(connection, req.headers["x-access-token"]).then((user) => {
+        checkAuth(connection, req.headers["x-access-token"]).then((auth_user) => {
             User.scope('defaultScope').findOne({where: {id: req.params.id}}).then((user) => {
+                sendOkResponse(res, user);
+            })
+            .catch((err) => {
+                res.status(500).send(err);
+            });
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+    });
+
+    // Get specific user profile
+    app.get("/users/:id/profile", (req, res) => {
+        checkAuth(connection, req.headers["x-access-token"]).then((auth_user) => {
+            User.scope('defaultScope', 'gameResults').findOne({where: {id: req.params.id}}).then((user) => {
+                user = user.toJSON()
+                let game_results = user.white.concat(user.black);
+                // sort inline
+                game_results.sort(dynamicSort("created_at"))
+                delete user.white
+                delete user.black
+                user.game_results = game_results
                 sendOkResponse(res, user);
             })
             .catch((err) => {

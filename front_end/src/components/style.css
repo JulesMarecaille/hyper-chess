@@ -34,6 +34,15 @@ td,th{
 }
 
 /**********************************************************
+* GLOBAL VIEW
+***********************************************************/
+.page-centered{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 26px;
+}
+/**********************************************************
 * LEFT MENU
 ***********************************************************/
 
@@ -621,7 +630,7 @@ td,th{
 * PROFILE
 ****************************************************/
 .profile-container{
-    width: 250px;
+    width: 450px;
 }
 
 .profile-container .infos{
@@ -644,6 +653,86 @@ td,th{
 .profile-container .tertiary{
     font-weight: 300;
     font-size: 12px;
+}
+
+.profile-container .game-results{
+    padding: 10px 20px;
+    max-height: 450px;
+    width: 100%;
+}
+
+.profile-container .title{
+    font-size: 18px;
+}
+
+.profile-container .game-results .entry{
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.profile-container .game-results .entry .players{
+    width: 250px;
+    padding: 0 10px
+}
+
+.profile-container .game-results .entry .players .player{
+    display: flex;
+    align-items: center;
+}
+
+.profile-container .game-results .entry .players .color{
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin: 0 10px;
+}
+
+.profile-container .game-results .entry .players .color.white{
+    background-color: #fff;
+}
+
+.profile-container .game-results .entry .players .color.black{
+    background-color: #000;
+}
+
+.profile-container .game-results .entry .players .name{
+    font-weight: 200;
+}
+
+.profile-container .game-results .entry .players .elo{
+    margin-left: 6px;
+}
+
+.profile-container .game-results .date{
+    font-weight: 200;
+}
+
+.self-result{
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 16px;
+}
+
+.self-result.draw{
+    background-color: #888;
+}
+
+.self-result.win{
+    background-color: var(--navigation-green);
+}
+
+.self-result.lose{
+    background-color: var(--navigation-red);
 }
 
 /**************************************************

@@ -20,6 +20,10 @@ class HyperChessAPI {
         return this._get("users/" + user_id)
     }
 
+    getUserProfile(user_id) {
+        return this._get("users/" + user_id + "/profile" )
+    }
+
     newUser(payload) {
         return this._post("users", payload)
     }

@@ -80,7 +80,8 @@ class ViewPlayLobby extends React.Component {
             <div class="button-container">
                 <button class="button" onClick={this.openOverlay.bind(this)}>Create Game</button>
             </div>
-            <Lobby api={this.props.api}
+            <Lobby user={this.props.user}
+                   api={this.props.api}
                    onAcceptGameOffer={this.props.onAcceptGameOffer}
                    onCreateGame={this.openOverlay.bind(this)}/>
         </React.Fragment>)

@@ -35,11 +35,11 @@ function onDisconnecting() {
     }
 }
 
-function onRequestGameOffers(){
+function onRequestGameOffers(user_id){
     let gameoffers = []
     for([game_id, game_state] of Object.entries(games_state)){
         let game_state = games_state[game_id]
-        if(game_state.isJoinable()){
+        if(game_state.isJoinable() && game_state.creator.id !== user_id){
             gameoffers.push({
                 id: game_state.game_id,
                 user: game_state.creator,
@@ -111,8 +111,9 @@ function gameOver(game_id, winner, time_remaining, reason, players, elo_differen
         elo_differences: elo_differences
     };
     io.sockets.in(game_id).emit('gameOver', payload);
+    // If game wasn't canceled
     if(elo_differences){
-        updateElos(players, elo_differences);
+        gameResults(players, elo_differences, winner);
     }
 }
 
@@ -124,8 +125,32 @@ function leaveGame(game_id, socket){
     socket.leave(game_id)
 }
 
-function updateElos(players, elo_differences){
-    const { User } = require("../entities")(sequelize)
+function gameResults(players, elo_differences, winner){
+    const { User, GameResult } = require("../entities")(sequelize)
+    const WHITE = 0;
+    const BLACK = 1;
+
+    // Store game gameResults
+    let white_won = (winner === WHITE);
+    let draw = (winner == null);
+    let white_id = players[WHITE].id;
+    let black_id = players[BLACK].id;
+    let white_name = players[WHITE].name;
+    let black_name = players[BLACK].name;
+    let white_elo = players[WHITE].elo;
+    let black_elo = players[BLACK].elo;
+    GameResult.create({
+        whiteId: white_id,
+        blackId: black_id,
+        white_elo: white_elo,
+        black_elo: black_elo,
+        white_name: white_name,
+        black_name: black_name,
+        draw: draw,
+        white_won: white_won
+    });
+
+    // Update Elos
     for(const [color, player] of Object.entries(players)){
         User.findOne({where: {id: player.id}}).then((user) => {
             user.elo += elo_differences[color];
