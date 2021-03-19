@@ -40,16 +40,16 @@ class ViewProfile extends React.Component {
             // Self result
             let self_result;
             if(game_result.draw){
-                self_result = <div className="self-result draw"></div>
+                self_result = <div className="self-result draw">Draw</div>
             } else {
                 if (this.state.user.id === game_result.whiteId && game_result.white_won){
-                    self_result = <div className="self-result win"></div>
+                    self_result = <div className="self-result win">Win</div>
                 } else if (this.state.user.id === game_result.blackId && game_result.white_won){
-                    self_result = <div className="self-result lose"></div>
+                    self_result = <div className="self-result lose">Loss</div>
                 } else if (this.state.user.id === game_result.blackId && !game_result.white_won) {
-                    self_result = <div className="self-result draw"></div>
+                    self_result = <div className="self-result win">Win</div>
                 } else {
-                    self_result = <div className="self-result lose"></div>
+                    self_result = <div className="self-result lose">Loss</div>
                 }
             }
             game_results.push(
