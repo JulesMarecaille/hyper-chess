@@ -19,6 +19,8 @@ function connection(sio, socket, sequelize_connection) {
         game_socket.on("makeMove", onMakeMove);
         game_socket.on("requestGameOffers", onRequestGameOffers);
         game_socket.on("playerResign", onResign);
+        game_socket.on("proposeDraw", onProposeDraw);
+        game_socket.on("acceptDraw", onAcceptDraw)
     } catch (e) {
         console.log(e)
     }
@@ -77,7 +79,7 @@ function onLeaveGame(game_id){
 }
 
 function onResign(data){
-    games_state[game_id].resign(data.color);
+    games_state[data.game_id].resign(data.color);
 }
 
 function onPlayerJoinedGame(data) {
@@ -103,7 +105,18 @@ function onPlayerJoinedGame(data) {
     }
 }
 
-function gameOver(game_id, winner, time_remaining, reason, players, elo_differences){
+function onProposeDraw(data){
+    this.to(game_id).emit('opponentOfferDraw')
+    games_state[data.game_id].offerDraw(data.color);
+}
+
+function onAcceptDraw(data){
+    games_state[data.game_id].acceptDraw(data.color);
+}
+
+
+// Utils
+function gameOver(game_id, winner, time_remaining, reason, players, elo_differences, time, increment){
     let payload = {
         winner: winner,
         time_remaining: time_remaining,
@@ -113,7 +126,7 @@ function gameOver(game_id, winner, time_remaining, reason, players, elo_differen
     io.sockets.in(game_id).emit('gameOver', payload);
     // If game wasn't canceled
     if(elo_differences){
-        gameResults(players, elo_differences, winner);
+        gameResults(players, elo_differences, winner, time, increment);
     }
 }
 
@@ -125,7 +138,7 @@ function leaveGame(game_id, socket){
     socket.leave(game_id)
 }
 
-function gameResults(players, elo_differences, winner){
+function gameResults(players, elo_differences, winner, time, increment){
     const { User, GameResult } = require("../entities")(sequelize)
     const WHITE = 0;
     const BLACK = 1;
@@ -147,7 +160,9 @@ function gameResults(players, elo_differences, winner){
         white_name: white_name,
         black_name: black_name,
         draw: draw,
-        white_won: white_won
+        white_won: white_won,
+        time: time,
+        time_increment: increment
     });
 
     // Update Elos

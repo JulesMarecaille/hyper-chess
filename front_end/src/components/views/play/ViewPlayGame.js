@@ -1,7 +1,10 @@
 import React from 'react'
+import ReactTooltip from 'react-tooltip';
 import Game from '../../../chess/ui/Game.js'
 import Clock from '../../../chess/ui/Clock.js'
 import { Loader } from '../../navigation'
+import { MdFlag, MdClose, MdCheck } from 'react-icons/md'
+import { FaRegHandshake } from 'react-icons/fa'
 import { WHITE, BLACK, swapColor } from '../../../chess/model/constants.js';
 import { createUser } from '../../../chess/model/utils.js';
 import { createClassicDeck } from '../../../chess/model/utils.js';
@@ -21,7 +24,11 @@ class ViewPlayGame extends React.Component {
             color_to_move: WHITE,
             nb_half_moves: 0,
             game_over_reason : "",
-            elo_differences: null
+            elo_differences: null,
+            player_offer_draw: false,
+            opponent_offer_draw: false,
+            player_rejected_offer: false,
+            player_clicked_resign: false
         }
         this.game_start_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/GameStart.mp3")
         this.game_end_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/GameEnd.mp3")
@@ -58,6 +65,12 @@ class ViewPlayGame extends React.Component {
                 this.props.onUpdateUser()
             }
         });
+
+        socket.on("opponentOfferDraw", () => {
+            this.setState({
+                opponent_offer_draw: true
+            })
+        })
     }
 
     componentWillUnmount(){
@@ -98,7 +111,6 @@ class ViewPlayGame extends React.Component {
         let update_elo = '';
         if(this.state.elo_differences){
             let elo_difference = this.state.elo_differences[this.state.side];
-            let previous_elo = this.state.players[this.state.side].elo - elo_difference;
             let elo_difference_el;
             if(elo_difference > 0){
                 elo_difference_el = <span class="difference positive">+{elo_difference}</span>
@@ -109,8 +121,8 @@ class ViewPlayGame extends React.Component {
             }
             update_elo = (
                 <div class="update-elo">
-                    <span class="rating">New elo</span>
-                    <span><span class="previous">{previous_elo}</span>{elo_difference_el}</span>
+                    <span class="rating">New rating</span>
+                    <span><span class="previous">{this.state.players[this.state.side].elo}</span>({elo_difference_el})</span>
                 </div>);
         }
         return (
@@ -166,6 +178,81 @@ class ViewPlayGame extends React.Component {
         return player_info;
     }
 
+    drawActionInterface(){
+        let actions;
+        if(!this.state.player_offer_draw && !this.state.opponent_offer_draw){
+            if(this.state.player_clicked_resign){
+                actions =  (
+                    <div>
+                        <div className="info">Are you sure you want to resign?</div>
+                        <div class="actions">
+                            <ReactTooltip place="bottom" delayShow="600" effect="solid"/>
+                            <div className="action green" onClick={this.resign.bind(this)} data-tip="Resign"><MdCheck/></div>
+                            <div className="action red" onClick={this.toggleResign.bind(this)} data-tip="Cancel"><MdClose/></div>
+                        </div>
+                    </div>
+                );
+            } else {
+                actions = (
+                    <div class="actions">
+                        <ReactTooltip place="bottom" delayShow="600" effect="solid"/>
+                        <div className="action" onClick={this.toggleResign.bind(this)} data-tip="Resign"><MdFlag/></div>
+                        <div className="action" onClick={this.proposeDraw.bind(this)} data-tip="Offer draw"><FaRegHandshake/></div>
+                    </div>
+                );
+            }
+        } else if(this.state.player_offer_draw) {
+            actions = <div className="info">You offered a draw.</div>;
+        } else {
+            if(!this.state.player_rejected_offer){
+                actions = (
+                    <div>
+                        <div className="info">Opponent offered a draw.</div>
+                        <div class="actions">
+                            <ReactTooltip place="bottom" delayShow="600" effect="solid"/>
+                            <div className="action green" onClick={this.acceptDrawOffer.bind(this)} data-tip="Accept draw"><MdCheck/></div>
+                            <div className="action red" onClick={this.rejectDrawOffer.bind(this)} data-tip="Refuse draw"><MdClose/></div>
+                        </div>
+                    </div>
+                );
+            } else {
+                actions = <div className="info">You rejected the offer for a draw.</div>;
+            }
+        }
+        return (
+            <div className="actions-container">
+                {actions}
+            </div>
+        );
+    }
+
+    proposeDraw(){
+        this.setState({
+            player_offer_draw: true
+        })
+        socket.emit("proposeDraw", {game_id: this.props.game_id, color: this.state.side});
+    }
+
+    acceptDrawOffer(){
+        socket.emit("acceptDraw", {game_id: this.props.game_id, color: this.state.side});
+    }
+
+    rejectDrawOffer(){
+        this.setState({
+            player_rejected_offer: true
+        });
+    }
+
+    toggleResign(){
+        this.setState({
+            player_clicked_resign: !this.state.player_clicked_resign
+        })
+    }
+
+    resign(){
+        socket.emit("playerResign", {game_id: this.props.game_id, color: this.state.side})
+    }
+
     handleGameOver(winner){
         this.setState({
             winner: winner,
@@ -187,7 +274,10 @@ class ViewPlayGame extends React.Component {
         }
         this.setState({
             color_to_move: swapColor(this.state.color_to_move),
-            nb_half_moves: this.state.nb_half_moves + 1
+            nb_half_moves: this.state.nb_half_moves + 1,
+            player_offer_draw: false,
+            opponent_offer_draw: false,
+            player_rejected_offer: false
         });
     }
 
@@ -196,18 +286,21 @@ class ViewPlayGame extends React.Component {
         let game = '';
         if(this.state.players){
             game = (
-                <div className="chess-board-container">
-                    {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[WHITE], WHITE) : this.drawPlayerInfo(this.state.players[BLACK], BLACK)}
-                    <Game side={this.state.side}
-                          game_id={this.props.game_id}
-                          whitePlayer={this.state.players[WHITE]}
-                          blackPlayer={this.state.players[BLACK]}
-                          whiteDeck={createClassicDeck()}
-                          blackDeck={createClassicDeck()}
-                          onGameOver={this.handleGameOver.bind(this)}
-                          onPlayerMoved={this.handlePlayerMoved.bind(this)}
-                    />
-                    {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[BLACK], BLACK) : this.drawPlayerInfo(this.state.players[WHITE], WHITE)}
+                <div>
+                    <div className="chess-board-container">
+                        {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[WHITE], WHITE) : this.drawPlayerInfo(this.state.players[BLACK], BLACK)}
+                        <Game side={this.state.side}
+                              game_id={this.props.game_id}
+                              whitePlayer={this.state.players[WHITE]}
+                              blackPlayer={this.state.players[BLACK]}
+                              whiteDeck={createClassicDeck()}
+                              blackDeck={createClassicDeck()}
+                              onGameOver={this.handleGameOver.bind(this)}
+                              onPlayerMoved={this.handlePlayerMoved.bind(this)}
+                        />
+                        {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[BLACK], BLACK) : this.drawPlayerInfo(this.state.players[WHITE], WHITE)}
+                    </div>
+                    {this.drawActionInterface()}
                 </div>
             )
         } else {
