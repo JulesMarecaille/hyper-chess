@@ -9,16 +9,9 @@ npm install
 npm start
 ```
 
-## To run the socket server
+## To run the Backend
 ```
-cd socket_server
-npm install
-noce server.js
-```
-
-## To run the API
-```
-cd api
+cd back_end
 npm install
 node server.js
 ```

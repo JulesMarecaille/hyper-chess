@@ -81,7 +81,6 @@ class ViewPlayGame extends React.Component {
 
     drawEndGameScreen(){
         let box_title;
-        console.log(this.state.winner)
         if(this.state.winner == null){
             let title = "Draw";
             if(this.state.nb_half_moves < 2){

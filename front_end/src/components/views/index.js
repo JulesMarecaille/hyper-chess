@@ -7,5 +7,17 @@ import ViewNewAccount from './ViewNewAccount'
 import ViewCollection from './ViewCollection'
 import ViewProfile from './ViewProfile'
 import ViewLeaderboard from './ViewLeaderboard'
+import ViewResetPassword from './ViewResetPassword'
 
-export { ViewDecks, ViewPlay, ViewHome, ViewShop, ViewLogin, ViewNewAccount, ViewCollection, ViewProfile, ViewLeaderboard }
+export {
+    ViewDecks,
+    ViewPlay,
+    ViewHome,
+    ViewShop,
+    ViewLogin,
+    ViewNewAccount,
+    ViewCollection,
+    ViewProfile,
+    ViewLeaderboard,
+    ViewResetPassword
+}

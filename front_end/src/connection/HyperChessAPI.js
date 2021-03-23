@@ -28,6 +28,14 @@ class HyperChessAPI {
         return this._post("users", payload)
     }
 
+    resetPassword(payload) {
+        return this._post("users/reset_password", payload)
+    }
+
+    newPassword(payload) {
+        return this._post("users/new_password", payload)
+    }
+
     // Decks
     getAllDecksFromUser(user_id){
         return this._get("decks/user/" + user_id)
