@@ -105,10 +105,7 @@ class ViewDecks extends React.Component {
               this.props.api.newDeck(this.state.selected_deck);
           }
           else if(this.deckIsChanged(this.state.selected_deck)){
-              console.log("UPDATE ME POR FAVOR", this.state.selected_deck);
-              //to be updated when fixed
-
-          //    this.props.api.updateDeck(this.state.selectedDeck.id, this.state.selectedDeck);
+             this.props.api.updateDeck(this.state.selected_deck.id, this.state.selected_deck);
           }
           this.setState({clicked:false,
               selected_deck : false,

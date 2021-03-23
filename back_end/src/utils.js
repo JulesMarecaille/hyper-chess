@@ -28,7 +28,7 @@ exports.dynamicSort = (property) => {
     }
 }
 
-exports.checkAuth = (connection, token) => {
+exports.checkAuth = (connection, token, scope="defaultScope") => {
     const { User } = require("./entities")(connection)
     return new Promise((resolve, reject) => {
         if (!token) {
@@ -38,7 +38,7 @@ exports.checkAuth = (connection, token) => {
             if (err) {
                 reject({ auth: false, message: "Failed to authenticate token." });
             }
-            User.findOne({ where: {id: decoded.id}}).then((user) => {
+            User.scope(scope).findOne({ where: {id: decoded.id}}).then((user) => {
                 resolve(user);
             });
         })
@@ -145,7 +145,9 @@ exports.createDefaultDeck = (connection, user_id) => {
                    'ClassicPawn', 'ClassicPawn', 'ClassicPawn', 'ClassicPawn',
                    'ClassicRook', 'ClassicKnight', 'ClassicBishop', 'ClassicQueen',
                    'ClassicKing', 'ClassicBishop', 'ClassicKnight', 'ClassicRook'],
-        "UserId": user_id
+        "UserId": user_id,
+        "prefered_as_white": true,
+        "prefered_as_black": true
     });
 }
 
