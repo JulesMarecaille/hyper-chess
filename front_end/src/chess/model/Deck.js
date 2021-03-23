@@ -9,7 +9,8 @@ class Deck {
         this.name = name;
         this.pieces = pieces;
         this.prefered_color = prefered_color;
-        this.color = color;
+        this.color = WHITE;
+        this.score = 0;
     }
 
     addPiece(piece, position){

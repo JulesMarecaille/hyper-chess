@@ -1,5 +1,5 @@
-import { WHITE, BLACK, SQUARES } from '../constants.js'
 import Piece from './Piece.js'
+import {ALLOWED} from '../constants.js'
 
 class ClassicQueen extends Piece
 {
@@ -21,7 +21,7 @@ class ClassicQueen extends Piece
 			0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0,
 			3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3];
 		let description = "move on diagonals and on lines : one of the strongest pieces";
-		super(color, behavior, 'ClassicQueen', 9, description);
+		super(color, behavior, 'ClassicQueen', 'Classic Queen', 9, description, ALLOWED.QUEEN);
 	}
 
 }

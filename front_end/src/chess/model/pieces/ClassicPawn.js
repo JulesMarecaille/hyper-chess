@@ -1,5 +1,5 @@
-import { WHITE, BLACK, SQUARES } from '../constants.js'
 import Piece from './Piece.js'
+import {ALLOWED} from '../constants.js'
 
 function passedByPawn(move)
 {
@@ -37,7 +37,7 @@ class ClassicPawn extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "move to 1 forward, can only eat on the two diagonals square forward ";
-		super(color, behavior, 'ClassicPawn', 1, description);
+		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN);
 		this.is_pawn = true;
 	}
 

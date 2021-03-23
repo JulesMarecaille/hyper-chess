@@ -1,5 +1,5 @@
-import { WHITE, BLACK, SQUARES } from '../constants.js'
 import Piece from './Piece.js'
+import {ALLOWED} from '../constants.js'
 
 class ClassicBishop extends Piece
 {
@@ -21,7 +21,7 @@ class ClassicBishop extends Piece
 			0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
 			3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3];
 			let description = "move in diagonals";
-		super(color, behavior, 'ClassicBishop', 3, description);
+		super(color, behavior, 'ClassicBishop', 'ClassicBishop', 3, description, ALLOWED.BISHOP);
 	}
 
 }
