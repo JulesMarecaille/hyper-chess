@@ -30,6 +30,11 @@ body{
     justify-content: center;
 }
 
+.text-link{
+    font-size: 11px;
+    color: #3d50e0;
+}
+
 /********************************************************
 * LOGIN PAGES
 *********************************************************/
@@ -82,8 +87,6 @@ body{
 
 .form-container .form-title .alt-title{
     position: relative;
-    font-size: 11px;
-    color: #3d50e0;
 }
 
 .input-container{

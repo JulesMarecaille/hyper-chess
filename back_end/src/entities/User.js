@@ -29,6 +29,11 @@ module.exports.initUser = (connection) => {
             allowNull: false
         },
 
+        reset_token:{
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+
         elo: {
             type: DataTypes.INTEGER,
             defaultValue: 1000,
@@ -40,7 +45,7 @@ module.exports.initUser = (connection) => {
         },
         scopes: {
             logging: {
-                attributes: ["id", "email", "password"]
+                attributes: ["id", "email", "password", "reset_token"]
             }
         }
     })

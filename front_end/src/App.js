@@ -2,7 +2,18 @@ import './App.css';
 import React from 'react'
 import { LeftMenu, Loader } from './components/navigation';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { ViewDecks, ViewPlay, ViewHome, ViewShop, ViewLogin, ViewNewAccount, ViewCollection, ViewProfile, ViewLeaderboard} from './components/views';
+import {
+    ViewDecks,
+    ViewPlay,
+    ViewHome,
+    ViewShop,
+    ViewLogin,
+    ViewNewAccount,
+    ViewResetPassword,
+    ViewCollection,
+    ViewProfile,
+    ViewLeaderboard
+} from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
 import { socket, initSocket } from './connection/socket';
@@ -60,9 +71,16 @@ class App extends React.Component {
     }
 
     handleNewAccount(){
-        window.location.href = "login";
         this.setState({
-            new_account_created: true
+            new_account_created: true,
+            redirect_to_login: <Redirect to="/login"/>
+        });
+    }
+
+    handlePasswordReset(){
+        this.setState({
+            password_reset: true,
+            redirect_to_login: <Redirect to="/login"/>
         });
     }
 
@@ -83,15 +101,23 @@ class App extends React.Component {
                 <div className="right-panel">
                     <Switch>
                         <Route exact path='/login'
-                               render={() => (<ViewLogin api={this.state.api}
-                                                         onLoginSuccess={this.handleLogin.bind(this)}/>
+                               render={(props) => (<ViewLogin api={this.state.api}
+                                                         newAccountCreated={this.state.new_account_created}
+                                                         passwordReset={this.state.password_reset}
+                                                         onLoginSuccess={this.handleLogin.bind(this)}
+                                                         search={props.location.search}/>
                                              )}>
                         </Route>
-                        <Route exact path='/newAccount'
+                        <Route exact path='/signup'
                                render={() => (<ViewNewAccount api={this.state.api}
                                                               onNewAccountSuccess={this.handleNewAccount.bind(this)}/>
                                              )}>
                         </Route>
+                        <Route exact path="/reset" render={(props) => (<ViewResetPassword api={this.state.api}
+                                                                                          search={props.location.search}
+                                                                                          onNewPassword={this.handlePasswordReset.bind(this)}
+                                                                        />
+                                                             )}></Route>
                         <Route render={() => <Redirect to="/login" />} />
                     </Switch>
                 </div>
@@ -134,6 +160,7 @@ class App extends React.Component {
         }
         return (
             <Router>
+                {this.state.redirect_to_login}
                 <div className="App">
                     {app}
                 </div>
