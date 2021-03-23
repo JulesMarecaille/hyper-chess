@@ -1,5 +1,5 @@
-import { WHITE, BLACK, SQUARES } from '../constants.js'
 import Piece from './Piece.js'
+import {ALLOWED} from '../constants.js'
 
 function isSquareChecked(board, square, color, last_move)
 {
@@ -39,7 +39,7 @@ class ClassicKing extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 			let description = "Can move to 1 square, loose him, loose the game.";
-		super(color, behavior, 'ClassicKing', 1, description);
+		super(color, behavior, 'ClassicKing', 'Classic King', 1, description, ALLOWED.KING);
 		this.is_king = true;
 	}
 

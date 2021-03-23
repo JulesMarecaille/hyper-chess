@@ -1,6 +1,33 @@
 export const WHITE = 0;
 export const BLACK = 1;
 
+export const ALLOWED = {
+    PAWN : 1,
+    ROOK : 2,
+    KNIGHT : 4,
+    BISHOP : 8,
+    QUEEN : 16,
+    KING : 32
+}
+
+export const ALLOWED_MAPPING = {
+    "PAWN" : ALLOWED.PAWN,
+    "ROOK" : ALLOWED.ROOK,
+    "KNIGHT" : ALLOWED.KNIGHT,
+    "BISHOP" : ALLOWED.BISHOP,
+    "QUEEN" : ALLOWED.QUEEN,
+    "KING" : ALLOWED.KING
+}
+
+export const ALLOWED_POS = {
+    1 : [0, 1, 2, 3, 4, 5, 6, 7],
+    2 : [8, 15],
+    4 : [9, 14],
+    8 : [10, 13],
+    16 : [11],
+    32 : [12]
+}
+
 export const SQUARES = {
   a8:   0, b8:   1, c8:   2, d8:   3, e8:   4, f8:   5, g8:   6, h8:   7,
   a7:  16, b7:  17, c7:  18, d7:  19, e7:  20, f7:  21, g7:  22, h7:  23,
