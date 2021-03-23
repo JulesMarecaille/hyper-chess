@@ -110,6 +110,22 @@ module.exports = (app, connection) => {
         });
     });
 
+    // Update user
+    app.put("/users/:id", (req, res) => {
+        checkAuth(connection, req.headers["x-access-token"]).then((user) => {
+            req.body.id = req.params.id;
+            user.update(req.body).then((user) => {
+                sendOkResponse(res, user);
+            })
+            .catch((err) => {
+                res.status(500).send(err);
+            });
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+    });
+
     // Create a new user
     app.post("/users", (req, res) => {
         User.findOne({
