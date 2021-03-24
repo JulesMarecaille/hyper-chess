@@ -32,6 +32,12 @@
 .chess-board td.dark.selected{
     background: #457b9d;
 }
+.chess-board td.last-move{
+    background: #3c73c0;
+}
+.chess-board td.premove{
+    background-color: #f94144;
+}
 
 .chess-board .marker-container{
     height: 100%;

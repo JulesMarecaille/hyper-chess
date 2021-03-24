@@ -25,6 +25,10 @@ class Board {
 		return getLegalMovesFromPlayerFromBoard(this.board, color, this.kings_positions, this.getLastMove(), true)
 	}
 
+	isMoveLegal(move){
+		return (this.getLegalMovesFromPiece(move.from).includes(move.to) && this.color_to_move === move.player_color);
+	}
+
 	initializeBoard(){
 		let white_pieces = this.deck_white.getPiecesAsWhite()
 		let black_pieces = this.deck_black.getPiecesAsBlack()
