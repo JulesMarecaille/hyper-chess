@@ -20,6 +20,17 @@ class Square extends React.Component {
         this.props.dragOver(this.props.square);
     }
 
+    getColorClass(evt){
+        if(this.props.isPremove){
+            return "premove"
+        } else if(this.props.isSelected){
+            return "selected"
+        } else if(this.props.isLastMove){
+            return "last-move"
+        }
+        return "";
+    }
+
     render() {
         let option_marker = '';
         let piece = '';
@@ -43,7 +54,7 @@ class Square extends React.Component {
         // Add style if the Square is selected or if it's pointable by the player
         return (
         <React.Fragment>
-            <td className={`${this.props.color} ${this.props.isSelected ? "selected" : ""} ${this.props.isClickable ? "clickable" : ""}`}
+            <td className={`${this.props.color} ${this.props.isClickable ? "clickable" : ""} ${this.getColorClass()}`}
                 onClick={this.handleClick.bind(this)}
                 onDragOver={this.handleDragOver.bind(this)}>
                 {option_marker}

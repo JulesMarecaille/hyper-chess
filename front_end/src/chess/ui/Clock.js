@@ -35,7 +35,7 @@ class Clock extends React.Component {
             seconds_str = seconds;
         }
         return (
-            <div className={`clock-container ${this.props.color === WHITE ? 'white' : 'black'}`}>
+            <div className={`clock-container unselectable ${this.props.color === WHITE ? 'white' : 'black'}`}>
                 <span class="minutes">{minutes_str}</span>
                 <span class="separator">:</span>
                 <span class="seconds">{seconds_str}</span>
