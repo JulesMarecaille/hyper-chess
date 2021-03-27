@@ -30,6 +30,8 @@ module.exports = (app, connection) => {
                     user.coins += 50;
                     user.save().then(() => {
                         sendOkResponse(res, {});
+                        rewards.last_daily_coins_collected = new Date();
+                        rewards.save();
                     })
                 } else {
                     res.status(401).send();

@@ -10,6 +10,7 @@ body{
     --gold: #FAA613;
     --silver: #F6F4F3;
     --copper: #C8553D;
+    --color-coins: #FAA613;
 }
 
 a {
@@ -40,6 +41,14 @@ td,th{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.coins{
+    color: var(--color-coins);
+}
+
+.green{
+    color: var(--navigation-green);
 }
 
 /**********************************************************
@@ -87,9 +96,10 @@ td,th{
 }
 
 .leftmenu .content .entry{
-    font-size: 0.8em;
+    font-size: 13px;
     font-weight: 200;
-    height: 36px;
+    min-height: 20px;
+    padding: 8px 0;
     width: 100%;
     margin: 0;
     font-weight: 400;
@@ -117,8 +127,29 @@ td,th{
 }
 
 .leftmenu .content .entry .icon{
-    font-size: 1.3em;
+    font-size: 18px;
     margin: 0 12px;
+}
+
+.leftmenu .content .entry .main{
+    display: flex;
+    align-items: center;
+}
+
+.leftmenu .content .entry .sub{
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    padding-top: 8px;
+}
+
+.leftmenu .content .entry .sub .name{
+    font-size: 12px;
+}
+
+.leftmenu .content .entry .sub .icon{
+    margin-right: 6px;
+    font-size: 16px;
 }
 
 /*******************************************************************
@@ -375,7 +406,6 @@ td,th{
 }
 
 .overlay .box .content{
-
     width: 100%;
 }
 
@@ -384,6 +414,7 @@ td,th{
     align-items: center;
     justify-content: center;
     width: 100%;
+    padding-top: 8px;
 }
 
 /**************************************************
@@ -605,34 +636,48 @@ td,th{
 }
 
 /**************************************************
-* UPDATE ELO
+* UPDATE ELO / COINS
 ***************************************************/
-.update-elo {
+.update {
     width: 100%;
     text-align: center;
     padding-top: 8px;
 }
 
-.update-elo .rating{
+.update .update-title{
     font-weight: 300;
     display: block;
 }
 
-.update-elo .previous{
+.update .info{
     font-weight: 400;
+    display: inline-flex;
+    align-items: center;
 }
 
-.update-elo .difference{
+.update .difference{
     margin-left: 6px;
     font-weight: 600;
 }
 
-.update-elo .difference.positive{
+.update .difference.positive{
     color: var(--navigation-green);
 }
 
-.update-elo .difference.negative{
+.update .difference.negative{
     color: var(--navigation-red);
+}
+
+.update .limit{
+    font-style: italic;
+    font-size: 12px;
+    color: #a4a4a4;
+}
+
+.icon-coin{
+    color: var(--color-coins);
+    padding-top: 2px;
+    margin-left: 4px;
 }
 
 /****************************************************
@@ -892,4 +937,62 @@ td,th{
 
 .actions-container .action.green{
     color: var(--navigation-green);
+}
+
+/**************************************************
+* DAILY REWARD
+***************************************************/
+
+.daily-reward-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.daily-reward-container .title{
+    font-size: 18px;
+}
+
+.daily-reward{
+    height: 42px;
+    border-radius: 5px;
+    border: 1px solid black;
+    min-width: 100px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: 0.25s;
+    background-color: var(--menu-background-color);
+    margin: 12px;
+}
+
+.daily-reward span{
+    display: flex;
+    align-items: center;
+}
+
+.daily-reward span .icon{
+    margin-left: 6px;
+    padding-top: 3px;
+}
+
+.daily-reward.active{
+    color: var(--color-coins);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.daily-reward.active:hover{
+    color: #fff !important;
+    background-color: var(--color-coins);
+    cursor: pointer;
+}
+
+.daily-reward.inactive{
+    font-style: italic;
+    color: #a4a4a4;
+    font-size: 12px;
 }

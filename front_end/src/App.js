@@ -142,7 +142,12 @@ class App extends React.Component {
                                                                                   user={this.state.user}
                                                                             />
                                                                     )}></Route>
-                            <Route exact path='/shop' component={ViewShop}></Route>
+                            <Route exact path='/shop' render={(props) => (<ViewShop api={this.state.api}
+                                                                                    user={this.state.user}
+                                                                                    search={props.location.search}
+                                                                                    onUpdateUser={this.handleUpdateUser.bind(this)}
+                                                                     />
+                                                                    )}></Route>
                             <Route exact path='/collection' render={() => (<ViewCollection api={this.state.api}
                                                                                            user={this.state.user}
                                                                             />
