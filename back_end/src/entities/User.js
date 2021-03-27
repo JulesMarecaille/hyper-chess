@@ -38,10 +38,16 @@ module.exports.initUser = (connection) => {
             type: DataTypes.INTEGER,
             defaultValue: 1000,
             allowNull: false
+        },
+
+        coins: {
+            type: DataTypes.INTEGER,
+            defaultValue: 1500,
+            allowNull: false
         }
     }, {
         defaultScope: {
-            attributes: ["id", "created_at", "name", "elo"]
+            attributes: ["id", "created_at", "name", "elo", "coins"]
         },
         scopes: {
             logging: {

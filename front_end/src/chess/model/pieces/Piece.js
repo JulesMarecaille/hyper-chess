@@ -1,4 +1,4 @@
-import { WHITE, BLACK, SQUARES } from '../constants.js'
+import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING } from '../constants.js'
 
 function reverseBehavior(table)
 {
@@ -26,8 +26,7 @@ class Piece
 	//matrice des déplacement des différente pièces en bitwise : pour chaque pièce deux bits sont assigné, un de poids faible pour la capacité de se mouvoir,
 	//l'autre pour la capacité de manger. Le centre en 7,7 représente la piece, et au tour les différents codes.
 	//
-	constructor(color, behavior, name, label, score)
-	{
+	constructor(color, behavior, name, label, score, description, allowed){
 		this.score = score;
 		this.rockable = false;
 		this.behavior = behavior;
@@ -37,8 +36,10 @@ class Piece
 		this.is_pawn = false;
 		this.name = name;
 		this.label = label;
-    this.color = color;
+		this.allowed = allowed;
+    	this.color = color;
 		this.moved = false;
+		this.description = description;
 		if (this.color === BLACK)
 		{
 			this.behavior = reverseBehavior(this.behavior);
@@ -58,6 +59,11 @@ class Piece
 				legal_move.push(pos);
 		}
 		return legal_move;
+	}
+
+	hasStartingPosition(string){
+		let stri_up = string.toUpperCase();
+		return (ALLOWED_MAPPING[stri_up] & this.allowed ? true : false);
 	}
 
 	// Pour une piece d'ID defini, en position POS : verifie si la case d'index INDEX de sa matrice est possible à atteindre su la BOARD

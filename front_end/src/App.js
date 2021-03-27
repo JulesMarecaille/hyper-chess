@@ -138,7 +138,10 @@ class App extends React.Component {
                                                                                onUpdateUser={this.handleUpdateUser.bind(this)}
                                                                      />
                                                               )}></Route>
-                            <Route exact path='/decks' component={ViewDecks}></Route>
+                            <Route exact path='/decks' render={() => (<ViewDecks  api={this.state.api}
+                                                                                  user={this.state.user}
+                                                                            />
+                                                                    )}></Route>
                             <Route exact path='/shop' component={ViewShop}></Route>
                             <Route exact path='/collection' render={() => (<ViewCollection api={this.state.api}
                                                                                            user={this.state.user}

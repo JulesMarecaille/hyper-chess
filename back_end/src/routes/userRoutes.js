@@ -12,6 +12,7 @@ const {
     sendNewAccountEmail,
     createDefaultCollection,
     createDefaultDeck,
+    createDefaultRewards,
     validateEmail,
     validateUsername,
     validatePassword
@@ -109,6 +110,22 @@ module.exports = (app, connection) => {
         });
     });
 
+    // Update user
+    app.put("/users/:id", (req, res) => {
+        checkAuth(connection, req.headers["x-access-token"]).then((user) => {
+            req.body.id = req.params.id;
+            user.update(req.body).then((user) => {
+                sendOkResponse(res, user);
+            })
+            .catch((err) => {
+                res.status(500).send(err);
+            });
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+    });
+
     // Create a new user
     app.post("/users", (req, res) => {
         User.findOne({
@@ -128,12 +145,14 @@ module.exports = (app, connection) => {
                 const salt = bcrypt.genSaltSync(10);
                 new_user.password = bcrypt.hashSync(req.body.password, salt);
                 const collection = createDefaultCollection(connection, new_user.id);
-                const deck = createDefaultDeck(connection, new_user.id)
+                const deck = createDefaultDeck(connection, new_user.id);
+                const rewards = createDefaultRewards(connection, new_user.id);
                 new_user.save().then(async (new_user) => {
                     delete new_user.password;
                     sendOkResponse(res, new_user);
                     await collection.save();
                     await deck.save();
+                    await rewards.save();
                     sendNewAccountEmail(req.body.email);
                 })
                 .catch((err) => {
