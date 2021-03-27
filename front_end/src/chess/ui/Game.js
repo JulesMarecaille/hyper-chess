@@ -20,6 +20,8 @@ class Game extends React.Component {
             winner: null,
             draw: null,
             is_check: false,
+            promotion:false,
+            promise:null,
             premove: null
         };
         this.blank_img =  new Image()
@@ -266,17 +268,38 @@ class Game extends React.Component {
         return chessboard;
     }
 
+    promote(promise){
+        this.setState({
+            promise:promise,//store promise
+            promotion:true
+        });
+    }
 
+    overlaySelection(selection){
+        this.state.promise.resolve(selection)
+        this.setState({
+            promise:null,//store promise
+            promotion:false
+        });
+    }
+
+    displayOverlayPromote(promise){
+        if (this.state.promotion){//overlay for promotion
+            return("")
+        }
+        else {//noting to overlay
+            return ("");
+        }
+    }
 
     render() {
-        let overlayPromote = "";
         return (
         <React.Fragment>
         <div>
             <table className="chess-board">
                 {this.drawChessBoard()}
             </table>
-            {overlayPromote}
+            {this.displayOverlayPromote()}
         </div>
         </React.Fragment>)
     }
