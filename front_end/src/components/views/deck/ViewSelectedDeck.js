@@ -1,7 +1,7 @@
 import React from 'react'
 import OneDeck from './OneDeck.js'
 import Square from '../../../chess/ui/Square'
-import { PIECE_MAPPING, piece_list, nbr_pieces } from '../../../chess/model/pieces/index'
+import { PIECE_MAPPING, nbr_pieces } from '../../../chess/model/pieces/index'
 import { WHITE, BLACK, ALLOWED_POS, ALLOWED } from '../../../chess/model/constants.js'
 
 class ViewSelectedDeck extends React.Component {
@@ -14,6 +14,11 @@ class ViewSelectedDeck extends React.Component {
             color : WHITE,
             valid_pos :[]
         };
+        this.piece_list = [];
+        for(const [piece_name, is_bought] of Object.entries(this.props.collection)){
+            if (is_bought)
+                this.piece_list.push(piece_name);
+        }
     }
 
     drawPieces(){
@@ -31,7 +36,7 @@ class ViewSelectedDeck extends React.Component {
             let selected_square;
             if (this.state.choosen_one !== square){
                 selected_square = square;
-                piece = new PIECE_MAPPING[piece_list[selected_square]];
+                piece = new PIECE_MAPPING[this.piece_list[selected_square]];
             }
             else{
                 selected_square = -1;
@@ -64,7 +69,7 @@ class ViewSelectedDeck extends React.Component {
                 }
                 let selected = (square === this.state.choosen_square);
 
-                let piece = piece_list[i * width + j] ? new PIECE_MAPPING[piece_list[i * width + j]](this.state.color) : false;
+                let piece = this.piece_list[i * width + j] ? new PIECE_MAPPING[this.piece_list[i * width + j]](this.state.color) : false;
                 //if (piece)
                     //console.log(piece, piece.hasStartingPosition("bishop"));
                 //to get through father wich will call DB
@@ -91,17 +96,19 @@ class ViewSelectedDeck extends React.Component {
     drawPieceInfo()
     {
 
-      let name = piece_list[this.state.choosen_one];
-      if (this.state.selected_one !== -1 && this.state.choosen_one === -1)
-      {
-        name = this.props.deck.pieces[this.state.selected_one];
-      }
-      let piece = name ? new PIECE_MAPPING[name](WHITE) : false;
-      return(
-      <div className="deckInfo"><div className="textWrap">
-        <h3>{name}</h3>
-        {piece.description}
-      </div></div>);
+
+
+        let name = this.piece_list[this.state.choosen_one];
+        if (this.state.selected_one !== -1 && this.state.choosen_one === -1)
+        {
+            name = this.props.deck.pieces[this.state.selected_one];
+        }
+        let piece = name ? new PIECE_MAPPING[name](WHITE) : false;
+        return(
+            <div className="pieceInfo darkCase"><div className="textWrap">
+            <h3>{name}</h3>
+            {piece.description}
+            </div></div>);
     }
 
     clickedEdition()
@@ -137,7 +144,9 @@ class ViewSelectedDeck extends React.Component {
                   onChangeColor={this.handleChangeColor.bind(this)}
                   user={this.props.user}
                   deck_index={this.state.deck_index}
-                  valid_pos={this.state.valid_pos}/>);
+                  valid_pos={this.state.valid_pos}
+                  locked={true}
+                  piece_list={this.piece_list}/>);
         return (edition);
     }
 
@@ -150,10 +159,10 @@ class ViewSelectedDeck extends React.Component {
           {this.drawEdition()}
           <div className="line">
             <div className="deckCase">
-              <h3 onClick={this.props.clickedReturn.bind(this)}> Finished </h3>
+              <div onClick={this.props.clickedReturn.bind(this)}> Finished </div>
             </div>
             <div>
-              <h3 onClick={this.props.clickedDelete.bind(this)}> {del} </h3>
+              <div onClick={this.props.clickedDelete.bind(this)}> {del} </div>
             </div>
           </div>
         </div>);

@@ -6,9 +6,11 @@ class ViewAllDecks extends React.Component {
     drawCreateDeck(){
         let img = "/assets/picto/plus.svg";
         return(
-            <div className="deck"><div className="totalDeckCase" onClick={this.props.addDeck.bind(this)}>
-                <img className="add_deck" alt="" src={`${process.env.PUBLIC_URL}${img}`}/>
-            </div></div>
+            <div className="darkCase deckWidth" onClick={this.props.addDeck.bind(this)}>
+                <div className="case deckWidth">
+                    <img className="add_deck" alt="" src={`${process.env.PUBLIC_URL}${img}`}/>
+                </div>
+            </div>
         );
     }
 
@@ -19,18 +21,21 @@ class ViewAllDecks extends React.Component {
         {
         //all_decks.push(<div className="deck"> {this.drawDeck(this.state.decks[k], k)} </div>);
           all_decks.push(
+
             <OneDeck  deck={this.props.decks[k]}
                       onClick={this.props.clickedDeck.bind(this, this.props.decks[k], k)}
                       user={this.props.user}
                       onChangeColor={this.props.onChangeColor.bind(this)}
-                      deck_index={k}/>);
+                      deck_index={k}
+                      locked={false}/>
+                  );
           }
       return (<div className="allDeck">{all_decks}</div>);
     }
 
     render(){
         return (
-        <div><h1> {this.props.name} </h1>
+        <div>
             {this.drawAllDecks()}
         </div>);
     }

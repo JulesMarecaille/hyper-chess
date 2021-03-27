@@ -141,7 +141,8 @@ class ViewDecks extends React.Component {
                 user={this.props.user}
                 clickedReturn={this.clickedReturn.bind(this)}
                 clickedDelete={this.clickedDelete.bind(this)}
-                onChangeColor={this.onChangeColor.bind(this)}/>
+                onChangeColor={this.onChangeColor.bind(this)}
+                collection={this.state.collection}/>
         }
         return (
         <React.Fragment>
