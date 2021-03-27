@@ -1,6 +1,6 @@
 import React from 'react'
 import Square from '../../../chess/ui/Square'
-import { PIECE_MAPPING, piece_list} from '../../../chess/model/pieces/index'
+import { PIECE_MAPPING} from '../../../chess/model/pieces/index'
 import '../../../chess/ui/style.css'
 import { WHITE, BLACK } from '../../../chess/model/constants'
 
@@ -35,7 +35,7 @@ class OneDecks extends React.Component
             if (this.state.selected !== square){
                 if (this.props.choosen_one !== -1){
                     if (this.props.valid_pos ? this.props.valid_pos.includes(square) : false){
-                        let name = piece_list[this.props.choosen_one];
+                        let name = this.props.piece_list[this.props.choosen_one];
                         this.deck.pieces[square] = name;
                         selected = -1;
                     }
@@ -58,7 +58,6 @@ class OneDecks extends React.Component
     drawChessBoard() {
         let chessboard = [];
         let files = [<th></th>];
-        console.log(this.props.valid_pos);
         for (let i = 0; i < 2; i += 1) {
             let row = [];
             for (let j = 0; j < 8; j += 1) {
@@ -68,12 +67,10 @@ class OneDecks extends React.Component
                     square_color = "light"
                 }
                 let name = this.deck.pieces[square];
-
                 let selected = (square === this.state.selected);
                 if (!this.props.canSelect)
                   selected = false;
                 let piece = name ? new PIECE_MAPPING[name](this.state.color) : false;
-                // The square can be clicked if it's a move option or if there's a piece belonging to the player on it
                 row.push(
                     <Square square={square}
                                       color={square_color}
@@ -119,7 +116,7 @@ class OneDecks extends React.Component
         name = this.deck.pieces[k]
         let piece = name ? new PIECE_MAPPING[name](WHITE) : false;
         if (piece)
-          this.score += piece.score;
+            this.score += piece.score;
       }
       this.deck.score = this.score;
       let color = this.score > 40 ? "red" : "";
@@ -146,11 +143,10 @@ class OneDecks extends React.Component
 
     drawDeckInfo()
     {
-      let text4 = "Score : ";
       let deckInfo =[<div>
-        {this.drawChooseMainDeck()}{text4}{this.getScore()}
-        {this.colorSelect()}
-        </div>];
+            {this.drawChooseMainDeck()}
+            {this.getScore()}
+            {this.colorSelect()}</div>];
       return (deckInfo);
     }
 
@@ -173,42 +169,52 @@ class OneDecks extends React.Component
         if (this.state.clicked_name){
             return (this.drawInput(this.deck.name));
         }
-        return (<div onClick={this.clickedName.bind(this)}>{this.deck.name}</div>);
+        if (!this.props.locked)
+            return (<div className="deckText">{this.deck.name}</div>)
+        else
+            return (<div className="deckText nameSize select" onClick={this.clickedName.bind(this)}>{this.deck.name}</div>);
     }
+
+    drawInput(name)
+    {
+        return(
+            <div className="line deckText">
+                <input type="text"
+                    className="input_box"
+                    onChange={this.handleInput}
+                    placeholder={name}
+                    maxLength={15}/>
+                    <button className="inputButton" onClick={this.clickedOkName.bind(this)}>ok</button>
+            </div>
+        )
+    }
+
     drawDeckImage(){
         let deckName =[];
         let deckImage = [];
-        deckName.push(<div className="line">{this.drawName()}</div>);//nom du deck
-        deckImage.push(<table className="chess-board">
-            {this.drawChessBoard()}
-          </table>);
-        deckImage = <div  onClick={this.handleClick.bind(this)}>{deckImage}</div>;
-        return(<div className="deckCase">{deckName}{deckImage}</div>);
+        let selectDeck = this.props.locked ? "" : "selectDeck";
+        deckName.push(<div className="line nameSize">{this.drawName()}</div>);//nom du deck
+        deckImage.push(<div className={selectDeck}>
+                <table className="chess-board">
+                    {this.drawChessBoard()}
+                </table>
+            </div>);
+        deckImage = <div>{deckImage}</div>;
+        return(<div onClick={this.handleClick.bind(this)} className="deckCase">{deckName}{deckImage}</div>);
     }
 
     handleInput = event => {
         this.setState({ name: event.target.value });
     };
 
-    drawInput(name)
-    {
-        return(
-            <div className="line"><input onChange={this.handleInput} placeholder={name} />
-                <button onClick={this.clickedOkName.bind(this)}>ok</button>
-            </div>
-        )
-    }
 
     render()
     {
       return (
       <React.Fragment>
-          <div className="deck">
-            <div className="totalDeckCase">
-              <div className="deck">
-                {this.drawDeckImage()}</div>
-              <div> {this.drawDeckInfo()}</div>
-            </div>
+        <div className="darkCase deck">
+            <div className="deckImg">{this.drawDeckImage()}</div>
+            <div className="deckInfo"> {this.drawDeckInfo()}</div>
           </div>
       </React.Fragment>);
     }

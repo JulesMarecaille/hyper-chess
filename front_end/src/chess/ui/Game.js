@@ -266,13 +266,17 @@ class Game extends React.Component {
         return chessboard;
     }
 
+
+
     render() {
+        let overlayPromote = "";
         return (
         <React.Fragment>
         <div>
             <table className="chess-board">
                 {this.drawChessBoard()}
             </table>
+            {overlayPromote}
         </div>
         </React.Fragment>)
     }
