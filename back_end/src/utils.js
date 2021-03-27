@@ -61,20 +61,20 @@ exports.checkAuthNoDatabase = (token) => {
 
 
 exports.initializeDatabase = async (connection) => {
-    // await destroyDatabase(connection)
     // await createBaseUsers(connection)
 }
 
 async function destroyDatabase(connection){
-    const { User, Deck, Collection, GameResult } = require("./entities")(connection)
+    const { User, Deck, Collection, GameResult, Rewards } = require("./entities")(connection)
     User.destroy({where: {}})
     Deck.destroy({where: {}})
     Collection.destroy({where: {}})
     GameResult.destroy({where: {}})
+    Rewards.destroy({where: {}})
 }
 
 async function createBaseUsers(connection){
-    const { User, Deck, Collection } = require("./entities")(connection)
+    const { User, Deck, Collection, Rewards } = require("./entities")(connection)
     const salt = bcrypt.genSaltSync(10);
 
     const jules = User.build({
@@ -126,12 +126,21 @@ async function createBaseUsers(connection){
         "ClassicQueen":true,
         "UserId": jules.id
     })
+
+    const rewards_jules = Rewards.build({
+        "UserId": jules.id
+    })
+    const rewards_octave = Rewards.build({
+        "UserId": octave.id
+    })
     await jules.save()
     await deck_jules.save()
     await octave.save()
     await deck_octave.save()
     await collection_octave.save()
     await collection_jules.save()
+    await rewards_jules.save()
+    await rewards_octave.save()
 }
 
 /**********************************************************************
@@ -152,6 +161,13 @@ exports.createDefaultDeck = (connection, user_id) => {
 exports.createDefaultCollection = (connection, user_id) => {
     const { Collection } = require("./entities")(connection)
     return Collection.build({
+        "UserId": user_id
+    });
+}
+
+exports.createDefaultRewards = (connection, user_id) => {
+    const { Rewards } = require("./entities")(connection)
+    return Rewards.build({
         "UserId": user_id
     });
 }

@@ -12,6 +12,7 @@ const {
     sendNewAccountEmail,
     createDefaultCollection,
     createDefaultDeck,
+    createDefaultRewards,
     validateEmail,
     validateUsername,
     validatePassword
@@ -128,12 +129,14 @@ module.exports = (app, connection) => {
                 const salt = bcrypt.genSaltSync(10);
                 new_user.password = bcrypt.hashSync(req.body.password, salt);
                 const collection = createDefaultCollection(connection, new_user.id);
-                const deck = createDefaultDeck(connection, new_user.id)
+                const deck = createDefaultDeck(connection, new_user.id);
+                const rewards = createDefaultRewards(connection, new_user.id);
                 new_user.save().then(async (new_user) => {
                     delete new_user.password;
                     sendOkResponse(res, new_user);
                     await collection.save();
                     await deck.save();
+                    await rewards.save();
                     sendNewAccountEmail(req.body.email);
                 })
                 .catch((err) => {

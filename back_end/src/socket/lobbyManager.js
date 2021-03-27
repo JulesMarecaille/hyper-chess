@@ -4,6 +4,10 @@ var games_state = {};
 var gameSocket;
 var io;
 var sequelize;
+const WHITE = 0;
+const BLACK = 1;
+const MAX_DAILY_GAME_COINS = 200;
+const COINS_PER_WIN = 25;
 
 function connection(sio, socket, sequelize_connection) {
     try {
@@ -116,17 +120,39 @@ function onAcceptDraw(data){
 
 
 // Utils
-function gameOver(game_id, winner, time_remaining, reason, players, elo_differences, time, increment){
+async function gameOver(game_id, winner, time_remaining, reason, players, elo_differences, time, increment, nb_half_moves){
+    const { Rewards } = require("../entities")(sequelize)
+
+    // Give money to the winner if there's a winner and if the game wasn't canceled
+    let coins_won = {};
+    coins_won[WHITE] = 0;
+    coins_won[BLACK] = 0;
+    if((winner === WHITE || winner === BLACK) && elo_differences){
+        rewards = await Rewards.findOne({where: {UserId: players[winner].id}})
+        if(rewards.last_game_coins_collected < new Date().setHours(0, 0, 0, 0)){
+            rewards.todays_coins_collected = 0;
+        }
+        if(rewards.todays_coins_collected < MAX_DAILY_GAME_COINS){
+            rewards.todays_coins_collected += COINS_PER_WIN
+            rewards.last_game_coins_collected = new Date();
+            coins_won[winner] = 25;
+        }
+        rewards.save();
+    }
+
+    // Tell the clients that the game ended
     let payload = {
         winner: winner,
         time_remaining: time_remaining,
         reason: reason,
-        elo_differences: elo_differences
+        elo_differences: elo_differences,
+        coins_won: coins_won
     };
     io.sockets.in(game_id).emit('gameOver', payload);
-    // If game wasn't canceled
+
+    // If game wasn't canceled, handle game results and user changes
     if(elo_differences){
-        gameResults(players, elo_differences, winner, time, increment);
+        gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won);
     }
 }
 
@@ -138,10 +164,8 @@ function leaveGame(game_id, socket){
     socket.leave(game_id)
 }
 
-function gameResults(players, elo_differences, winner, time, increment){
+function gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won){
     const { User, GameResult } = require("../entities")(sequelize)
-    const WHITE = 0;
-    const BLACK = 1;
 
     // Store game gameResults
     let white_won = (winner === WHITE);
@@ -152,6 +176,7 @@ function gameResults(players, elo_differences, winner, time, increment){
     let black_name = players[BLACK].name;
     let white_elo = players[WHITE].elo;
     let black_elo = players[BLACK].elo;
+
     GameResult.create({
         whiteId: white_id,
         blackId: black_id,
@@ -162,14 +187,20 @@ function gameResults(players, elo_differences, winner, time, increment){
         draw: draw,
         white_won: white_won,
         time: time,
-        time_increment: increment
+        time_increment: increment,
+        number_of_half_moves: nb_half_moves
+    })
+    .catch((err) => {
     });
 
     // Update Elos
     for(const [color, player] of Object.entries(players)){
         User.findOne({where: {id: player.id}}).then((user) => {
             user.elo += elo_differences[color];
-            user.save();
+            user.coins += coins_won[color];
+            user.save()
+            .catch((err) => {
+            });
         }).catch((err) => {
         });
     }
