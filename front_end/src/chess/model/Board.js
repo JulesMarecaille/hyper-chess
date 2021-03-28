@@ -25,10 +25,6 @@ class Board {
 		return getLegalMovesFromPlayerFromBoard(this.board, color, this.kings_positions, this.getLastMove(), true)
 	}
 
-	isMoveLegal(move){
-		return (this.getLegalMovesFromPiece(move.from).includes(move.to) && this.color_to_move === move.player_color);
-	}
-
 	initializeBoard(){
 		let white_pieces = this.deck_white.getPiecesAsWhite()
 		let black_pieces = this.deck_black.getPiecesAsBlack()
@@ -59,7 +55,7 @@ class Board {
 
 		// Change turn
 		this.color_to_move = swapColor(this.color_to_move);
-		let is_check = this.is_check[this.color_to_move]
+		let is_check = this.is_check[this.color_to_move];
 		this.updateHasGameEnded();
 		let game_over = this.game_over;
 		let is_draw = this.is_draw;
@@ -81,6 +77,10 @@ class Board {
 		}
 	}
 
+	isMoveLegal(move){
+	        return (this.getLegalMovesFromPiece(move.from).includes(move.to) && this.color_to_move === move.player_color);
+	    }
+		
 	updateHasGameEnded(){
 		let is_checkmate = this.isCheckmate(this.color_to_move);
 		let is_stalemate = this.isStalemate(this.color_to_move);

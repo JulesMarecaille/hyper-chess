@@ -20,6 +20,8 @@ class Game extends React.Component {
             winner: null,
             draw: null,
             is_check: false,
+            promotion:false,
+            promise:null,
             premove: null
         };
         this.blank_img =  new Image()

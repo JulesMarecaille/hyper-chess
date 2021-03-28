@@ -25,9 +25,16 @@ module.exports.initDeck = (connection) => {
             defaultValue: []
         },
 
-        prefered_color: {
-            type: DataTypes.INTEGER,
-            allowNull: true
+        selected_as_white: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
+        },
+
+        selected_as_black:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
         }
     }, {
         defaultScope: {

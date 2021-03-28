@@ -59,7 +59,7 @@ class GameState {
             this.winner = null;
             reason = "The game was canceled."
         }
-        this.game_over_callback(this.game_id, this.winner, time_remaining, reason, this.players, elo_differences, this.time, this.increment);
+        this.game_over_callback(this.game_id, this.winner, time_remaining, reason, this.players, elo_differences, this.time, this.increment, this.nb_half_moves);
     }
 
     resign(resign_color){

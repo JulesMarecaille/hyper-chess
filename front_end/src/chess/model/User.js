@@ -9,6 +9,8 @@ class User {
         } else {
             this.id = id
         }
+        this.white_select = 0;
+        this.black_select = 0;
         this.name = name;
         this.elo = elo;
         if (decks){

@@ -2,6 +2,7 @@ const {initDeck} = require("./Deck.js");
 const {initUser} = require("./User.js");
 const {initCollection} = require("./Collection.js");
 const {initGameResult} = require("./GameResult.js");
+const {initRewards} = require("./Rewards.js");
 const { Sequelize } = require('sequelize');
 
 module.exports = (connection) => {
@@ -9,6 +10,7 @@ module.exports = (connection) => {
     const Deck = initDeck(connection)
     const Collection = initCollection(connection)
     const GameResult = initGameResult(connection)
+    const Rewards = initRewards(connection)
 
     // Add relations
     User.hasMany(Deck, {
@@ -40,6 +42,11 @@ module.exports = (connection) => {
         foreignKey: 'whiteId'
     });
 
+    User.hasOne(Rewards, {
+      foreignKey: 'UserId'
+    });
+    Rewards.belongsTo(User);
+
     // Add scopes
     User.addScope('decks', {
         include: [
@@ -57,5 +64,10 @@ module.exports = (connection) => {
             { model: GameResult, as: "black", separate : true, limit: 10 }
         ]
     });
-    return { User, Deck, Collection, GameResult }
+    User.addScope('rewards', {
+        include: [
+            { model: Rewards }
+        ]
+    })
+    return { User, Deck, Collection, GameResult, Rewards }
 }

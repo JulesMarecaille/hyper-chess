@@ -44,6 +44,10 @@ module.exports.initGameResult = (connection) => {
             allowNull: false,
         },
 
+        number_of_half_moves:{
+            type: DataTypes.INTEGER,
+        },
+
         time:{
             type: DataTypes.INTEGER,
         },
