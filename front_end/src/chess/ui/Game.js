@@ -32,7 +32,7 @@ class Game extends React.Component {
 
     componentDidMount(){
         socket.on("opponentMove", (data) => {
-            this.makeMove(data.move, data.time_remaining, false);
+            this.makeMove(data.move, data.time_remaining, false, false);
             if(this.state.premove){
                 if(this.state.boardObject.isMoveLegal(this.state.premove)){
                     this.makeMove(this.state.premove, null, true);
@@ -174,12 +174,15 @@ class Game extends React.Component {
     }
 
     // Action
-    makeMove(move, time_remaining=null, emit=false){
+    async makeMove(move, time_remaining=null, emit=false, my_move=true){
+        let boardResponse;
         if(this.state.boardObject.color_to_move !== move.player_color){ return; }
-        let {game_over, is_draw, winner, is_capture, is_check} = this.state.boardObject.makeMove(move, this.makeChoice.bind(this));
-        if (is_check){
+        //let solution = await new Promise((resolve, reject) => {
+        boardResponse = await this.state.boardObject.makeMove(move, this.makeChoice.bind(this), my_move)
+        //});
+        if (boardResponse.is_check){
             this.check_sound.play()
-        } else if(is_capture){
+        } else if(boardResponse.is_capture){
             this.capture_sound.play()
         } else {
             this.move_sound.play();
@@ -188,8 +191,8 @@ class Game extends React.Component {
             let payload = {
                 game_id: this.props.game_id,
                 move: move,
-                is_game_over: game_over,
-                winner: winner
+                is_game_over: boardResponse.game_over,
+                winner: boardResponse.winner
             }
             socket.emit("makeMove", payload);
         }
@@ -198,13 +201,13 @@ class Game extends React.Component {
             selected_square: -1,
             highlighted_moves: [],
             opponent_highlighted_moves: [],
-            game_over: game_over,
-            is_draw: is_draw,
-            winner: winner,
-            is_check: is_check
+            game_over: boardResponse.game_over,
+            is_draw: boardResponse.is_draw,
+            winner: boardResponse.winner,
+            is_check: boardResponse.is_check
         });
         if (this.state.game_over){
-            this.props.onGameOver(winner);
+            this.props.onGameOver(boardResponse.winner);
         }
     }
 
@@ -268,26 +271,33 @@ class Game extends React.Component {
         return chessboard;
     }
 
-    makeChoice(promise){
+    makeChoice(resolve, reject){
         this.setState({
-            promise:promise,//store promise
-            promotion:true
+            promise:resolve,//store promise
+            choice_select:true
         });
     }
 
     overlaySelection(selection){
-        this.state.promise.resolve(selection)
         this.setState({
-            promise:null,//store promise
-            promotion:false
+            promise:null,//restore promise
+            choice_select:false
         });
+        this.state.promise(0);
     }
 
-    displayOverlayPromote(promise){
-        if (this.state.promotion){
+    displayOverlaySelection(promise){
+        if (this.state.choice_select
+            && this.state.boardObject.color_to_move === this.props.side){
         //overlay for promotion
+            //return(<div className="overlay"></div>);
             return (
-                <div className="overlay"></div>);
+                <div className="overlay">
+                    <div class="box">
+                        <div className="title grey">Choose</div>
+                        <button class="button" onClick={this.overlaySelection.bind(this)}>Do this</button>
+                    </div>
+                </div>);
         }
         else {//noting to overlay
             return ("");
@@ -301,7 +311,7 @@ class Game extends React.Component {
             <table className="chess-board">
                 {this.drawChessBoard()}
             </table>
-            {this.displayOverlayPromote()}
+            {this.displayOverlaySelection()}
         </div>
         </React.Fragment>)
     }

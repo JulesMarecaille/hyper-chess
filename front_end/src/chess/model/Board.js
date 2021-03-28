@@ -38,19 +38,18 @@ class Board {
 		this.updateKingPosition();
 	}
 
-	makeMove(move, makeChoice){
+	async makeMove(move, makeChoice, my_move){
 		// If game is over we can't make moves anymore
 		if (this.game_over){
 			return this.game_over, this.is_draw, this.winner, false, false;
 		}
-
 		// Check if this move captures a piece
 		let is_capture = (!!this.board[move.to]);
 
 		// Move the piece
-		console.log(makeChoice);
-		makeChoice();
-		this.board = this.board[move.from].move(move, this.board, this.getLastMove(), makeChoice.bind(this));
+        this.board = await this.board[move.from].move(move, this.board, this.getLastMove(), makeChoice, my_move);
+
+
 
 		this.updateHistory(move);
 		this.updateKingPosition();
@@ -62,7 +61,8 @@ class Board {
 		let game_over = this.game_over;
 		let is_draw = this.is_draw;
 		let winner = this.winner;
-		return {game_over, is_draw, winner, is_capture, is_check};
+		let pack = {game_over, is_draw, winner, is_capture, is_check};
+		return pack;
 	}
 
 	updateHistory(move){

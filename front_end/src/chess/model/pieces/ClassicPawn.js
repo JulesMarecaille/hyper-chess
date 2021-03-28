@@ -41,15 +41,20 @@ class ClassicPawn extends Piece
 		this.is_pawn = true;
 	}
 
-	move(move_struct, board, last_move)
+	async move(move_struct, board, last_move, makeChoice, my_move)
 	{
 		this.behavior[87] = 0;
 		this.behavior[151] = 0;
+		if (makeChoice && my_move){
+			let solution = await new Promise((resolve, reject) => {
+				makeChoice(resolve, reject);
+			});
+		}
 
 		//Check if it is enPassant, if so, delete the pawn
 		if (this.checkPassant(board, move_struct.to, move_struct.from, last_move))
 			board[last_move.to] = null;
-		return (super.move(move_struct, board, last_move));
+		return (super.move(move_struct, board, last_move, makeChoice));
 	}
 
 	checkPassant(board, target_pos, pos, last_move)

@@ -220,8 +220,8 @@ class Piece
 
 	move(move_struct, board, last_move, makeChoice)
 	{
-		if (makeChoice)
-			makeChoice();
+		//if (makeChoice)
+		//	makeChoice();
 		this.moved = true;
 		board[move_struct.to] = board[move_struct.from];
 		board[move_struct.from] = null;
