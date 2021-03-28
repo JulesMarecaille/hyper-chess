@@ -176,7 +176,7 @@ class Game extends React.Component {
     // Action
     makeMove(move, time_remaining=null, emit=false){
         if(this.state.boardObject.color_to_move !== move.player_color){ return; }
-        let {game_over, is_draw, winner, is_capture, is_check} = this.state.boardObject.makeMove(move);
+        let {game_over, is_draw, winner, is_capture, is_check} = this.state.boardObject.makeMove(move, this.makeChoice.bind(this));
         if (is_check){
             this.check_sound.play()
         } else if(is_capture){
@@ -268,7 +268,7 @@ class Game extends React.Component {
         return chessboard;
     }
 
-    promote(promise){
+    makeChoice(promise){
         this.setState({
             promise:promise,//store promise
             promotion:true
