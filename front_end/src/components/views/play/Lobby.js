@@ -78,7 +78,7 @@ class Lobby extends React.Component {
                         <tr class="header">
                             <th class="icon"></th>
                             <th class="player-name">Player</th>
-                            <th class="player-elo">Elo</th>
+                            <th class="player-elo">Rating</th>
                             <th class="time"><MdTimer/></th>
                         </tr>
                         {this.drawLobby()}

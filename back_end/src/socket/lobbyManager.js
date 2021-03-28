@@ -191,6 +191,7 @@ function gameResults(players, elo_differences, winner, time, increment, nb_half_
         number_of_half_moves: nb_half_moves
     })
     .catch((err) => {
+        console.log(err)
     });
 
     // Update Elos
@@ -200,8 +201,10 @@ function gameResults(players, elo_differences, winner, time, increment, nb_half_
             user.coins += coins_won[color];
             user.save()
             .catch((err) => {
+                console.log(err)
             });
         }).catch((err) => {
+            console.log(err)
         });
     }
 }
