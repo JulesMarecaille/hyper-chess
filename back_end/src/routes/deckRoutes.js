@@ -128,7 +128,7 @@ module.exports = (app, connection) => {
     app.delete("/decks/:id", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
-                if (found_deck.UserId == user.id && user.Decks.length >= 1){
+            if (found_deck.UserId == user.id && user.Decks.length >= 1){
                     Deck.destroy({where: {id: req.params.id}}).then((deck) => {
                         sendOkResponse(res, deck);
                     })

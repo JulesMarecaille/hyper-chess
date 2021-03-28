@@ -30,7 +30,7 @@ connection.authenticate().then(() => {
     // Initialize entities
     require("./src/entities")(connection)
 
-    connection.sync({alter: false}).then(() => {
+    connection.sync({alter: true}).then(() => {
         console.log('Database synced.');
         // Create placeholders
         initializeDatabase(connection).then(() => {

@@ -24,6 +24,7 @@ class ViewDecks extends React.Component {
             decks : [],
             collection : []
         }
+        console.log(this.props.user);
     }
 
     componentWillMount(){

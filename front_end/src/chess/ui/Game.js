@@ -284,8 +284,10 @@ class Game extends React.Component {
     }
 
     displayOverlayPromote(promise){
-        if (this.state.promotion){//overlay for promotion
-            return("")
+        if (this.state.promotion){
+        //overlay for promotion
+            return (
+                <div className="overlay"></div>);
         }
         else {//noting to overlay
             return ("");
