@@ -61,6 +61,10 @@ class HyperChessAPI {
         return this._post("decks", deck)
     }
 
+    getSelectedDecksFromUser(user_id){
+        return this._get("decks/user/" + user_id + "/selected")
+    }
+
     // Collection
     unlockPiece(){
     }

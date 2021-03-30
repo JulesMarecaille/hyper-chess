@@ -12,9 +12,11 @@ class ViewShopBrowse extends React.Component {
     render() {
         return (
         <React.Fragment>
-            <DailyReward api={this.props.api}
-                         user={this.props.user}
-                         onUpdateUser={this.props.onUpdateUser}/>
+            <div class="view-padding">
+                <DailyReward api={this.props.api}
+                             user={this.props.user}
+                             onUpdateUser={this.props.onUpdateUser}/>
+            </div>
         </React.Fragment>)
     }
 }

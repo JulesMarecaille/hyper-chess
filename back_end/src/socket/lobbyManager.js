@@ -74,7 +74,7 @@ function onCreateNewGame(data) {
     this.emit('newGameCreated');
     data.user.socket_id = this.id;
     games_state[data.game_id] = new GameState(data.game_id, data.time, data.increment, gameOver)
-    games_state[data.game_id].addPlayer(data.user)
+    games_state[data.game_id].addPlayer(data.user, data.user_decks)
     this.join(data.game_id)
 }
 
@@ -100,7 +100,7 @@ function onPlayerJoinedGame(data) {
         data.user.socket_id = this.id;
 
         this.join(game_id);
-        games_state[game_id].addPlayer(data.user);
+        games_state[game_id].addPlayer(data.user, data.user_decks);
         if (room.size === 2) {
             io.sockets.in(game_id).emit('startGame', games_state[game_id].startGame())
         }
