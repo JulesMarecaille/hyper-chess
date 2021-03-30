@@ -20,7 +20,7 @@ class ClassicQueen extends Piece
 			0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0,
 			0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0,
 			3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3];
-		let description = "move on diagonals and on lines : one of the strongest pieces";
+		let description = "The classic queen from the classic game of chess.";
 		super(color, behavior, 'ClassicQueen', 'Classic Queen', 9, description, ALLOWED.QUEEN);
 	}
 

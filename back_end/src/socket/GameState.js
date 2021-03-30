@@ -142,6 +142,10 @@ class GameState {
         }
     }
 
+    playersAreDifferent(){
+        return this.players[WHITE] && this.players[BLACK] && this.players[WHITE].id !== this.players[BLACK].id;
+    }
+
     rematch(){
 
     }

@@ -60,8 +60,8 @@ module.exports = (connection) => {
     });
     User.addScope('gameResults', {
         include: [
-            { model: GameResult, as: "white", separate : true, limit: 10 },
-            { model: GameResult, as: "black", separate : true, limit: 10 }
+            { model: GameResult, as: "white", separate : true, order: [["created_at", "DESC"]], limit: 10 },
+            { model: GameResult, as: "black", separate : true, order: [["created_at", "DESC"]], limit: 10 }
         ]
     });
     User.addScope('rewards', {

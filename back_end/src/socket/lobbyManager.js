@@ -101,7 +101,7 @@ function onPlayerJoinedGame(data) {
 
         this.join(game_id);
         games_state[game_id].addPlayer(data.user, data.user_decks);
-        if (room.size === 2) {
+        if (room.size === 2 && games_state[game_id].playersAreDifferent()) {
             io.sockets.in(game_id).emit('startGame', games_state[game_id].startGame())
         }
     } else if (room.size >= 2) {

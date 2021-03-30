@@ -275,12 +275,16 @@ textarea:focus, input:focus{
 /****************************************************************
 * LOBBY
 *****************************************************************/
-
+.play-lobby-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+}
 
 .lobby-container{
     border: 1px solid black;
     width: 400px;
-    height: 450px;
+    height: 450px !important;
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -382,11 +386,10 @@ textarea:focus, input:focus{
 
 .lobby-actions{
     display: flex;
-    align-items: center;
-    padding: 8px 0;
+    align-items: flex-end;
+    flex-direction: column;
     font-size: 16px;
     font-weight: 400;
-    justify-content: space-between;
 }
 
 .lobby-actions .selected-decks{
@@ -686,14 +689,14 @@ textarea:focus, input:focus{
 .clock-container{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 6px 10px;
     border-radius: 5px;
     right: 12px;
     position: absolute;
     font-size: 14px;
     font-weight: 600;
-    width: 48px;
+    width: 68px;
 }
 
 .clock-container.white{
@@ -706,16 +709,31 @@ textarea:focus, input:focus{
     color: #fff;
 }
 
+.clock-container.stopped{
+    background-color: #888 !important;
+    color: #000 !important;
+}
+
 .clock-container *{
     min-height: 12px;
     display: inline-flex;
     align-items: center;
 }
 
-.clock-container .separator{
-    padding: 0 2px;
+.clock-container .icon{
+    padding-right: 8px;
+    padding-top: 2px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
+.clock-container .time{
+    width: 48px;
+}
+
+.clock-container .time .separator{
+    padding: 0 2px;
+}
 /**************************************************
 * UPDATE ELO / COINS
 ***************************************************/
@@ -765,10 +783,17 @@ textarea:focus, input:focus{
 * PROFILE
 ****************************************************/
 .profile-container{
+    width:100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-column{
     width: 450px;
 }
 
-.profile-container .infos{
+.profile-column .infos{
     width: 100%;
     border: 1px solid #fff;
     padding: 10px 16px;
@@ -776,31 +801,34 @@ textarea:focus, input:focus{
     margin-bottom: 10px;
 }
 
-.profile-container .infos .main{
+.profile-column .infos .main{
     font-weight: 600
 }
 
-.profile-container .secondary{
+.profile-column .secondary{
     font-weight: 300;
     font-size: 16px
 }
+.profile-column .rating{
+    color: var(--navigation-green);
+}
 
-.profile-container .tertiary{
+.profile-column .tertiary{
     font-weight: 300;
     font-size: 12px;
 }
 
-.profile-container .game-results{
+.profile-column .game-results{
     padding: 10px 20px;
     max-height: 450px;
     width: 100%;
 }
 
-.profile-container .title{
+.profile-column .title{
     font-size: 18px;
 }
 
-.profile-container .game-results .entry{
+.profile-column .game-results .entry{
     display: flex;
     align-items: center;
     padding: 10px 16px;
@@ -808,40 +836,40 @@ textarea:focus, input:focus{
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.profile-container .game-results .entry .players{
+.profile-column .game-results .entry .players{
     width: 250px;
     padding: 0 10px
 }
 
-.profile-container .game-results .entry .players .player{
+.profile-column .game-results .entry .players .player{
     display: flex;
     align-items: center;
 }
 
-.profile-container .game-results .entry .players .color{
+.profile-column .game-results .entry .players .color{
     width: 12px;
     height: 12px;
     border-radius: 3px;
     margin: 0 10px;
 }
 
-.profile-container .game-results .entry .players .color.white{
+.profile-column .game-results .entry .players .color.white{
     background-color: #fff;
 }
 
-.profile-container .game-results .entry .players .color.black{
+.profile-column .game-results .entry .players .color.black{
     background-color: #000;
 }
 
-.profile-container .game-results .entry .players .name{
+.profile-column .game-results .entry .players .name{
     font-weight: 200;
 }
 
-.profile-container .game-results .entry .players .elo{
+.profile-column .game-results .entry .players .elo{
     margin-left: 6px;
 }
 
-.profile-container .game-results .date{
+.profile-column .game-results .date{
     font-weight: 200;
 }
 
@@ -878,7 +906,7 @@ textarea:focus, input:focus{
 .leaderboard-container{
     border: 1px solid black;
     width: 400px;
-    height: 450px;
+    height: 450px !important;
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -1001,7 +1029,7 @@ textarea:focus, input:focus{
     font-style: italic;
 }
 
-.actions-container .action{
+.actions-container .actions .action{
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1010,13 +1038,14 @@ textarea:focus, input:focus{
     border: 1px solid black;
     margin: 4px 8px;
     cursor: pointer;
+    background-color: var(--menu-background-color)
 }
 
-.actions-container .action.red{
+.actions-container .actions .action.red{
     color: var(--navigation-red);
 }
 
-.actions-container .action.green{
+.actions-container .actions .action.green{
     color: var(--navigation-green);
 }
 
@@ -1092,7 +1121,7 @@ textarea:focus, input:focus{
 }
 
 .browse-decks .add-deck{
-    width:520px;
+    width:460px;
     min-height: 120px;
     display: flex;
     align-items: center;
@@ -1114,7 +1143,7 @@ textarea:focus, input:focus{
 }
 
 .deck-entry{
-    width:520px;
+    width:460px;
     min-height: 120px;
     border: 0.5px solid black;
     background: var(--menu-background-color);
@@ -1138,7 +1167,7 @@ textarea:focus, input:focus{
     align-items: center;
     display: flex;
     height: 100%;
-    width: 120px;
+    width: 72px;
 }
 
 .deck-entry .info .select-color{
@@ -1218,7 +1247,7 @@ textarea:focus, input:focus{
 }
 
 .edition-container .edition .info-box{
-    width: 220px;
+    width: 164px;
     padding: 8px 12px;
     margin-right: 8px;
     border: 1px solid black;
@@ -1234,7 +1263,7 @@ textarea:focus, input:focus{
     text-align: center;
     font-style: italic;
     font-weight: 200;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .edition-container .edition .info-box .piece-info{
@@ -1247,12 +1276,12 @@ textarea:focus, input:focus{
 }
 
 .edition-container .edition .info-box .piece-info .name{
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 600;
 }
 
 .edition-container .edition .info-box .piece-info .description{
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 200;
 }
 

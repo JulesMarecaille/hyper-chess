@@ -20,7 +20,7 @@ class ClassicKnight extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		let description = "move to 3 square in line, then 1 on the side, can jump over other piece";
+		let description = "The classic knight from the classic game of chess.";
 		super(color, behavior, 'ClassicKnight', 'Classic Knight', 3, description, ALLOWED.KNIGHT);
 	}
 
