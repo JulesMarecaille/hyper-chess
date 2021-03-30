@@ -1,5 +1,8 @@
 const { checkAuth, sendOkResponse } = require("../utils.js")
 const { Op } = require("sequelize");
+const pieces_info = require("../chess/pieces_info")
+const WHITE = 0;
+const BLACK = 1;
 
 module.exports = (app, connection) => {
     const { Deck } = require("../entities")(connection)
@@ -60,12 +63,17 @@ module.exports = (app, connection) => {
                 ]
             }}).then((decks) => {
                 let payload = {}
-                if(decks[0].selected_as_white){
-                    payload["white"] = decks[0];
-                    payload["black"] = decks[1];
+                if(decks.length === 1) {
+                    payload[WHITE] = decks[0];
+                    payload[BLACK] = decks[0];
+                } else if(decks[0].selected_as_white && decks[1].selected_as_black){
+                    payload[WHITE] = decks[0];
+                    payload[BLACK] = decks[1];
+                } else if(decks[1].selected_as_white && decks[0].selected_as_black){
+                    payload[WHITE] = decks[1];
+                    payload[BLACK] = decks[0];
                 } else {
-                    payload["white"] = decks[1];
-                    payload["black"] = decks[0];
+                    res.status(500).send(err);
                 }
                 sendOkResponse(res, payload);
             })
@@ -85,12 +93,36 @@ module.exports = (app, connection) => {
                 // TODO : Add a selected_as_* check
                 if (found_deck.UserId == user.id){
                     req.body.id = req.params.id;
-                    found_deck.update(req.body).then((deck) => {
-                        sendOkResponse(res, deck);
-                    })
-                    .catch((err) => {
-                        res.status(500).send(err);
-                    });
+                    let valid = true;
+                    if(req.body.pieces){
+                        valid = valid && isDeckValid(req.body.pieces)
+                    }
+                    if(req.body.selected_as_white){
+                        Deck.findAll({where: {UserId: user.id, selected_as_white: true}}).then((decks) => {
+                            for(let deck of decks){
+                                deck.selected_as_white = false;
+                                deck.save()
+                            }
+                        })
+                    }
+                    if(req.body.selected_as_black){
+                        Deck.findAll({where: {UserId: user.id, selected_as_black: true}}).then((decks) => {
+                            for(let deck of decks){
+                                deck.selected_as_black = false;
+                                deck.save()
+                            }
+                        })
+                    }
+                    if(valid){
+                        found_deck.update(req.body).then((deck) => {
+                            sendOkResponse(res, deck);
+                        })
+                        .catch((err) => {
+                            res.status(500).send(err);
+                        });
+                    } else {
+                        res.status(401).send();
+                    }
                 } else {
                     res.status(401).send();
                 }
@@ -128,7 +160,7 @@ module.exports = (app, connection) => {
     app.delete("/decks/:id", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
-            if (found_deck.UserId == user.id && user.Decks.length >= 1){
+                if (found_deck.UserId == user.id && user.Decks.length > 1 && !found_deck.selected_as_white && !found_deck.selected_as_black){
                     Deck.destroy({where: {id: req.params.id}}).then((deck) => {
                         sendOkResponse(res, deck);
                     })
@@ -147,4 +179,28 @@ module.exports = (app, connection) => {
             res.status(500).send(err);
         });
     })
+}
+
+function isDeckValid(pieces){
+    let has_king = false;
+    let number_of_pawns = 0;
+    let value = 0;
+    let invalid_piece = false;
+    for(let i=0; i < pieces.length; i++){
+        if(pieces[i]){
+            let piece_info = pieces_info[pieces[i]];
+            if(i < 8){
+                number_of_pawns += 1;
+            }
+            if(piece_info.is_king){
+                has_king = true
+            }
+            if(!piece_info.allowed_positions.includes(i)){
+                console.log(piece_info)
+                invalid_piece = true
+            }
+            value += piece_info.value;
+        }
+    }
+    return (has_king && !(number_of_pawns < 8) && value <= 40 && !invalid_piece)
 }

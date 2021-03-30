@@ -1,6 +1,34 @@
 import React from 'react'
 import { WHITE } from '../model/constants.js'
+import {
+    WiTime1,
+    WiTime2,
+    WiTime3,
+    WiTime4,
+    WiTime5,
+    WiTime6,
+    WiTime7,
+    WiTime8,
+    WiTime9,
+    WiTime10,
+    WiTime11,
+    WiTime12
+} from 'react-icons/wi';
 const TICK = 1000;
+const CLOCK_ICONS = [
+    <WiTime12/>,
+    <WiTime11/>,
+    <WiTime10/>,
+    <WiTime9/>,
+    <WiTime8/>,
+    <WiTime7/>,
+    <WiTime6/>,
+    <WiTime5/>,
+    <WiTime4/>,
+    <WiTime3/>,
+    <WiTime2/>,
+    <WiTime1/>
+]
 
 class Clock extends React.Component {
     constructor(props) {
@@ -34,11 +62,16 @@ class Clock extends React.Component {
         } else {
             seconds_str = seconds;
         }
+        let clock_icon_index = Math.floor(seconds / 5);
+        let is_stopped_class = this.props.is_running ? "" : "stopped"
         return (
-            <div className={`clock-container unselectable ${this.props.color === WHITE ? 'white' : 'black'}`}>
-                <span class="minutes">{minutes_str}</span>
-                <span class="separator">:</span>
-                <span class="seconds">{seconds_str}</span>
+            <div className={`clock-container unselectable ${this.props.color === WHITE ? 'white' : 'black'} ${is_stopped_class}`}>
+                <span class="icon">{CLOCK_ICONS[clock_icon_index]}</span>
+                <div class="time">
+                    <span class="minutes">{minutes_str}</span>
+                    <span class="separator">:</span>
+                    <span class="seconds">{seconds_str}</span>
+                </div>
             </div>
         );
     }

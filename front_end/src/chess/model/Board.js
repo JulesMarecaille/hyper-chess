@@ -29,11 +29,15 @@ class Board {
 		let white_pieces = this.deck_white.getPiecesAsWhite()
 		let black_pieces = this.deck_black.getPiecesAsBlack()
 		for (const [square, piece_name] of Object.entries(white_pieces)){
-			this.board[square] = new PIECE_MAPPING[piece_name](WHITE);
+			if (piece_name){
+				this.board[square] = new PIECE_MAPPING[piece_name](WHITE);
+			}
 		}
 
 		for (const [square, piece_name] of Object.entries(black_pieces)){
-			this.board[square] = new PIECE_MAPPING[piece_name](BLACK);
+			if (piece_name){
+				this.board[square] = new PIECE_MAPPING[piece_name](BLACK);
+			}
 		}
 		this.updateKingPosition();
 	}

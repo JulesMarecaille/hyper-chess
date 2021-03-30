@@ -20,8 +20,8 @@ class ClassicBishop extends Piece
 			0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0,
 			0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
 			3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3];
-			let description = "move in diagonals";
-		super(color, behavior, 'ClassicBishop', 'ClassicBishop', 3, description, ALLOWED.BISHOP);
+		let description = "The classic bishop from the classic game of chess.";
+		super(color, behavior, 'ClassicBishop', 'Classic Bishop', 3, description, ALLOWED.BISHOP);
 	}
 
 }

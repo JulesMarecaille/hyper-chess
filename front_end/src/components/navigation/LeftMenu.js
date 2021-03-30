@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { MdHome, MdVideogameAsset, MdStore, MdPowerSettingsNew, MdPerson } from 'react-icons/md';
+import { MdHome, MdVideogameAsset, MdStore, MdPowerSettingsNew, MdPerson, MdShowChart } from 'react-icons/md';
 import { FaChessBishop } from 'react-icons/fa';
 import { GiLockedChest } from 'react-icons/gi';
+import { BiCoin } from 'react-icons/bi'
 import { ImTrophy } from 'react-icons/im';
 import '../style.css'
 import { withRouter } from 'react-router-dom';
@@ -38,7 +39,7 @@ class LeftMenu extends React.Component {
                     <Link to="/decks">
                         <div className={`entry ${this.isSelected("/decks")}`}>
                             <FaChessBishop className="icon"/>
-                            <span className="name">Decks</span>
+                            <span className="name">My decks</span>
                         </div>
                     </Link>
                     <Link to="/shop">
@@ -50,7 +51,7 @@ class LeftMenu extends React.Component {
                     <Link to="/collection">
                         <div className={`entry ${this.isSelected("/collection")}`}>
                             <GiLockedChest className="icon"/>
-                            <span className="name">Collection</span>
+                            <span className="name">My collection</span>
                         </div>
                     </Link>
                     <Link to="/leaderboard">
@@ -63,8 +64,20 @@ class LeftMenu extends React.Component {
                 <div className="bottom content">
                     <Link to={"/profile?id=" + this.props.user.id}>
                         <div className={`entry ${this.isSelected("/profile", "?id="+this.props.user.id)}`}>
-                            <MdPerson className="icon"/>
-                            <span className="name">{this.props.user.name}</span>
+                            <div>
+                                <div class="main">
+                                    <MdPerson className="icon"/>
+                                    <span className="name">{this.props.user.name}</span>
+                                </div>
+                                <div className="sub green">
+                                    <MdShowChart className="icon"/>
+                                    <span className="name">{this.props.user.elo}</span>
+                                </div>
+                                <div className="sub coins">
+                                    <BiCoin className="icon"/>
+                                    <span className="name">{this.props.user.coins}</span>
+                                </div>
+                            </div>
                         </div>
                     </Link>
                     <div className="entry" onClick={this.props.onLogout}>

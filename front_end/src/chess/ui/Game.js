@@ -172,17 +172,27 @@ class Game extends React.Component {
             } else {
                 this.makeMove(move, null, true, true);
             }
-        } else if ( this.state.dragged_element !== -1 && !options) {
-            this.state.dragged_element.style.position = "relative";
-            this.state.dragged_element.style.left = 0;
-            this.state.dragged_element.style.top = 0;
-            this.state.dragged_element.style.pointerEvents = "auto";
+        } else if (!options) {
+            this.resetDraggedPiece();
         }
         if (!options){
             this.setState({
                 dragged_square: -1,
                 dragged_element: null,
             });
+        }
+    }
+
+    resetDraggedPiece()
+    {
+        if (this.state.dragged_element !== -1
+            && this.state.dragged_element
+            && this.state.dragged_element.style)
+        {
+            this.state.dragged_element.style.position = "relative";
+            this.state.dragged_element.style.left = 0;
+            this.state.dragged_element.style.top = 0;
+            this.state.dragged_element.style.pointerEvents = "auto";
         }
     }
 
@@ -312,19 +322,15 @@ class Game extends React.Component {
         this.setState({
             dragged_square: -1,
             dragged_element: null,
-            pending_move: null
+            pending_move: null,
         });
+        this.resetDraggedPiece();
     }
 
     closeTheOverlay(){
         if (this.user_have_to_select){
             this.user_have_to_select = false;
-            if (this.state.dragged_element !== -1) {
-                this.state.dragged_element.style.position = "relative";
-                this.state.dragged_element.style.left = 0;
-                this.state.dragged_element.style.top = 0;
-                this.state.dragged_element.style.pointerEvents = "auto";
-            }
+            this.resetDraggedPiece();
             this.setState({
                 pending_move: null,
                 dragged_square: -1,

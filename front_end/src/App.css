@@ -96,41 +96,11 @@ body{
     margin: 30px 0;
 }
 
-label {
-    display: block;
-    color: #909090;
-    font-weight: 400;
-    font-size: 10px;
-    text-transform: uppercase;
-    padding: 0;
-    transition: color .3s ease;
-    -webkit-transition: color .3s ease;
-}
-
-input {
-    padding: 8px 0;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: lato,sans-serif;
-    border: 0;
-    border-bottom: 1px solid #cecece;
-    display: block;
-    width: 100%;
-    color: #424242;
-    transition: all .25s ease;
-    -webkit-transition: all .25s ease;
-}
-
-textarea:focus, input:focus{
-    outline: none;
-}
-
 .form-buttons{
     text-align: right
 }
 
 .button{
-    height: 32px;
     color: #fff;
     background-color: #3d50e0;
     display: inline-block;

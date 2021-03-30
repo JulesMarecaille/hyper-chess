@@ -5,9 +5,9 @@ import Clock from '../../../chess/ui/Clock.js'
 import { Loader } from '../../navigation'
 import { MdFlag, MdClose, MdCheck } from 'react-icons/md'
 import { FaRegHandshake } from 'react-icons/fa'
+import { BiCoin } from 'react-icons/bi'
+import Deck from '../../../chess/model/Deck.js'
 import { WHITE, BLACK, swapColor } from '../../../chess/model/constants.js';
-import { createUser } from '../../../chess/model/utils.js';
-import { createClassicDeck } from '../../../chess/model/utils.js';
 import { socket } from '../../../connection/socket';
 
 class ViewPlayGame extends React.Component {
@@ -18,6 +18,7 @@ class ViewPlayGame extends React.Component {
             winner: null,
             side: null,
             players: null,
+            decks: null,
             endgame_msg: "",
             is_overlay_open: true,
             time_remaining: {},
@@ -25,6 +26,7 @@ class ViewPlayGame extends React.Component {
             nb_half_moves: 0,
             game_over_reason : "",
             elo_differences: null,
+            coins_won: null,
             player_offer_draw: false,
             opponent_offer_draw: false,
             player_rejected_offer: false,
@@ -44,6 +46,7 @@ class ViewPlayGame extends React.Component {
             this.setState({
                 side: side,
                 players: data.players,
+                decks: data.decks,
                 time_remaining: data.time_remaining
             });
             this.game_start_sound.play()
@@ -55,7 +58,8 @@ class ViewPlayGame extends React.Component {
                 is_game_over: true,
                 time_remaining: data.time_remaining,
                 game_over_reason: data.reason,
-                elo_differences: data.elo_differences
+                elo_differences: data.elo_differences,
+                coins_won: data.coins_won
             })
             this.game_end_sound.play()
             if (data.elo_differences){
@@ -112,23 +116,39 @@ class ViewPlayGame extends React.Component {
             let elo_difference = this.state.elo_differences[this.state.side];
             let elo_difference_el;
             if(elo_difference > 0){
-                elo_difference_el = <span class="difference positive">+{elo_difference}</span>
+                elo_difference_el = <span class="difference positive">(+{elo_difference})</span>
             } else if (elo_difference < 0){
-                elo_difference_el = <span class="difference negative">{elo_difference}</span>
+                elo_difference_el = <span class="difference negative">({elo_difference})</span>
             } else {
-                elo_difference_el = <span class="difference">+0</span>
+                elo_difference_el = <span class="difference">(+0)</span>
             }
             update_elo = (
-                <div class="update-elo">
-                    <span class="rating">New rating</span>
-                    <span><span class="previous">{this.state.players[this.state.side].elo}</span>({elo_difference_el})</span>
+                <div class="update">
+                    <span class="update-title">New rating</span>
+                    <span class="info"><span class="">{this.state.players[this.state.side].elo}</span>{elo_difference_el}</span>
                 </div>);
+        }
+        let update_coins = '';
+        if(this.state.coins_won[this.state.side] > 0){
+            update_coins = (
+                <div class="update">
+                    <span class="update-title">Coins collected</span>
+                    <span class="info"><span class="info">+{this.state.coins_won[this.state.side]}</span><BiCoin class="icon-coin"/></span>
+                </div>
+            );
+        } else if (this.state.winner === this.state.side){
+            update_coins = (
+                <div class="update">
+                    <span class="limit">You've reach the maximum number of coins you can win today</span>
+                </div>
+            );
         }
         return (
             <div class="box">
                 {box_title}
                 <div className="content">
                     {update_elo}
+                    {update_coins}
                     <div class="button-container">
                         <button class="button" onClick={this.props.onExitGame}>Back to Lobby</button>
                     </div>
@@ -292,8 +312,8 @@ class ViewPlayGame extends React.Component {
                               game_id={this.props.game_id}
                               whitePlayer={this.state.players[WHITE]}
                               blackPlayer={this.state.players[BLACK]}
-                              whiteDeck={createClassicDeck()}
-                              blackDeck={createClassicDeck()}
+                              whiteDeck={Deck.buildFromPayload(this.state.decks[WHITE])}
+                              blackDeck={Deck.buildFromPayload(this.state.decks[BLACK])}
                               onGameOver={this.handleGameOver.bind(this)}
                               onPlayerMoved={this.handlePlayerMoved.bind(this)}
                         />

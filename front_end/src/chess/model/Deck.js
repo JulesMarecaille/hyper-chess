@@ -3,25 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { WHITE, BLACK } from './constants.js'
 
 class Deck {
-    constructor(id=uuidv4(), name='New Deck', pieces=new Array(16), prefered_color=null) {
+    constructor(id=uuidv4(), name='New Deck', pieces=new Array(16)) {
         this.id = id;
         this.name = name;
         this.pieces = pieces;
-        this.prefered_color = prefered_color;
-        this.color = WHITE;
-        this.score = 0;
-    }
-
-    addPiece(piece, position){
-        this.pieces[position] = piece;
-    }
-
-    cleanPosition(position){
-        this.pieces[position] = null;
-    }
-
-    setPreferedColor(color){
-        this.prefered_color = color;
     }
 
     getId(){
@@ -68,6 +53,10 @@ class Deck {
         ret[SQUARES['g8']] = this.pieces[14]
         ret[SQUARES['h8']] = this.pieces[15]
         return ret
+    }
+
+    static buildFromPayload(payload){
+        return new Deck(0, payload.name, payload.pieces)
     }
 }
 

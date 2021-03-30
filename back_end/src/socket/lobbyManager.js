@@ -74,7 +74,7 @@ function onCreateNewGame(data) {
     this.emit('newGameCreated');
     data.user.socket_id = this.id;
     games_state[data.game_id] = new GameState(data.game_id, data.time, data.increment, gameOver)
-    games_state[data.game_id].addPlayer(data.user)
+    games_state[data.game_id].addPlayer(data.user, data.user_decks)
     this.join(data.game_id)
 }
 
@@ -100,8 +100,8 @@ function onPlayerJoinedGame(data) {
         data.user.socket_id = this.id;
 
         this.join(game_id);
-        games_state[game_id].addPlayer(data.user);
-        if (room.size === 2) {
+        games_state[game_id].addPlayer(data.user, data.user_decks);
+        if (room.size === 2 && games_state[game_id].playersAreDifferent()) {
             io.sockets.in(game_id).emit('startGame', games_state[game_id].startGame())
         }
     } else if (room.size >= 2) {
@@ -191,6 +191,7 @@ function gameResults(players, elo_differences, winner, time, increment, nb_half_
         number_of_half_moves: nb_half_moves
     })
     .catch((err) => {
+        console.log(err)
     });
 
     // Update Elos
@@ -200,8 +201,10 @@ function gameResults(players, elo_differences, winner, time, increment, nb_half_
             user.coins += coins_won[color];
             user.save()
             .catch((err) => {
+                console.log(err)
             });
         }).catch((err) => {
+            console.log(err)
         });
     }
 }

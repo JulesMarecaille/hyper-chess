@@ -1,4 +1,5 @@
 body{
+    --app-background-color: #343a40;
     --menu-background-color: #212529;
     --menu-color: #f8f9fa;
     --menu-border-color: #ced4da;
@@ -10,6 +11,9 @@ body{
     --gold: #FAA613;
     --silver: #F6F4F3;
     --copper: #C8553D;
+    --color-coins: #FAA613;
+    --color-typo: #ced4da;
+    --color-value: #e76f51;
 }
 
 a {
@@ -29,6 +33,37 @@ td,th{
     padding: 0;
 }
 
+label {
+    display: block;
+    color: #909090;
+    font-weight: 400;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 0;
+    transition: color .3s ease;
+    -webkit-transition: color .3s ease;
+}
+
+input {
+    padding: 8px 0;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: lato,sans-serif;
+    border: 0;
+    border-bottom: 1px solid #cecece;
+    display: block;
+    width: 100%;
+    color: #424242;
+    transition: all .25s ease;
+    -webkit-transition: all .25s ease;
+    font-family: inherit;
+    background-color: rgba(0,0,0,0);
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
 .text-link:hover{
     border-bottom: 1px solid;
 }
@@ -42,6 +77,14 @@ td,th{
     user-select: none;
 }
 
+.coins{
+    color: var(--color-coins);
+}
+
+.green{
+    color: var(--navigation-green);
+}
+
 /**********************************************************
 * GLOBAL VIEW
 ***********************************************************/
@@ -49,6 +92,10 @@ td,th{
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
+}
+
+.view-padding{
     padding-top: 26px;
 }
 /**********************************************************
@@ -87,9 +134,10 @@ td,th{
 }
 
 .leftmenu .content .entry{
-    font-size: 0.8em;
+    font-size: 13px;
     font-weight: 200;
-    height: 36px;
+    min-height: 20px;
+    padding: 8px 0;
     width: 100%;
     margin: 0;
     font-weight: 400;
@@ -117,8 +165,29 @@ td,th{
 }
 
 .leftmenu .content .entry .icon{
-    font-size: 1.3em;
+    font-size: 18px;
     margin: 0 12px;
+}
+
+.leftmenu .content .entry .main{
+    display: flex;
+    align-items: center;
+}
+
+.leftmenu .content .entry .sub{
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    padding-top: 8px;
+}
+
+.leftmenu .content .entry .sub .name{
+    font-size: 12px;
+}
+
+.leftmenu .content .entry .sub .icon{
+    margin-right: 6px;
+    font-size: 16px;
 }
 
 /*******************************************************************
@@ -206,12 +275,16 @@ td,th{
 /****************************************************************
 * LOBBY
 *****************************************************************/
-
+.play-lobby-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+}
 
 .lobby-container{
     border: 1px solid black;
     width: 400px;
-    height: 450px;
+    height: 450px !important;
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -311,6 +384,47 @@ td,th{
     background-color: var(--menu-background-color);
 }
 
+.lobby-actions{
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.lobby-actions .selected-decks{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px 12px;
+}
+
+.lobby-actions .selected-decks .title{
+    padding-bottom: 4px;
+}
+
+.lobby-actions .selected-decks .entry{
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+    font-weight: 200;
+}
+
+.lobby-actions .selected-decks .entry .deck-color{
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 8px;
+}
+
+.lobby-actions .selected-decks .entry .deck-color.white{
+    background-color: #fff;
+}
+
+.lobby-actions .selected-decks .entry .deck-color.black{
+    background-color: #000;
+}
+
 /*******************************************************
 * OVERLAY
 ********************************************************/
@@ -375,7 +489,6 @@ td,th{
 }
 
 .overlay .box .content{
-
     width: 100%;
 }
 
@@ -384,6 +497,7 @@ td,th{
     align-items: center;
     justify-content: center;
     width: 100%;
+    padding-top: 8px;
 }
 
 /*******************************************************
@@ -500,7 +614,7 @@ td,th{
 
 .collection-container{
     background-color: var(--app-background-color);
-    height: 450px;
+    height: 450px !important;
     border-radius: 5px;
     border: 1px solid black;
     width: 350px;
@@ -556,8 +670,9 @@ td,th{
     padding-left: 6px;
 }
 
-.collection-container .entry .score{
+.collection-container .entry .value{
     padding-left: 6px;
+    color: var(--color-value);
 }
 
 .collection-container .entry .image {
@@ -631,14 +746,14 @@ td,th{
 .clock-container{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 6px 10px;
     border-radius: 5px;
     right: 12px;
     position: absolute;
     font-size: 14px;
     font-weight: 600;
-    width: 48px;
+    width: 68px;
 }
 
 .clock-container.white{
@@ -651,55 +766,91 @@ td,th{
     color: #fff;
 }
 
+.clock-container.stopped{
+    background-color: #888 !important;
+    color: #000 !important;
+}
+
 .clock-container *{
     min-height: 12px;
     display: inline-flex;
     align-items: center;
 }
 
-.clock-container .separator{
-    padding: 0 2px;
+.clock-container .icon{
+    padding-right: 8px;
+    padding-top: 2px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
+.clock-container .time{
+    width: 48px;
+}
+
+.clock-container .time .separator{
+    padding: 0 2px;
+}
 /**************************************************
-* UPDATE ELO
+* UPDATE ELO / COINS
 ***************************************************/
-.update-elo {
+.update {
     width: 100%;
     text-align: center;
     padding-top: 8px;
 }
 
-.update-elo .rating{
+.update .update-title{
     font-weight: 300;
     display: block;
 }
 
-.update-elo .previous{
+.update .info{
     font-weight: 400;
+    display: inline-flex;
+    align-items: center;
 }
 
-.update-elo .difference{
+.update .difference{
     margin-left: 6px;
     font-weight: 600;
 }
 
-.update-elo .difference.positive{
+.update .difference.positive{
     color: var(--navigation-green);
 }
 
-.update-elo .difference.negative{
+.update .difference.negative{
     color: var(--navigation-red);
+}
+
+.update .limit{
+    font-style: italic;
+    font-size: 12px;
+    color: #a4a4a4;
+}
+
+.icon-coin{
+    color: var(--color-coins);
+    padding-top: 2px;
+    margin-left: 4px;
 }
 
 /****************************************************
 * PROFILE
 ****************************************************/
 .profile-container{
+    width:100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-column{
     width: 450px;
 }
 
-.profile-container .infos{
+.profile-column .infos{
     width: 100%;
     border: 1px solid #fff;
     padding: 10px 16px;
@@ -707,31 +858,34 @@ td,th{
     margin-bottom: 10px;
 }
 
-.profile-container .infos .main{
+.profile-column .infos .main{
     font-weight: 600
 }
 
-.profile-container .secondary{
+.profile-column .secondary{
     font-weight: 300;
     font-size: 16px
 }
+.profile-column .rating{
+    color: var(--navigation-green);
+}
 
-.profile-container .tertiary{
+.profile-column .tertiary{
     font-weight: 300;
     font-size: 12px;
 }
 
-.profile-container .game-results{
+.profile-column .game-results{
     padding: 10px 20px;
     max-height: 450px;
     width: 100%;
 }
 
-.profile-container .title{
+.profile-column .title{
     font-size: 18px;
 }
 
-.profile-container .game-results .entry{
+.profile-column .game-results .entry{
     display: flex;
     align-items: center;
     padding: 10px 16px;
@@ -739,40 +893,40 @@ td,th{
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.profile-container .game-results .entry .players{
+.profile-column .game-results .entry .players{
     width: 250px;
     padding: 0 10px
 }
 
-.profile-container .game-results .entry .players .player{
+.profile-column .game-results .entry .players .player{
     display: flex;
     align-items: center;
 }
 
-.profile-container .game-results .entry .players .color{
+.profile-column .game-results .entry .players .color{
     width: 12px;
     height: 12px;
     border-radius: 3px;
     margin: 0 10px;
 }
 
-.profile-container .game-results .entry .players .color.white{
+.profile-column .game-results .entry .players .color.white{
     background-color: #fff;
 }
 
-.profile-container .game-results .entry .players .color.black{
+.profile-column .game-results .entry .players .color.black{
     background-color: #000;
 }
 
-.profile-container .game-results .entry .players .name{
+.profile-column .game-results .entry .players .name{
     font-weight: 200;
 }
 
-.profile-container .game-results .entry .players .elo{
+.profile-column .game-results .entry .players .elo{
     margin-left: 6px;
 }
 
-.profile-container .game-results .date{
+.profile-column .game-results .date{
     font-weight: 200;
 }
 
@@ -809,7 +963,7 @@ td,th{
 .leaderboard-container{
     border: 1px solid black;
     width: 400px;
-    height: 450px;
+    height: 450px !important;
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -932,7 +1086,7 @@ td,th{
     font-style: italic;
 }
 
-.actions-container .action{
+.actions-container .actions .action{
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -941,12 +1095,269 @@ td,th{
     border: 1px solid black;
     margin: 4px 8px;
     cursor: pointer;
+    background-color: var(--menu-background-color)
 }
 
-.actions-container .action.red{
+.actions-container .actions .action.red{
     color: var(--navigation-red);
 }
 
-.actions-container .action.green{
+.actions-container .actions .action.green{
     color: var(--navigation-green);
+}
+
+/**************************************************
+* DAILY REWARD
+***************************************************/
+
+.daily-reward-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.daily-reward-container .title{
+    font-size: 18px;
+}
+
+.daily-reward{
+    height: 42px;
+    border-radius: 5px;
+    border: 1px solid black;
+    min-width: 100px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: 0.25s;
+    background-color: var(--menu-background-color);
+    margin: 12px;
+}
+
+.daily-reward span{
+    display: flex;
+    align-items: center;
+}
+
+.daily-reward span .icon{
+    margin-left: 6px;
+    padding-top: 3px;
+}
+
+.daily-reward.active{
+    color: var(--color-coins);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.daily-reward.active:hover{
+    color: #fff !important;
+    background-color: var(--color-coins);
+    cursor: pointer;
+}
+
+.daily-reward.inactive{
+    font-style: italic;
+    color: #a4a4a4;
+    font-size: 12px;
+}
+
+/**************************************************
+* DECK
+***************************************************/
+.browse-decks{
+    height:100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow: auto;
+    margin: 0;
+}
+
+.browse-decks .add-deck{
+    width:460px;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    border: 4px dashed rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    justify-content: center;
+    font-size: 64px;
+    font-weight:1200 ;
+    margin: 8px;
+    cursor: pointer;
+
+}
+
+.browse-decks .add-deck:hover{
+    border: 4px dashed #fff;
+    color: #fff;
+    transition: 0.3s ease;
+}
+
+.deck-entry{
+    width:460px;
+    min-height: 120px;
+    border: 0.5px solid black;
+    background: var(--menu-background-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    margin: 8px;
+    padding: 8px;
+    transition: 0.3s ease;
+    position: relative;
+}
+
+.deck-entry.selectable:hover{
+    color: var(--menu-background-color) !important;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.deck-entry .info{
+    align-items: center;
+    display: flex;
+    height: 100%;
+    width: 72px;
+}
+
+.deck-entry .info .select-color{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: flex;
+    align-items: center;
+}
+
+.deck-entry .info .select-color img{
+    width: 45px;
+    height: 45px;
+}
+
+.deck-entry .info .select-color .unselected{
+    opacity: 0.2;
+}
+
+.deck-entry .info .value-container{
+
+}
+
+.deck-entry .info .value{
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--color-value);
+}
+
+.deck-entry .info .value.over{
+    color: var(--navigation-red) !important;
+}
+
+.deck-entry .info .max-value{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.deck-entry .content{
+    height: 100%;
+    display: inline;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.deck-entry.selectable:hover .content .chess-board{
+    box-shadow: 0px 0px  0px 2px rgba(0,0,0,1);
+}
+
+.deck-entry .content .name{
+    font-size: 20px;
+    padding-bottom: 4px;
+    padding-top: 0;
+    border-bottom: none;
+    margin-bottom: 4px;
+}
+
+.deck-entry.content input.name{
+    color: var(--color-typo);
+    transition: 0.3s ease;
+}
+
+.deck-entry .content input.name:hover{
+    color: #fff;
+    background-color: var(--app-background-color);
+}
+
+.edition-container{
+
+}
+
+.edition-container .edition{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px;
+}
+
+.edition-container .edition .info-box{
+    width: 164px;
+    padding: 8px 12px;
+    margin-right: 8px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: var(--menu-background-color);
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edition-container .edition .info-box .info{
+    text-align: center;
+    font-style: italic;
+    font-weight: 200;
+    font-size: 14px;
+}
+
+.edition-container .edition .info-box .piece-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: stretch;
+    text-align: left;
+    width: 100%;
+}
+
+.edition-container .edition .info-box .piece-info .name{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.edition-container .edition .info-box .piece-info .description{
+    font-size: 14px;
+    font-weight: 200;
+}
+
+.edition-container .edition .info-box .piece-info .value{
+    font-size: 16px;
+    color: var(--color-value);
+}
+
+.edition-container .actions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.edition-container .actions .info{
+    font-size: 14px;
+    max-width: 200px;
+    font-style: italic;
+    text-align: center;
+    font-weight: 200;
 }

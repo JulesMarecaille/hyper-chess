@@ -61,12 +61,25 @@ class HyperChessAPI {
         return this._post("decks", deck)
     }
 
+    getSelectedDecksFromUser(user_id){
+        return this._get("decks/user/" + user_id + "/selected")
+    }
+
     // Collection
     unlockPiece(){
     }
 
     getUserCollection(user_id){
         return this._get("collections/user/" + user_id)
+    }
+
+    // Rewards
+    getUserRewards(user_id){
+        return this._get("rewards/user/" + user_id)
+    }
+
+    collectDailyReward(){
+        return this._get("rewards/collect_daily_reward");
     }
 
     /*UTILS*/

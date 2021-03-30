@@ -1,6 +1,7 @@
 import React from 'react'
 import Lobby from './Lobby'
 import { InfoPanel } from '../../navigation'
+import { WHITE, BLACK } from '../../../chess/model/constants.js'
 
 class ViewPlayLobby extends React.Component {
     state = {
@@ -51,6 +52,22 @@ class ViewPlayLobby extends React.Component {
         return <div class="available-times">{time_elements}</div>;
     }
 
+    drawSelectedDeck(){
+        return (
+            <div class="selected-decks">
+                <div class="title">Using decks :</div>
+                <div class="entry">
+                    <div class="deck-color white"></div>
+                    <div>{this.props.decks[WHITE].name}</div>
+                </div>
+                <div class="entry">
+                    <div class="deck-color black"></div>
+                    <div>{this.props.decks[BLACK].name}</div>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         let overlay = ''
         if(this.state.is_overlay_open){
@@ -77,13 +94,16 @@ class ViewPlayLobby extends React.Component {
         <React.Fragment>
             {overlay}
             <InfoPanel isOpen={this.props.error} type="error" message={this.props.errorMsg} />
-            <div class="button-container">
-                <button class="button" onClick={this.openOverlay.bind(this)}>Create Game</button>
+            <div className="play-lobby-container view-padding">
+                <div class="lobby-actions">
+                    {this.drawSelectedDeck()}
+                    <button class="button" onClick={this.openOverlay.bind(this)}>Create Game</button>
+                </div>
+                <Lobby user={this.props.user}
+                       api={this.props.api}
+                       onAcceptGameOffer={this.props.onAcceptGameOffer}
+                       onCreateGame={this.openOverlay.bind(this)}/>
             </div>
-            <Lobby user={this.props.user}
-                   api={this.props.api}
-                   onAcceptGameOffer={this.props.onAcceptGameOffer}
-                   onCreateGame={this.openOverlay.bind(this)}/>
         </React.Fragment>)
     }
 }

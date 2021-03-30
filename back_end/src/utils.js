@@ -155,8 +155,8 @@ exports.createDefaultDeck = (connection, user_id) => {
                    'ClassicRook', 'ClassicKnight', 'ClassicBishop', 'ClassicQueen',
                    'ClassicKing', 'ClassicBishop', 'ClassicKnight', 'ClassicRook'],
         "UserId": user_id,
-        "prefered_as_white": true,
-        "prefered_as_black": true
+        "selected_as_white": true,
+        "selected_as_black": true
     });
 }
 

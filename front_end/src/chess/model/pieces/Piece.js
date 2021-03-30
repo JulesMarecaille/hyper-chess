@@ -20,9 +20,10 @@ function reverseBehavior(table){
 
 class Piece{
 	//matrice des déplacement des différente pièces en bitwise : pour chaque pièce deux bits sont assigné, un de poids faible pour la capacité de se mouvoir,
-	//l'autre pour la capacité de manger. Le centre en 7,7 représente la piece, et autour les différents codes.
-	constructor(color, behavior, name, label, score, description, allowed){
-		this.score = score;
+	//l'autre pour la capacité de manger. Le centre en 7,7 représente la piece, et au tour les différents codes.
+	//
+	constructor(color, behavior, name, label, value, description, allowed){
+		this.value = value;
 		this.rockable = false;
 		this.behavior = behavior;
 		this.behavior_size = 239;
