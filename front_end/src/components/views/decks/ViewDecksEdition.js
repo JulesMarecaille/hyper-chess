@@ -3,6 +3,7 @@ import DeckEntry from './DeckEntry'
 import Square from '../../../chess/ui/Square'
 import { PIECE_MAPPING} from '../../../chess/model/pieces/index'
 import { WHITE, BLACK, ALLOWED_POS, ALLOWED } from '../../../chess/model/constants.js'
+import {getAllowedPosition} from '../../../chess/model/utils.js'
 
 class ViewDecksEdition extends React.Component {
     constructor(props){
@@ -26,7 +27,7 @@ class ViewDecksEdition extends React.Component {
             this.setState({
                 selected_square: square,
                 selected_piece: piece,
-                valid_piece_positions: ALLOWED_POS[piece.allowed],
+                valid_piece_positions: getAllowedPosition(piece.allowed),
                 selected_piece_from_entry: null
             });
         } else {

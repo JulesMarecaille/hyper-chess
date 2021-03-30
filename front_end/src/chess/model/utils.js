@@ -1,5 +1,17 @@
 import Deck from './Deck'
 import User from './User'
+import {ALLOWED_POS, ALLOWED } from './constants'
+
+export function getAllowedPosition(piece_allowed)
+{
+    let allowed_pos = [];
+    for(const [mask, allowed_pos_of_mask] of Object.entries(ALLOWED_POS)){
+        if (mask & piece_allowed){
+            allowed_pos = allowed_pos.concat(allowed_pos_of_mask);
+        }
+    }
+    return (allowed_pos);
+}
 
 export function createClassicDeck(){
     let pieces = ['ClassicPawn', 'ClassicPawn', 'ClassicPawn', 'ClassicPawn',

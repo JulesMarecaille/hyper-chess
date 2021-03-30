@@ -65,7 +65,6 @@ class Piece{
 
 	hasStartingPosition(string){
 		let stri_up = string.toUpperCase();
-		console.log(this.allowed);
 		return ALLOWED_MAPPING[stri_up] & this.allowed ? true : false;//return a true instead of a number
 	}
 

@@ -42,6 +42,6 @@ module.exports = {
     "ClassicPawn": {
         is_king: false,
         value: 1,
-        allowed_positions: ALLOWED_POS["Pawn"]
+        allowed_positions: ALLOWED_POS["Pawn"] + ALLOWED_POS["Bishop"]
     }
 }
