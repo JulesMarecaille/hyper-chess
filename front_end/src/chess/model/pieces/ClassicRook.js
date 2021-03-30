@@ -20,7 +20,7 @@ class ClassicRook extends Piece
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0];
-		let description = "can move on lines";
+		let description = "The classic rook from the classic game of chess.";
 		super(color, behavior, 'ClassicRook', 'Classic Rook', 5, description, ALLOWED.ROOK);
 		this.rockable = true;
 	}

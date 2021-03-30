@@ -39,7 +39,7 @@ class LeftMenu extends React.Component {
                     <Link to="/decks">
                         <div className={`entry ${this.isSelected("/decks")}`}>
                             <FaChessBishop className="icon"/>
-                            <span className="name">Decks</span>
+                            <span className="name">My decks</span>
                         </div>
                     </Link>
                     <Link to="/shop">
@@ -51,7 +51,7 @@ class LeftMenu extends React.Component {
                     <Link to="/collection">
                         <div className={`entry ${this.isSelected("/collection")}`}>
                             <GiLockedChest className="icon"/>
-                            <span className="name">Collection</span>
+                            <span className="name">My collection</span>
                         </div>
                     </Link>
                     <Link to="/leaderboard">

@@ -1,4 +1,6 @@
 import React from 'react';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import { Loader } from '../navigation';
 
 class ViewProfile extends React.Component {
@@ -82,7 +84,7 @@ class ViewProfile extends React.Component {
                     <div class="infos">
                         <div>
                             <div className="main">{this.state.user.name}</div>
-                            <div className="secondary">Rating: {this.state.user.elo}</div>
+                            <div className="secondary">Rating: <span class="rating">{this.state.user.elo}</span></div>
                             <div className="secondary">Member since: {formatDate(this.state.user.created_at)}</div>
                         </div>
                     </div>
@@ -96,9 +98,11 @@ class ViewProfile extends React.Component {
         }
         return (
         <React.Fragment>
-            <div class="profile-container view-padding">
-                {content}
-            </div>
+            <PerfectScrollbar className="profile-container view-padding">
+                <div class="profile-column">
+                    {content}
+                </div>
+            </PerfectScrollbar>
         </React.Fragment>)
     }
 }

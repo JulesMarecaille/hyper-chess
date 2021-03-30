@@ -94,7 +94,7 @@ class ViewPlayLobby extends React.Component {
         <React.Fragment>
             {overlay}
             <InfoPanel isOpen={this.props.error} type="error" message={this.props.errorMsg} />
-            <div className="play-lobby-container">
+            <div className="play-lobby-container view-padding">
                 <div class="lobby-actions">
                     {this.drawSelectedDeck()}
                     <button class="button" onClick={this.openOverlay.bind(this)}>Create Game</button>

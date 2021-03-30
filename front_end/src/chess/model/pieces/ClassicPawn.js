@@ -36,7 +36,7 @@ class ClassicPawn extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		let description = "move to 1 forward, can only eat on the two diagonals square forward ";
+		let description = "The classic pawn from the classic game of chess.";
 		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN);
 		this.is_pawn = true;
 	}

@@ -5,6 +5,8 @@ import { ImContrast } from 'react-icons/im'
 import { MdTimer, MdShowChart } from 'react-icons/md'
 import { Loader } from '../../navigation'
 import { socket } from '../../../connection/socket'
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 class Lobby extends React.Component {
     state = {
@@ -71,7 +73,7 @@ class Lobby extends React.Component {
 
         return (
         <React.Fragment>
-            <div class="lobby-container" data-simplebar>
+            <PerfectScrollbar className="lobby-container">
                 <table className="lobby">
                     <colgroup span="4" class="columns"></colgroup>
                     <tbody>
@@ -87,7 +89,7 @@ class Lobby extends React.Component {
                 <div class="info-container">
                     {info}
                 </div>
-            </div>
+            </PerfectScrollbar>
         </React.Fragment>)
     }
 }

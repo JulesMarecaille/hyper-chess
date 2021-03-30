@@ -2,8 +2,8 @@ import React from 'react'
 import { Loader } from '../navigation';
 import { Redirect } from 'react-router-dom';
 import { ImTrophy } from 'react-icons/im';
-import 'simplebar';
-import 'simplebar/dist/simplebar.css';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 class ViewLeaderboard extends React.Component {
     state = {
@@ -49,6 +49,8 @@ class ViewLeaderboard extends React.Component {
         }
         if(rank <= 3){
             trophy = <td className={`special-rank${rank}`}><ImTrophy/></td>
+        } else {
+            trophy = <td></td>
         }
         //
         return (
@@ -70,7 +72,7 @@ class ViewLeaderboard extends React.Component {
         <React.Fragment>
             <p>Leaderboard</p>
             {this.state.redirect}
-            <div className="leaderboard-container" data-simplebar>
+            <PerfectScrollbar className="leaderboard-container">
                 <table className="leaderboard">
                     <colgroup span="4" class="columns"></colgroup>
                     <tbody>
@@ -86,7 +88,7 @@ class ViewLeaderboard extends React.Component {
                 <div class="info-container">
                     {loader}
                 </div>
-            </div>
+            </PerfectScrollbar>
         </React.Fragment>)
     }
 }
