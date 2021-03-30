@@ -6,9 +6,8 @@ import { Loader } from '../../navigation'
 import { MdFlag, MdClose, MdCheck } from 'react-icons/md'
 import { FaRegHandshake } from 'react-icons/fa'
 import { BiCoin } from 'react-icons/bi'
+import Deck from '../../../chess/model/Deck.js'
 import { WHITE, BLACK, swapColor } from '../../../chess/model/constants.js';
-import { createUser } from '../../../chess/model/utils.js';
-import { createClassicDeck } from '../../../chess/model/utils.js';
 import { socket } from '../../../connection/socket';
 
 class ViewPlayGame extends React.Component {
@@ -19,6 +18,7 @@ class ViewPlayGame extends React.Component {
             winner: null,
             side: null,
             players: null,
+            decks: null,
             endgame_msg: "",
             is_overlay_open: true,
             time_remaining: {},
@@ -46,6 +46,7 @@ class ViewPlayGame extends React.Component {
             this.setState({
                 side: side,
                 players: data.players,
+                decks: data.decks,
                 time_remaining: data.time_remaining
             });
             this.game_start_sound.play()
@@ -311,8 +312,8 @@ class ViewPlayGame extends React.Component {
                               game_id={this.props.game_id}
                               whitePlayer={this.state.players[WHITE]}
                               blackPlayer={this.state.players[BLACK]}
-                              whiteDeck={createClassicDeck()}
-                              blackDeck={createClassicDeck()}
+                              whiteDeck={Deck.buildFromPayload(this.state.decks[WHITE])}
+                              blackDeck={Deck.buildFromPayload(this.state.decks[BLACK])}
                               onGameOver={this.handleGameOver.bind(this)}
                               onPlayerMoved={this.handlePlayerMoved.bind(this)}
                         />

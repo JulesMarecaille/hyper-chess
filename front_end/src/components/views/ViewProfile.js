@@ -96,7 +96,7 @@ class ViewProfile extends React.Component {
         }
         return (
         <React.Fragment>
-            <div class="profile-container">
+            <div class="profile-container view-padding">
                 {content}
             </div>
         </React.Fragment>)

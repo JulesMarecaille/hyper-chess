@@ -1,17 +1,24 @@
 import React from 'react'
 import { ViewPlayLobby, ViewPlayGame } from './play'
+import { Loader } from '../navigation'
 import { socket } from '../../connection/socket'
 import { WHITE, BLACK } from '../../chess/model/constants'
 import { v4 as uuidv4 } from 'uuid';
 
 class ViewPlay extends React.Component {
     state = {
+        // decks
+        decks: {},
+
         // lobby
         error_msg: "",
         error: false,
 
         // Game
-        game_id: null
+        game_id: null,
+
+        // interface
+        is_loading: true
     }
 
     componentDidMount(){
@@ -22,6 +29,13 @@ class ViewPlay extends React.Component {
                 error: true
             })
         });
+
+        this.props.api.getSelectedDecksFromUser(this.props.user.id).then((decks) => {
+            this.setState({
+                decks: decks,
+                is_loading: false
+            })
+        }).catch((err) => {})
     }
 
     componentWillUnmount(){
@@ -35,7 +49,8 @@ class ViewPlay extends React.Component {
             time: time,
             increment: increment,
             game_id: game_id,
-            user: this.props.user
+            user: this.props.user,
+            user_decks: this.state.decks
         }
         socket.emit("createNewGame", data)
         this.setState({
@@ -48,7 +63,7 @@ class ViewPlay extends React.Component {
             game_id: game_id,
             game_offer_was_deleted: false
         });
-        socket.emit("playerJoinedGame", {game_id: game_id, user: this.props.user})
+        socket.emit("playerJoinedGame", {game_id: game_id, user: this.props.user, user_decks: this.state.decks})
     }
 
     exitGame(){
@@ -62,7 +77,9 @@ class ViewPlay extends React.Component {
 
     render() {
         let content = "";
-        if(this.state.game_id){
+        if(this.state.is_loading){
+            content = <Loader/>
+        } else if(this.state.game_id){
             content = (
                 <ViewPlayGame api={this.props.api}
                               user={this.props.user}
@@ -75,6 +92,7 @@ class ViewPlay extends React.Component {
             content = (
                 <ViewPlayLobby api={this.props.api}
                                user={this.props.user}
+                               decks={this.state.decks}
                                onCreateGame={this.createGame.bind(this)}
                                onAcceptGameOffer={this.joinGame.bind(this)}
                                error={this.state.error}

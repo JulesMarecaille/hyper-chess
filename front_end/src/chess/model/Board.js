@@ -29,11 +29,15 @@ class Board {
 		let white_pieces = this.deck_white.getPiecesAsWhite()
 		let black_pieces = this.deck_black.getPiecesAsBlack()
 		for (const [square, piece_name] of Object.entries(white_pieces)){
-			this.board[square] = new PIECE_MAPPING[piece_name](WHITE);
+			if (piece_name){
+				this.board[square] = new PIECE_MAPPING[piece_name](WHITE);
+			}
 		}
 
 		for (const [square, piece_name] of Object.entries(black_pieces)){
-			this.board[square] = new PIECE_MAPPING[piece_name](BLACK);
+			if (piece_name){
+				this.board[square] = new PIECE_MAPPING[piece_name](BLACK);
+			}
 		}
 		this.updateKingPosition();
 	}
@@ -80,7 +84,7 @@ class Board {
 	isMoveLegal(move){
 	        return (this.getLegalMovesFromPiece(move.from).includes(move.to) && this.color_to_move === move.player_color);
 	    }
-		
+
 	updateHasGameEnded(){
 		let is_checkmate = this.isCheckmate(this.color_to_move);
 		let is_stalemate = this.isStalemate(this.color_to_move);

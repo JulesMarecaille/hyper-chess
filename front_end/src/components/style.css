@@ -1,4 +1,5 @@
 body{
+    --app-background-color: #343a40;
     --menu-background-color: #212529;
     --menu-color: #f8f9fa;
     --menu-border-color: #ced4da;
@@ -11,6 +12,8 @@ body{
     --silver: #F6F4F3;
     --copper: #C8553D;
     --color-coins: #FAA613;
+    --color-typo: #ced4da;
+    --color-value: #e76f51;
 }
 
 a {
@@ -28,6 +31,37 @@ table{
 td,th{
     margin: 0;
     padding: 0;
+}
+
+label {
+    display: block;
+    color: #909090;
+    font-weight: 400;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 0;
+    transition: color .3s ease;
+    -webkit-transition: color .3s ease;
+}
+
+input {
+    padding: 8px 0;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: lato,sans-serif;
+    border: 0;
+    border-bottom: 1px solid #cecece;
+    display: block;
+    width: 100%;
+    color: #424242;
+    transition: all .25s ease;
+    -webkit-transition: all .25s ease;
+    font-family: inherit;
+    background-color: rgba(0,0,0,0);
+}
+
+textarea:focus, input:focus{
+    outline: none;
 }
 
 .text-link:hover{
@@ -58,6 +92,10 @@ td,th{
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
+}
+
+.view-padding{
     padding-top: 26px;
 }
 /**********************************************************
@@ -342,6 +380,48 @@ td,th{
     background-color: var(--menu-background-color);
 }
 
+.lobby-actions{
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 16px;
+    font-weight: 400;
+    justify-content: space-between;
+}
+
+.lobby-actions .selected-decks{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px 12px;
+}
+
+.lobby-actions .selected-decks .title{
+    padding-bottom: 4px;
+}
+
+.lobby-actions .selected-decks .entry{
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+    font-weight: 200;
+}
+
+.lobby-actions .selected-decks .entry .deck-color{
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 8px;
+}
+
+.lobby-actions .selected-decks .entry .deck-color.white{
+    background-color: #fff;
+}
+
+.lobby-actions .selected-decks .entry .deck-color.black{
+    background-color: #000;
+}
+
 /*******************************************************
 * OVERLAY
 ********************************************************/
@@ -474,7 +554,7 @@ td,th{
 
 .collection-container{
     background-color: var(--app-background-color);
-    height: 450px;
+    height: 450px !important;
     border-radius: 5px;
     border: 1px solid black;
     width: 350px;
@@ -530,8 +610,9 @@ td,th{
     padding-left: 6px;
 }
 
-.collection-container .entry .score{
+.collection-container .entry .value{
     padding-left: 6px;
+    color: var(--color-value);
 }
 
 .collection-container .entry .image {
@@ -995,4 +1076,202 @@ td,th{
     font-style: italic;
     color: #a4a4a4;
     font-size: 12px;
+}
+
+/**************************************************
+* DECK
+***************************************************/
+.browse-decks{
+    height:100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow: auto;
+    margin: 0;
+}
+
+.browse-decks .add-deck{
+    width:520px;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    border: 4px dashed rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    justify-content: center;
+    font-size: 64px;
+    font-weight:1200 ;
+    margin: 8px;
+    cursor: pointer;
+
+}
+
+.browse-decks .add-deck:hover{
+    border: 4px dashed #fff;
+    color: #fff;
+    transition: 0.3s ease;
+}
+
+.deck-entry{
+    width:520px;
+    min-height: 120px;
+    border: 0.5px solid black;
+    background: var(--menu-background-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    margin: 8px;
+    padding: 8px;
+    transition: 0.3s ease;
+    position: relative;
+}
+
+.deck-entry.selectable:hover{
+    color: var(--menu-background-color) !important;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.deck-entry .info{
+    align-items: center;
+    display: flex;
+    height: 100%;
+    width: 120px;
+}
+
+.deck-entry .info .select-color{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: flex;
+    align-items: center;
+}
+
+.deck-entry .info .select-color img{
+    width: 45px;
+    height: 45px;
+}
+
+.deck-entry .info .select-color .unselected{
+    opacity: 0.2;
+}
+
+.deck-entry .info .value-container{
+
+}
+
+.deck-entry .info .value{
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--color-value);
+}
+
+.deck-entry .info .value.over{
+    color: var(--navigation-red) !important;
+}
+
+.deck-entry .info .max-value{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.deck-entry .content{
+    height: 100%;
+    display: inline;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.deck-entry.selectable:hover .content .chess-board{
+    box-shadow: 0px 0px  0px 2px rgba(0,0,0,1);
+}
+
+.deck-entry .content .name{
+    font-size: 20px;
+    padding-bottom: 4px;
+    padding-top: 0;
+    border-bottom: none;
+    margin-bottom: 4px;
+}
+
+.deck-entry.content input.name{
+    color: var(--color-typo);
+    transition: 0.3s ease;
+}
+
+.deck-entry .content input.name:hover{
+    color: #fff;
+    background-color: var(--app-background-color);
+}
+
+.edition-container{
+
+}
+
+.edition-container .edition{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px;
+}
+
+.edition-container .edition .info-box{
+    width: 220px;
+    padding: 8px 12px;
+    margin-right: 8px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: var(--menu-background-color);
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edition-container .edition .info-box .info{
+    text-align: center;
+    font-style: italic;
+    font-weight: 200;
+    font-size: 16px;
+}
+
+.edition-container .edition .info-box .piece-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: stretch;
+    text-align: left;
+    width: 100%;
+}
+
+.edition-container .edition .info-box .piece-info .name{
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.edition-container .edition .info-box .piece-info .description{
+    font-size: 16px;
+    font-weight: 200;
+}
+
+.edition-container .edition .info-box .piece-info .value{
+    font-size: 16px;
+    color: var(--color-value);
+}
+
+.edition-container .actions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.edition-container .actions .info{
+    font-size: 14px;
+    max-width: 200px;
+    font-style: italic;
+    text-align: center;
+    font-weight: 200;
 }

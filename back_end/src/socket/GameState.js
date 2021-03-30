@@ -6,6 +6,7 @@ class GameState {
     constructor(id, time, increment, game_over_callback){
         this.game_id = id;
         this.players = {};
+        this.decks = {};
         this.color_to_move = WHITE;
         this.clocks = {};
         this.winner = null;
@@ -21,20 +22,23 @@ class GameState {
         this.draw_offers[BLACK] = false;
     }
 
-    addPlayer(user){
+    addPlayer(user, user_decks){
         // if there's already a player in the game
         if(this.players[WHITE] || this.players[BLACK]){
             // pick the color left
             if(this.players[WHITE]){
                 this.players[BLACK] = user;
+                this.decks[BLACK] = user_decks[BLACK];
             } else {
                 this.players[WHITE] = user;
+                this.decks[WHITE] = user_decks[WHITE];
             }
             this.is_joinable = false;
         } else {
             // pick a random color
             let random_color = getRandomColor()
             this.players[random_color] = user;
+            this.decks[random_color] = user_decks[random_color];
             this.creator = user;
         }
     }
@@ -89,7 +93,7 @@ class GameState {
         let time_remaining = {};
         time_remaining[WHITE] = this.time;
         time_remaining[BLACK] = this.time;
-        return { players: this.players, time_remaining: time_remaining};
+        return { players: this.players, decks: this.decks, time_remaining: time_remaining};
     }
 
     isJoinable(){
