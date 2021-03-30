@@ -38,13 +38,11 @@ class Board {
 		this.updateKingPosition();
 	}
 
-	getAction(move)
-	{
+	getAction(move){
 		return this.board[move.from].getAction(move);
 	}
 
-	makeAction(move, selection)
-	{
+	makeAction(move, selection){
 		return this.board[move.from].makeAction(move, selection);
 	}
 
@@ -58,9 +56,6 @@ class Board {
 
 		// Move the piece
         this.board = this.board[move.from].move(move, this.board, this.getLastMove(), makeChoice, my_move);
-
-
-
 		this.updateHistory(move);
 		this.updateKingPosition();
 
@@ -91,7 +86,7 @@ class Board {
 
 	isMoveLegal(move){
 	        return (this.getLegalMovesFromPiece(move.from).includes(move.to) && this.color_to_move === move.player_color);
-	    }
+	}
 
 	updateHasGameEnded(){
 		let is_checkmate = this.isCheckmate(this.color_to_move);
