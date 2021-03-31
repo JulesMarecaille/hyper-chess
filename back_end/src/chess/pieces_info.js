@@ -12,50 +12,59 @@ module.exports = {
     "ClassicQueen": {
         is_king: false,
         value: 9,
-        allowed_positions: ALLOWED_POS["Queen"]
+        allowed_positions: ALLOWED_POS["Queen"],
+        cost: 0
     },
 
     "ClassicKing": {
         is_king: true,
         value: 1,
-        allowed_positions: ALLOWED_POS["King"]
+        allowed_positions: ALLOWED_POS["King"],
+        cost: 0
     },
 
     "ClassicRook": {
         is_king: false,
         value: 5,
-        allowed_positions: ALLOWED_POS["Rook"]
+        allowed_positions: ALLOWED_POS["Rook"],
+        cost: 0
     },
 
     "ClassicKnight": {
         is_king: false,
         value: 3,
-        allowed_positions: ALLOWED_POS["Knight"]
+        allowed_positions: ALLOWED_POS["Knight"],
+        cost: 0
     },
 
     "ClassicBishop": {
         is_king: false,
         value: 3,
-        allowed_positions: ALLOWED_POS["Bishop"]
+        allowed_positions: ALLOWED_POS["Bishop"],
+        cost: 0
     },
 
     "ClassicPawn": {
         is_king: false,
         value: 1,
-        allowed_positions: ALLOWED_POS["Pawn"]
+        allowed_positions: ALLOWED_POS["Pawn"],
+        cost: 0
     },
 
     "Unicorn": {
         is_king: false,
         value: 4,
-        allowed_positions: ALLOWED_POS["Knight"]
+        allowed_positions: ALLOWED_POS["Knight"],
+        cost: 400
     },
+
     "Phantom": {
         is_king: false,
         value: 2,
         allowed_positions: ALLOWED_POS["Knight"].concat(ALLOWED_POS["Bishop"]).concat(ALLOWED_POS["Rook"]),
         cost:1000
     },
+
     "Elephant": {
         is_king: false,
         value: 5,

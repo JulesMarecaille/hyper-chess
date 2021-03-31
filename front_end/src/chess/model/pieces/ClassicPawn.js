@@ -21,8 +21,9 @@ class ClassicPawn extends Piece{
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "The classic pawn from the classic game of chess.";
-		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN);
+		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN, 0);
 		this.is_pawn = true;
+		this.set_name = "Classic"
 	}
 
 	getAction(move){

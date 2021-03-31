@@ -20,9 +20,9 @@ class Phantom extends Piece
 			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5];
-		let description = "Can go anywhere, can't eat anyone";
+		let description = "Phantom can go anywhere on the board. It can't take any piece nor be taken.";
 		super(color, behavior, 'Phantom', 'Phantom', 2, description,
-            ALLOWED.BISHOP | ALLOWED.ROOK | ALLOWED.KNIGHT);
+            ALLOWED.BISHOP | ALLOWED.ROOK | ALLOWED.KNIGHT, 1000);
 		this.can_be_eaten = false;
 	}
 

@@ -21,7 +21,8 @@ class ClassicQueen extends Piece
 			0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0,
 			3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3];
 		let description = "The classic queen from the classic game of chess.";
-		super(color, behavior, 'ClassicQueen', 'Classic Queen', 9, description, ALLOWED.QUEEN);
+		super(color, behavior, 'ClassicQueen', 'Classic Queen', 9, description, ALLOWED.QUEEN, 0);
+		this.set_name = "Classic"
 	}
 
 }

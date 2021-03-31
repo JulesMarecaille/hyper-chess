@@ -21,7 +21,8 @@ class ClassicKnight extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "The classic knight from the classic game of chess.";
-		super(color, behavior, 'ClassicKnight', 'Classic Knight', 3, description, ALLOWED.KNIGHT);
+		super(color, behavior, 'ClassicKnight', 'Classic Knight', 3, description, ALLOWED.KNIGHT, 0);
+		this.set_name = "Classic"
 	}
 
 }
