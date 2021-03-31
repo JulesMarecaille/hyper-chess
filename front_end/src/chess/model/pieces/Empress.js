@@ -1,10 +1,8 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants.js'
 
-class Empress extends Piece
-{
-	constructor(color)
-	{
+class Empress extends Piece{
+	constructor(color){
 		let behavior = [0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -21,9 +19,8 @@ class Empress extends Piece
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0];
 		let description = "A rook and a horse combined";
-		super(color, behavior, 'Empress', 'Empress', 9, description, ALLOWED.QUEEN);
+		super(color, behavior, 'Empress', 'Empress', 9, description, ALLOWED.QUEEN, 200);
 	}
-
 }
 
 export default Empress;

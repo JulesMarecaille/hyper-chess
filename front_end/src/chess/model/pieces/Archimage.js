@@ -1,10 +1,8 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants.js'
 
-class Archimage extends Piece
-{
-	constructor(color)
-	{
+class Archimage extends Piece{
+	constructor(color){
 		let behavior = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -21,10 +19,9 @@ class Archimage extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "A bishop and a horse, but limited";
-		super(color, behavior, 'Archimage', 'Archimage', 7, description, ALLOWED.ROOK | ALLOWED.QUEEN);
+		super(color, behavior, 'Archimage', 'Archimage', 7, description, ALLOWED.ROOK | ALLOWED.QUEEN, 200);
 		this.rockable = true;
 	}
-
 }
 
 export default Archimage;

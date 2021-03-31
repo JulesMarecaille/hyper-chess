@@ -2,10 +2,8 @@ import Piece from './Piece.js'
 import {ALLOWED} from '../constants.js'
 import { squaresPassed } from '../utils.js'
 
-class Elephant extends Piece
-{
-	constructor(color)
-	{
+class Elephant extends Piece{
+	constructor(color){
 		let behavior = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

@@ -1,10 +1,8 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants.js'
 
-class Phantom extends Piece
-{
-	constructor(color)
-	{
+class Phantom extends Piece{
+	constructor(color){
 		let behavior = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
