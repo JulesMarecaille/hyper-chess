@@ -33,8 +33,7 @@ class ClassicPawn extends Piece{
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "The classic pawn from the classic game of chess.";
-		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description,
-			ALLOWED.PAWN | ALLOWED.ROOK | ALLOWED.BISHOP | ALLOWED.KNIGHT);
+		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN);
 		this.is_pawn = true;
 	}
 

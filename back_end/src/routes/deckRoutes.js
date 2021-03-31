@@ -90,7 +90,6 @@ module.exports = (app, connection) => {
     app.put("/decks/:id", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
-                // TODO : Add a selected_as_* check
                 if (found_deck.UserId == user.id){
                     req.body.id = req.params.id;
                     let valid = true;

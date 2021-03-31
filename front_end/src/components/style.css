@@ -447,7 +447,7 @@ textarea:focus, input:focus{
     background-color: #fff;
     border-radius: 15px;
     display: block;
-    color: #212529;
+    color: var(--menu-background-color);
     position: relative;
     overflow: hidden;
 }
@@ -530,7 +530,7 @@ textarea:focus, input:focus{
     background-color: #fff;
     border-radius: 15px;
     display: grid;
-    color: #212529;
+    color: var(--menu-background-color);
     position: relative;
     overflow: hidden;
 }
