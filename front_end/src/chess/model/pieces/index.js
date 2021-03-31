@@ -4,6 +4,7 @@ import ClassicRook from './ClassicRook'
 import ClassicKnight from './ClassicKnight'
 import ClassicKing from './ClassicKing'
 import ClassicQueen from './ClassicQueen'
+import Unicorn from './Unicorn'
 
 export const PIECE_MAPPING = {
     "ClassicBishop": ClassicBishop,
@@ -12,7 +13,5 @@ export const PIECE_MAPPING = {
     "ClassicKnight": ClassicKnight,
     "ClassicKing": ClassicKing,
     "ClassicQueen": ClassicQueen,
+    "Unicorn": Unicorn
 }
-
-export const piece_list = ["ClassicBishop", "ClassicPawn", "ClassicRook",
-                          "ClassicKnight", "ClassicKing", "ClassicQueen"];

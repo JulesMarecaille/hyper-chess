@@ -43,5 +43,11 @@ module.exports = {
         is_king: false,
         value: 1,
         allowed_positions: ALLOWED_POS["Pawn"]
+    },
+
+    "Unicorn": {
+        is_king: false,
+        value: 4,
+        allowed_positions: ALLOWED_POS["Knight"]
     }
 }

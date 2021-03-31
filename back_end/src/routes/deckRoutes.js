@@ -195,7 +195,6 @@ function isDeckValid(pieces){
                 has_king = true
             }
             if(!piece_info.allowed_positions.includes(i)){
-                console.log(piece_info)
                 invalid_piece = true
             }
             value += piece_info.value;

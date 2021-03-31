@@ -39,6 +39,11 @@ module.exports.initCollection = (connection) => {
             allowNull: false,
             defaultValue: true
         },
+        Unicorn: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
     }, {
         defaultScope: {
         },
