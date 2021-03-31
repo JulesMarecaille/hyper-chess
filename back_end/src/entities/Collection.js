@@ -44,6 +44,16 @@ module.exports.initCollection = (connection) => {
             allowNull: false,
             defaultValue: false
         },
+        Phantom: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        Elephant: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
     }, {
         defaultScope: {
         },

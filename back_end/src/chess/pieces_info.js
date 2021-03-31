@@ -49,5 +49,17 @@ module.exports = {
         is_king: false,
         value: 4,
         allowed_positions: ALLOWED_POS["Knight"]
+    },
+    "Phantom": {
+        is_king: false,
+        value: 2,
+        allowed_positions: ALLOWED_POS["Knight"].concat(ALLOWED_POS["Bishop"]).concat(ALLOWED_POS["Rook"]),
+        cost:1000
+    },
+    "Elephant": {
+        is_king: false,
+        value: 5,
+        allowed_positions: ALLOWED_POS["Rook"],
+        cost:800
     }
 }

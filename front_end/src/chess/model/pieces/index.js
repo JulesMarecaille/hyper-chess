@@ -5,6 +5,8 @@ import ClassicKnight from './ClassicKnight'
 import ClassicKing from './ClassicKing'
 import ClassicQueen from './ClassicQueen'
 import Unicorn from './Unicorn'
+import Phantom from './Phantom'
+import Elephant from './Elephant'
 
 export const PIECE_MAPPING = {
     "ClassicBishop": ClassicBishop,
@@ -13,5 +15,7 @@ export const PIECE_MAPPING = {
     "ClassicKnight": ClassicKnight,
     "ClassicKing": ClassicKing,
     "ClassicQueen": ClassicQueen,
-    "Unicorn": Unicorn
+    "Unicorn": Unicorn,
+    "Phantom": Phantom,
+    "Elephant" : Elephant
 }
