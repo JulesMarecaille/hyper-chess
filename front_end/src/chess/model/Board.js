@@ -59,7 +59,7 @@ class Board {
 		let is_capture = (!!this.board[move.to]);
 
 		// Move the piece
-        this.board = this.board[move.from].move(move, this.board, this.getLastMove());
+		this.board = this.board[move.from].move(move, this.board, this.getLastMove());
 		this.updateHistory(move);
 		this.updateKingPosition();
 
