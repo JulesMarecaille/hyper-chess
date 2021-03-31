@@ -34,10 +34,10 @@ class Game extends React.Component {
 
     componentDidMount(){
         socket.on("opponentMove", (data) => {
-            this.makeMove(data.move, data.time_remaining, false, false);
+            this.makeMove(data.move, data.time_remaining, false);
             if(this.state.premove){
                 if(this.state.boardObject.isMoveLegal(this.state.premove)){
-                    this.makeMove(this.state.premove, null, true, true);
+                    this.makeMove(this.state.premove, null, true);
                 }
                 this.setState({
                     premove: null
@@ -83,11 +83,12 @@ class Game extends React.Component {
                 to: square,
                 player_color: this.props.side
             };
-            if (options = this.state.boardObject.getAction(move)){//si la pièce à besoin de faire une action particulière, nécessitant de l'ui
-                this.makeChoice(move, options);
+            options = this.state.boardObject.getAction(move);
+            if (options){//si la pièce à besoin de faire une action particulière, nécessitant de l'ui
+                this.askUserForAChoice(move, options);
             } else {
                 if(this.props.side === this.state.boardObject.color_to_move){
-                    this.makeMove(move, null, true, true);
+                    this.makeMove(move, null, true);
                 } else {
                     this.setState({
                         premove: move,
@@ -153,8 +154,9 @@ class Game extends React.Component {
         };
         let options = null;
         if(this.props.side !== this.state.boardObject.color_to_move){
-            if (options = this.state.boardObject.getAction(move)){
-                this.makeChoice(move, options);
+            options = this.state.boardObject.getAction(move);
+            if (options){
+                this.askUserForAChoice(move, options);
             } else {
                 this.setState({
                     premove: move,
@@ -167,10 +169,11 @@ class Game extends React.Component {
         if (this.state.highlighted_moves.includes(square)
             && this.props.side === this.state.boardObject.color_to_move)
         {
-            if (options = this.state.boardObject.getAction(move)){
-                this.makeChoice(move, options);
+            options = this.state.boardObject.getAction(move)
+            if (options){
+                this.askUserForAChoice(move, options);
             } else {
-                this.makeMove(move, null, true, true);
+                this.makeMove(move, null, true);
             }
         } else if (!options) {
             this.resetDraggedPiece();
@@ -203,10 +206,10 @@ class Game extends React.Component {
     }
 
     // Action
-    makeMove(move, time_remaining=null, emit=false, my_move=false){
+    makeMove(move, time_remaining=null, emit=false){
         let boardResponse;
         if(this.state.boardObject.color_to_move !== move.player_color){ return; }
-        boardResponse = this.state.boardObject.makeMove(move, this.makeChoice.bind(this), my_move)
+        boardResponse = this.state.boardObject.makeMove(move)
         if (boardResponse.is_check){
             this.check_sound.play()
         } else if(boardResponse.is_capture){
@@ -298,7 +301,7 @@ class Game extends React.Component {
         return chessboard;
     }
 
-    makeChoice(move, options_selection){
+    askUserForAChoice(move, options_selection){
         this.user_have_to_select = true;
         this.setState({
             options_selection: options_selection,
@@ -310,7 +313,7 @@ class Game extends React.Component {
         this.user_have_to_select = false;
         let new_move = this.state.boardObject.makeAction(this.state.pending_move, selection);
         if(this.props.side === this.state.boardObject.color_to_move){
-            this.makeMove(new_move, null, true, true);
+            this.makeMove(new_move, null, true);
         } else {
             this.setState({
                 premove: new_move,

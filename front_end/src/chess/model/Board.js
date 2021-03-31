@@ -50,7 +50,7 @@ class Board {
 		return this.board[move.from].makeAction(move, selection);
 	}
 
-	makeMove(move, makeChoice, my_move){
+	makeMove(move){
 		// If game is over we can't make moves anymore
 		if (this.game_over){
 			return this.game_over, this.is_draw, this.winner, false, false;
@@ -59,7 +59,7 @@ class Board {
 		let is_capture = (!!this.board[move.to]);
 
 		// Move the piece
-        this.board = this.board[move.from].move(move, this.board, this.getLastMove(), makeChoice, my_move);
+        this.board = this.board[move.from].move(move, this.board, this.getLastMove());
 		this.updateHistory(move);
 		this.updateKingPosition();
 
@@ -145,7 +145,7 @@ function getLegalMovesFromPieceFromBoard(
 			};
 			let tmp_board = cloneDeep(board)
 			let tmp_kings_positions = cloneDeep(kings_positions)
-			tmp_board = tmp_board[square].move(move, tmp_board, opponent_last_move, false);
+			tmp_board = tmp_board[square].move(move, tmp_board, opponent_last_move);
 			// The king can escape
 			if (piece.is_king){
 				tmp_kings_positions[piece.color] = candidate_square;
