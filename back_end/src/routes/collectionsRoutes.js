@@ -1,4 +1,5 @@
 const { checkAuth, sendOkResponse } = require("../utils.js")
+const pieces_info = require("../chess/pieces_info")
 
 module.exports = (app, connection) => {
     const { Collection } = require("../entities")(connection)
@@ -37,6 +38,33 @@ module.exports = (app, connection) => {
                 } else {
                     res.status(401).send();
                 }
+            })
+            .catch((err) => {
+                res.status(500).send(err);
+            });
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+    });
+
+    //Buy piece
+    app.get("/collections/unlock/:piece", (req, res) => {
+        checkAuth(connection, req.headers["x-access-token"]).then((user) => {
+            Collection.findOne({where: {UserId: user.id}}).then((collection) => {
+                let cost = pieces_info[req.params.piece].cost;
+                if(user.coins - cost > 0){
+                    user.coins = user.coins - cost;
+                    let data = {};
+                    data[req.params.piece] = true;
+                    collection.update(data).then(() => {
+                        sendOkResponse(res, {});
+                        user.save();
+                    })
+                } else {
+                    res.status(401).send(err);
+                }
+
             })
             .catch((err) => {
                 res.status(500).send(err);

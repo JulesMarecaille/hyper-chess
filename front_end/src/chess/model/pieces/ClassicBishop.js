@@ -21,7 +21,8 @@ class ClassicBishop extends Piece
 			0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
 			3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3];
 		let description = "The classic bishop from the classic game of chess.";
-		super(color, behavior, 'ClassicBishop', 'Classic Bishop', 3, description, ALLOWED.BISHOP);
+		super(color, behavior, 'ClassicBishop', 'Classic Bishop', 3, description, ALLOWED.BISHOP, 0);
+		this.set_name = "Classic"
 	}
 
 }

@@ -39,8 +39,9 @@ class ClassicKing extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "The classic king from the classic game of chess.";
-		super(color, behavior, 'ClassicKing', 'Classic King', 1, description, ALLOWED.KING);
+		super(color, behavior, 'ClassicKing', 'Classic King', 1, description, ALLOWED.KING, 0);
 		this.is_king = true;
+		this.set_name = "Classic"
 	}
 
 	isRockable(board, target_pos, pos, index, last_move)

@@ -1361,3 +1361,236 @@ textarea:focus, input:focus{
     text-align: center;
     font-weight: 200;
 }
+
+/************************************************************************
+* SHOP BROWSE
+*************************************************************************/
+
+.shop-browse-container{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-column-gap: 16px;
+    height: 100%;
+}
+
+.shop-browse-container .left-panel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid black;
+}
+
+.shop-browse-container .pieces-container{
+    /* display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 16px;
+    grid-row-gap: 16px; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    height: calc(100% - 26px) !important;
+}
+
+.shop-browse-container .pieces-container .piece-entry{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 120px;
+    width: 120px;
+    margin: 8px;
+    transition: 0.3s ease;
+}
+
+.shop-browse-container .pieces-container .piece-entry:hover{
+    background-color: #fff;
+    color: #000 !important;
+    cursor: pointer;
+}
+
+.shop-browse-container .pieces-container .piece-entry .piece.black{
+    display: none;
+}
+
+.shop-browse-container .pieces-container .piece-entry:hover .piece.white{
+    display: none;
+}
+
+.shop-browse-container .pieces-container .piece-entry:hover .piece.black{
+    display: block;
+}
+
+.shop-browse-container .pieces-container .piece-entry .piece{
+    height: 64px;
+    width: 64px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.shop-browse-container .pieces-container .piece-entry .name{
+    font-weight: 600;
+    margin: 2px;
+}
+
+.shop-browse-container .pieces-container .piece-entry .value{
+    margin-left: 4px;
+    font-weight: 200;
+    color: var(--color-value);
+}
+
+.shop-browse-container .pieces-container .piece-entry .cost{
+    color: var(--color-coins);
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+}
+
+.shop-browse-container .pieces-container .piece-entry .cost .icon{
+    margin-left: 4px;
+    font-size: 16px;
+    padding-top: 1px;
+}
+
+.shop-browse-container .pieces-container .piece-entry .owned{
+    font-style: italic;
+    font-weight: 200;
+    padding: 4px 8px;
+}
+
+/************************************************************************
+* SHOP PIECE
+*************************************************************************/
+
+.shop-piece-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.shop-piece-container .main{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-column-gap: 16px;
+    padding: 32px;
+    border-bottom: 1px solid black;
+}
+
+.shop-piece-container .main .piece{
+    height: 128px;
+    width: 128px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.shop-piece-container .main .piece.black{
+    display: none;
+}
+
+.shop-piece-container .main .image:hover .piece.white{
+    display: none;
+}
+
+.shop-piece-container .main .image:hover .piece.black{
+    display: block;
+}
+
+.shop-piece-container .infos{
+    display: flex;
+    align-items: center;
+}
+
+.shop-piece-container .infos .name-positions{
+    margin-left: 32px;
+}
+
+.shop-piece-container .infos .position{
+    padding: 0 8px;
+    font-size: 24px
+}
+
+.shop-piece-container .main .name{
+    font-weight: 600;
+    font-size: 48px;
+    margin: 2px;
+}
+
+.shop-piece-container .main .value{
+    margin-left: 4px;
+    font-weight: 200;
+    color: var(--color-value);
+}
+
+.shop-piece-container .main .purchase{
+    display: flex;
+    align-items: center;
+}
+
+.shop-piece-container .main .purchase-button{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px 8px;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 116px;
+    background-color: var(--menu-background-color);
+    transition: 0.3s ease;
+}
+
+.shop-piece-container .main .purchase-button:hover{
+    color: #000 !important;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.shop-piece-container .main .purchase-button .text{
+    font-size: 20px;
+}
+
+.shop-piece-container .main .cost{
+    color: var(--color-coins);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.shop-piece-container .main .cost .icon{
+    margin-left: 4px;
+    padding-top: 1px;
+}
+
+.shop-piece-container .main .owned{
+    font-style: italic;
+    font-weight: 200;
+    font-size: 32px;
+}
+
+.shop-piece-container .sub{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 32px;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+.shop-piece-container .bottom{
+    justify-self: flex-end;
+    padding: 16px;
+}
