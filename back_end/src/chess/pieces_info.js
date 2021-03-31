@@ -92,7 +92,7 @@ module.exports = {
         allowed_positions: ALLOWED_POS["Rook"],
         cost:200
     },
-    
+
     "Fearful": {
         is_king: false,
         value: 2,
