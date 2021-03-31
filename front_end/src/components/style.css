@@ -447,7 +447,7 @@ textarea:focus, input:focus{
     background-color: #fff;
     border-radius: 15px;
     display: block;
-    color: #212529;
+    color: var(--menu-background-color);
     position: relative;
     overflow: hidden;
 }
@@ -499,6 +499,63 @@ textarea:focus, input:focus{
     width: 100%;
     padding-top: 8px;
 }
+
+/*******************************************************
+* OVERLAY-PROMOTE
+********************************************************/
+
+.overlay-options-selection .piece-container:hover .img-overlay{
+    background-color: rgba(10, 0, 0, 0.6);
+}
+
+.overlay-options-selection{
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.chessboard-container{
+    position:relative;
+}
+
+.overlay-options-selection .box{
+    background-color: #fff;
+    border-radius: 15px;
+    display: grid;
+    color: var(--menu-background-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.overlay-options-selection .piece{
+    width: 1.8em;
+    height: 1.8em;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.overlay-options-selection .box .content{
+
+    width: 100%;
+}
+
+.overlay-options-selection .box .button-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
 
 /**************************************************
 * INFO PANEL

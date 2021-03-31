@@ -42,18 +42,24 @@ class Board {
 		this.updateKingPosition();
 	}
 
+	getAction(move){
+		return this.board[move.from].getAction(move);
+	}
+
+	makeAction(move, selection){
+		return this.board[move.from].makeAction(move, selection);
+	}
+
 	makeMove(move){
 		// If game is over we can't make moves anymore
 		if (this.game_over){
 			return this.game_over, this.is_draw, this.winner, false, false;
 		}
-
 		// Check if this move captures a piece
 		let is_capture = (!!this.board[move.to]);
 
 		// Move the piece
 		this.board = this.board[move.from].move(move, this.board, this.getLastMove());
-
 		this.updateHistory(move);
 		this.updateKingPosition();
 
@@ -64,7 +70,8 @@ class Board {
 		let game_over = this.game_over;
 		let is_draw = this.is_draw;
 		let winner = this.winner;
-		return {game_over, is_draw, winner, is_capture, is_check};
+		let pack = {game_over, is_draw, winner, is_capture, is_check};
+		return pack;
 	}
 
 	updateHistory(move){
@@ -83,7 +90,7 @@ class Board {
 
 	isMoveLegal(move){
 	        return (this.getLegalMovesFromPiece(move.from).includes(move.to) && this.color_to_move === move.player_color);
-	    }
+	}
 
 	updateHasGameEnded(){
 		let is_checkmate = this.isCheckmate(this.color_to_move);

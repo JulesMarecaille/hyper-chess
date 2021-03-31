@@ -1,8 +1,10 @@
 import React from 'react'
 import Board from '../model/Board'
 import Square from './Square'
+import Piece from './Piece'
+import { PIECE_MAPPING } from '../model/pieces/index.js'
 import './style.css'
-import { WHITE, BLACK } from '../model/constants.js'
+import { WHITE, BLACK, COLORS_NAME } from '../model/constants.js'
 import { socket } from '../../connection/socket';
 
 class Game extends React.Component {
@@ -20,10 +22,10 @@ class Game extends React.Component {
             winner: null,
             draw: null,
             is_check: false,
-            promotion:false,
-            promise:null,
+            options_selection:[],
             premove: null
         };
+        this.user_have_to_select = false; //need to be out of state for instant execution
         this.blank_img =  new Image()
         this.move_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/ClassicMove.mp3");
         this.capture_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/ClassicCapture.mp3")
@@ -51,12 +53,11 @@ class Game extends React.Component {
     // Events
     clickedSquare(square) {
         if (this.state.game_over){ return; }
-        let piece = this.state.boardObject.board[square]
-        if (this.state.selected_square !== square &&
-            piece &&
-            !this.state.highlighted_moves.includes(square))
+        let piece = this.state.boardObject.board[square];
+        if (this.state.selected_square !== square
+            && piece
+            && !this.state.highlighted_moves.includes(square))
         {
-
             let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square);
             if(piece.color === this.props.side){
                 // Select player piece
@@ -72,24 +73,30 @@ class Game extends React.Component {
                     opponent_highlighted_moves: legal_piece_moves
                 });
             }
-        } else if (this.state.selected_square !== -1 &&
-                   this.state.highlighted_moves.includes(square))
+        } else if ( this.state.selected_square !== -1
+                    && this.state.highlighted_moves.includes(square))
         {
             // Make move
+            let options;
             let move = {
                 from: this.state.selected_square,
                 to: square,
                 player_color: this.props.side
             };
-            if(this.props.side === this.state.boardObject.color_to_move){
-                this.makeMove(move, null, true);
+            options = this.state.boardObject.getAction(move);
+            if (options){//si la pièce à besoin de faire une action particulière, nécessitant de l'ui
+                this.askUserForAChoice(move, options);
             } else {
-                this.setState({
-                    premove: move,
-                    selected_square: -1,
-                    highlighted_moves: [],
-                    opponent_highlighted_moves: [],
-                });
+                if(this.props.side === this.state.boardObject.color_to_move){
+                    this.makeMove(move, null, true);
+                } else {
+                    this.setState({
+                        premove: move,
+                        selected_square: -1,
+                        highlighted_moves: [],
+                        opponent_highlighted_moves: [],
+                    });
+                }
             }
         } else {
             // Reset click state
@@ -105,11 +112,11 @@ class Game extends React.Component {
     dragPieceStart(evt, square){
         if (this.state.game_over){ return; }
         evt.dataTransfer.setDragImage(this.blank_img, 0, 0);
-        let piece = this.state.boardObject.board[square]
-        if (this.state.dragged_square === -1 &&
-            piece &&
-            piece.color === this.props.side &&
-            !this.state.highlighted_moves.includes(square))
+        let piece = this.state.boardObject.board[square];
+        if (this.state.dragged_square === -1
+            && piece
+            && piece.color === this.props.side
+            && !this.state.highlighted_moves.includes(square))
         {
             // Select player piece
             let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square);
@@ -145,26 +152,51 @@ class Game extends React.Component {
             to: square,
             player_color: this.props.side
         };
+        let options = null;
         if(this.props.side !== this.state.boardObject.color_to_move){
-            this.setState({
-                premove: move,
-                selected_square: -1,
-                highlighted_moves: [],
-                opponent_highlighted_moves: []
-            })
+            options = this.state.boardObject.getAction(move);
+            if (options){
+                this.askUserForAChoice(move, options);
+            } else {
+                this.setState({
+                    premove: move,
+                    selected_square: -1,
+                    highlighted_moves: [],
+                    opponent_highlighted_moves: []
+                })
+            }
         }
-        if (this.state.highlighted_moves.includes(square) && this.props.side === this.state.boardObject.color_to_move) {
-            this.makeMove(move, null, true);
-        } else if (this.state.dragged_element !== -1) {
+        if (this.state.highlighted_moves.includes(square)
+            && this.props.side === this.state.boardObject.color_to_move)
+        {
+            options = this.state.boardObject.getAction(move)
+            if (options){
+                this.askUserForAChoice(move, options);
+            } else {
+                this.makeMove(move, null, true);
+            }
+        } else if (!options) {
+            this.resetDraggedPiece();
+        }
+        if (!options){
+            this.setState({
+                dragged_square: -1,
+                dragged_element: null,
+            });
+        }
+    }
+
+    resetDraggedPiece()
+    {
+        if (this.state.dragged_element !== -1
+            && this.state.dragged_element
+            && this.state.dragged_element.style)
+        {
             this.state.dragged_element.style.position = "relative";
             this.state.dragged_element.style.left = 0;
             this.state.dragged_element.style.top = 0;
             this.state.dragged_element.style.pointerEvents = "auto";
         }
-        this.setState({
-            dragged_square: -1,
-            dragged_element: null,
-        });
     }
 
     dragOverSquare(square){
@@ -175,11 +207,12 @@ class Game extends React.Component {
 
     // Action
     makeMove(move, time_remaining=null, emit=false){
+        let boardResponse;
         if(this.state.boardObject.color_to_move !== move.player_color){ return; }
-        let {game_over, is_draw, winner, is_capture, is_check} = this.state.boardObject.makeMove(move);
-        if (is_check){
+        boardResponse = this.state.boardObject.makeMove(move)
+        if (boardResponse.is_check){
             this.check_sound.play()
-        } else if(is_capture){
+        } else if(boardResponse.is_capture){
             this.capture_sound.play()
         } else {
             this.move_sound.play();
@@ -188,8 +221,8 @@ class Game extends React.Component {
             let payload = {
                 game_id: this.props.game_id,
                 move: move,
-                is_game_over: game_over,
-                winner: winner
+                is_game_over: boardResponse.game_over,
+                winner: boardResponse.winner
             }
             socket.emit("makeMove", payload);
         }
@@ -198,13 +231,13 @@ class Game extends React.Component {
             selected_square: -1,
             highlighted_moves: [],
             opponent_highlighted_moves: [],
-            game_over: game_over,
-            is_draw: is_draw,
-            winner: winner,
-            is_check: is_check
+            game_over: boardResponse.game_over,
+            is_draw: boardResponse.is_draw,
+            winner: boardResponse.winner,
+            is_check: boardResponse.is_check
         });
         if (this.state.game_over){
-            this.props.onGameOver(winner);
+            this.props.onGameOver(boardResponse.winner);
         }
     }
 
@@ -214,7 +247,7 @@ class Game extends React.Component {
         let last_move = this.state.boardObject.getLastMove();
         let last_move_squares = [];
         if(last_move){
-             last_move_squares = [last_move.from, last_move.to];
+            last_move_squares = [last_move.from, last_move.to];
         }
         let premove_squares = [];
         if(this.state.premove){
@@ -268,15 +301,87 @@ class Game extends React.Component {
         return chessboard;
     }
 
+    askUserForAChoice(move, options_selection){
+        this.user_have_to_select = true;
+        this.setState({
+            options_selection: options_selection,
+            pending_move:move
+        });
+    }
+
+    overlaySelection(selection){
+        this.user_have_to_select = false;
+        let new_move = this.state.boardObject.makeAction(this.state.pending_move, selection);
+        if(this.props.side === this.state.boardObject.color_to_move){
+            this.makeMove(new_move, null, true);
+        } else {
+            this.setState({
+                premove: new_move,
+                selected_square: -1,
+                highlighted_moves: [],
+                opponent_highlighted_moves: [],
+            });
+        }
+        this.setState({
+            dragged_square: -1,
+            dragged_element: null,
+            pending_move: null,
+        });
+        this.resetDraggedPiece();
+    }
+
+    closeTheOverlay(){
+        if (this.user_have_to_select){
+            this.user_have_to_select = false;
+            this.resetDraggedPiece();
+            this.setState({
+                pending_move: null,
+                dragged_square: -1,
+                dragged_element: null
+            })
+        }
+    }
+
+    drawOptionsOfOverlay(list_of_options)
+    {
+        let options = [];
+        list_of_options.forEach((item, i) => {
+            let piece = new PIECE_MAPPING[item](this.props.side);
+            options.push(<div className="piece-container">
+                            <div className="img-overlay" onClick={this.overlaySelection.bind(this, item)}>
+                                <Piece piece={piece}/>
+                            </div>
+                        </div>);
+        });
+        return options;
+    }
+
+    drawOverlaySelection(){
+        if (this.user_have_to_select){
+                let overlayPannel = this.drawOptionsOfOverlay(this.state.options_selection);
+                return (
+                    <div className="overlay-options-selection"
+                        onClick={this.closeTheOverlay.bind(this)}>
+                        <div class="box">
+                            {overlayPannel}
+                        </div>
+                    </div>);
+        } else {
+            return ("");
+        }
+    }
+
     render() {
+        let overlay = this.drawOverlaySelection();
         return (
         <React.Fragment>
-        <div>
+        <div className="chessboard-container">
             <table className="chess-board">
                 {this.drawChessBoard()}
             </table>
+            {overlay}
         </div>
-        </React.Fragment>)
+        </React.Fragment>);
     }
 }
 

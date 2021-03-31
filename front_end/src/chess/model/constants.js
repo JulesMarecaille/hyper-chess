@@ -1,6 +1,13 @@
 export const WHITE = 0;
 export const BLACK = 1;
 
+export const MOVE_MASK = {
+    MOVE : 1,
+    ATTACK : 1 << 1,
+    SEE_THROUGH : 1 << 2,
+    ATTACK_ALLY : 1 << 3,
+}
+
 export const ALLOWED = {
     PAWN : 1,
     ROOK : 2,
