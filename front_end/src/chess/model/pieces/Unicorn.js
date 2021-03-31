@@ -20,8 +20,8 @@ class Unicorn extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		let description = "The classic knight, but it can jump straight";
-		super(color, behavior, 'Unicorn', 'The Unicorn', 4, description, ALLOWED.KNIGHT);
+		let description = "Similar to the Classic Knight, but it can also jump straight.";
+		super(color, behavior, 'Unicorn', 'The Unicorn', 4, description, ALLOWED.KNIGHT, 400);
 	}
 
 }

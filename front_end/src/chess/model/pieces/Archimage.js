@@ -1,7 +1,7 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants.js'
 
-class ClassicKnight extends Piece
+class Archimage extends Piece
 {
 	constructor(color)
 	{
@@ -10,21 +10,21 @@ class ClassicKnight extends Piece
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 3, 7, 0, 7, 3, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 7, 7, 0, 7, 7, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 7, 7, 0, 7, 7, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 3, 7, 0, 7, 3, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		let description = "The classic knight from the classic game of chess.";
-		super(color, behavior, 'ClassicKnight', 'Classic Knight', 3, description, ALLOWED.KNIGHT, 0);
-		this.set_name = "Classic"
+		let description = "A bishop and a horse, but limited";
+		super(color, behavior, 'Archimage', 'Archimage', 7, description, ALLOWED.ROOK | ALLOWED.QUEEN);
+		this.rockable = true;
 	}
 
 }
 
-export default ClassicKnight;
+export default Archimage;

@@ -22,20 +22,23 @@ class Piece{
 	//matrice des déplacement des différente pièces en bitwise : pour chaque pièce deux bits sont assigné, un de poids faible pour la capacité de se mouvoir,
 	//l'autre pour la capacité de manger. Le centre en 7,7 représente la piece, et au tour les différents codes.
 	//
-	constructor(color, behavior, name, label, value, description, allowed){
+	constructor(color, behavior, name, label, value, description, allowed, cost){
 		this.value = value;
 		this.rockable = false;
 		this.behavior = behavior;
 		this.behavior_size = 239;
 		this.behavior_offset = (this.behavior_size - 1) / 2;
 		this.is_king = false;
+		this.cost = cost;
 		this.is_pawn = false;
+		this.can_be_eaten = true;
 		this.name = name;
 		this.label = label;
 		this.allowed = allowed;
     	this.color = color;
 		this.moved = false;
 		this.description = description;
+		this.set_name = "No set";
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
@@ -73,13 +76,13 @@ class Piece{
 	checkAvailableSquare(pos, index, board, last_move, is_rock_check){
 		let target_pos = this.getTargetPos(index, pos);
 		if ((this.behavior[index] && this.isOnBoard(target_pos))){
-			if ((this.isAlly(board, target_pos) && this.canAttackAlly(index))
-				|| (this.isEnemy(board, target_pos) && this.canAttack(index))
-				|| (this.isEmpty(board, target_pos) && this.canMove(index))){
-					if (this.canSeeThrough(index)
-						|| this.isInSight(board, pos, target_pos)){
-						return (target_pos);
-					}
+			if ((this.isAlly(board, target_pos) && this.canAttackAlly(index) && this.isEdible(board, target_pos) && !this.isKing(board, target_pos))
+				|| (this.isEnemy(board, target_pos) && this.canAttack(index) && this.isEdible(board, target_pos))
+				|| (this.isEmpty(board, target_pos) && this.canMove(index)))
+			{
+				if (this.canSeeThrough(index) || this.isInSight(board, pos, target_pos)){
+					return (target_pos);
+				}
 			}
 			if (is_rock_check && this.isRockable(board, target_pos, pos, index, last_move)){
 				return (target_pos);
@@ -115,8 +118,16 @@ class Piece{
 		return target & MOVE_MASK.MOVE;
 	}
 
+	isEdible(board, target_pos){
+		return board[target_pos].can_be_eaten;
+	}
+
 	isRockable(board, target_pos, pos){
 		return (false);
+	}
+
+	isKing(board, target_pos){
+		return board[target_pos].is_king;
 	}
 
 	isOnBoard(pos){

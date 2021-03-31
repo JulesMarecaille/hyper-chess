@@ -1,19 +1,7 @@
 import Piece from './Piece.js'
-import {ALLOWED} from '../constants.js'
+import {ALLOWED, WHITE, BLACK} from '../constants.js'
 import { cloneDeep } from "lodash"
-
-function squaresPassed(move){
-	let list = [];
-	let min = Math.min(move.to, move.from);
-	let max = Math.max(move.to, move.from);
-	while (min < max) {
-		min += 16;
-		if (min !== max){
-			list.push(min);
-		}
-		return list;
-	}
-}
+import { squaresPassed } from '../utils.js'
 
 class ClassicPawn extends Piece{
 	constructor(color){
@@ -33,13 +21,16 @@ class ClassicPawn extends Piece{
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "The classic pawn from the classic game of chess.";
-		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN);
+		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN, 0);
 		this.is_pawn = true;
+		this.set_name = "Classic"
 	}
 
 	getAction(move){
 		let options_promote = ["ClassicQueen", "ClassicRook", "ClassicBishop", "ClassicKnight"];
-		if (move.to <= 8 || move.to >= 8 * 2 * 7){
+		if ((move.to <= 8 && this.color == WHITE)
+			|| (move.to >= 8 * 2 * 7 && this.color == BLACK))
+		{
 			return options_promote;
 		}
 	}

@@ -1,7 +1,7 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants.js'
 
-class ClassicRook extends Piece
+class Empress extends Piece
 {
 	constructor(color)
 	{
@@ -10,22 +10,20 @@ class ClassicRook extends Piece
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 7, 3, 7, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 7, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0,
 			3, 3, 3, 3, 3, 3, 7, 0, 7, 3, 3, 3, 3, 3, 3, 0,
-			0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 7, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 7, 3, 7, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0];
-		let description = "The classic rook from the classic game of chess.";
-		super(color, behavior, 'ClassicRook', 'Classic Rook', 5, description, ALLOWED.ROOK, 0);
-		this.rockable = true;
-		this.set_name = "Classic"
+		let description = "A rook and a horse combined";
+		super(color, behavior, 'Empress', 'Empress', 9, description, ALLOWED.QUEEN);
 	}
 
 }
 
-export default ClassicRook;
+export default Empress;

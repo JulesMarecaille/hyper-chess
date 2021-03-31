@@ -66,7 +66,8 @@ class HyperChessAPI {
     }
 
     // Collection
-    unlockPiece(){
+    unlockPiece(piece_name){
+        return this._get("/collections/unlock/" + piece_name)
     }
 
     getUserCollection(user_id){
