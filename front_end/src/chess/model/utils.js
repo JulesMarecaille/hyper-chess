@@ -2,6 +2,21 @@ import Deck from './Deck'
 import User from './User'
 import {ALLOWED_POS, ALLOWED } from './constants'
 
+export function squaresPassed(move){
+	let list = [];
+	let min = Math.min(move.to, move.from);
+	let max = Math.max(move.to, move.from);
+    let increment = max - min > 7 ? 16 : 1;//line or column
+	while (min < max) {
+		min += increment;
+		if (min !== max){
+			list.push(min);
+        }
+	}
+    return list;
+}
+
+
 export function getAllowedPosition(piece_allowed)
 {
     let allowed_pos = [];

@@ -1,19 +1,7 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants.js'
 import { cloneDeep } from "lodash"
-
-function squaresPassed(move){
-	let list = [];
-	let min = Math.min(move.to, move.from);
-	let max = Math.max(move.to, move.from);
-	while (min < max) {
-		min += 16;
-		if (min !== max){
-			list.push(min);
-		}
-		return list;
-	}
-}
+import { squaresPassed } from '../utils.js'
 
 class ClassicPawn extends Piece{
 	constructor(color){
