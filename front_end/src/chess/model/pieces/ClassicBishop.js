@@ -1,10 +1,8 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants.js'
 
-class ClassicBishop extends Piece
-{
-	constructor(color)
-	{
+class ClassicBishop extends Piece{
+	constructor(color){
 		let behavior = [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0,
 			0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
 			0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0,
@@ -24,7 +22,6 @@ class ClassicBishop extends Piece
 		super(color, behavior, 'ClassicBishop', 'Classic Bishop', 3, description, ALLOWED.BISHOP, 0);
 		this.set_name = "Classic"
 	}
-
 }
 
 export default ClassicBishop;
