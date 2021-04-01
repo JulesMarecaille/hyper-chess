@@ -7,6 +7,10 @@ import ClassicQueen from './ClassicQueen'
 import Unicorn from './Unicorn'
 import Phantom from './Phantom'
 import Elephant from './Elephant'
+import Archimage from './Archimage'
+import Empress from './Empress'
+import Princess from './Princess'
+import FearfulPawn from './FearfulPawn'
 
 export const PIECE_MAPPING = {
     "ClassicBishop": ClassicBishop,
@@ -17,5 +21,9 @@ export const PIECE_MAPPING = {
     "ClassicQueen": ClassicQueen,
     "Unicorn": Unicorn,
     "Phantom": Phantom,
-    "Elephant" : Elephant
+    "Elephant" : Elephant,
+    "Archimage" : Archimage,
+    "Empress" : Empress,
+    "Princess" : Princess,
+    "FearfulPawn" : FearfulPawn
 }

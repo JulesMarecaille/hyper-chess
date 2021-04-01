@@ -70,5 +70,33 @@ module.exports = {
         value: 5,
         allowed_positions: ALLOWED_POS["Rook"],
         cost:800
+    },
+
+    "Archimage": {
+        is_king: false,
+        value: 7,
+        allowed_positions: ALLOWED_POS["Rook"].concat(ALLOWED_POS["Queen"]),
+        cost:200
+    },
+
+    "Empress": {
+        is_king: false,
+        value: 9,
+        allowed_positions: ALLOWED_POS["Queen"],
+        cost:200
+    },
+
+    "Princess": {
+        is_king: false,
+        value: 7,
+        allowed_positions: ALLOWED_POS["Rook"],
+        cost:200
+    },
+
+    "FearfulPawn": {
+        is_king: false,
+        value: 2,
+        allowed_positions: ALLOWED_POS["Pawn"],
+        cost:250
     }
 }

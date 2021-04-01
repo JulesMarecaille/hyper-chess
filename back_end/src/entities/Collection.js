@@ -54,6 +54,26 @@ module.exports.initCollection = (connection) => {
             allowNull: false,
             defaultValue: false
         },
+        Archimage: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        Empress: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        Princess: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        FearfulPawn: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
     }, {
         defaultScope: {
         },

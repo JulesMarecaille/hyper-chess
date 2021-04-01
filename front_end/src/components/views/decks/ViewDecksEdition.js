@@ -122,7 +122,7 @@ class ViewDecksEdition extends React.Component {
         let number_of_pawns = 0;
         let value = 0;
         for(let i=0; i < this.props.deck.pieces.length; i++){
-            if(this.props.deck.pieces[i]){
+            if(this.props.deck.pieces[i] && PIECE_MAPPING[this.props.deck.pieces[i]]){
                 let piece = new PIECE_MAPPING[this.props.deck.pieces[i]](WHITE);
                 if(i < 8){
                     number_of_pawns += 1;

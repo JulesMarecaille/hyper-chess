@@ -6,14 +6,16 @@ export function squaresPassed(move){
 	let list = [];
 	let min = Math.min(move.to, move.from);
 	let max = Math.max(move.to, move.from);
-    let increment = max - min > 7 ? 16 : 1;//line or column
-	while (min < max) {
-		min += increment;
-		if (min !== max){
-			list.push(min);
-        }
+	let increment = max - min > 7 ? 16 : 1;//line or column
+	if (min % 8 === max % 8 || max - min < 8){
+		while (min < max) {
+			min += increment;
+			if (min !== max){
+				list.push(min);
+			}
+		}
 	}
-    return list;
+	return list;
 }
 
 

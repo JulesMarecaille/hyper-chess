@@ -1,5 +1,5 @@
 import Piece from './Piece.js'
-import {ALLOWED} from '../constants.js'
+import {ALLOWED, WHITE, BLACK} from '../constants.js'
 import { cloneDeep } from "lodash"
 import { squaresPassed } from '../utils.js'
 
@@ -28,7 +28,9 @@ class ClassicPawn extends Piece{
 
 	getAction(move){
 		let options_promote = ["ClassicQueen", "ClassicRook", "ClassicBishop", "ClassicKnight"];
-		if (move.to <= 8 || move.to >= 8 * 2 * 7){
+		if ((move.to <= 8 && this.color == WHITE)
+			|| (move.to >= 8 * 2 * 7 && this.color == BLACK))
+		{
 			return options_promote;
 		}
 	}
