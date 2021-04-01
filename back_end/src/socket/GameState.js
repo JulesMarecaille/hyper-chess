@@ -6,6 +6,7 @@ class GameState {
     constructor(id, time, increment, game_over_callback){
         this.game_id = id;
         this.players = {};
+        this.users_decks = {};
         this.decks = {};
         this.color_to_move = WHITE;
         this.clocks = {};
@@ -29,9 +30,11 @@ class GameState {
             if(this.players[WHITE]){
                 this.players[BLACK] = user;
                 this.decks[BLACK] = user_decks[BLACK];
+                this.users_decks[BLACK] = user_decks;
             } else {
                 this.players[WHITE] = user;
                 this.decks[WHITE] = user_decks[WHITE];
+                this.users_decks[WHITE] = user_decks;
             }
             this.is_joinable = false;
         } else {
@@ -39,6 +42,7 @@ class GameState {
             let random_color = getRandomColor()
             this.players[random_color] = user;
             this.decks[random_color] = user_decks[random_color];
+            this.users_decks[random_color] = user_decks;
             this.creator = user;
         }
     }
@@ -147,7 +151,25 @@ class GameState {
     }
 
     rematch(){
+        // Swap colors
+        [this.players[WHITE], this.players[BLACK]] = [this.players[BLACK], this.players[WHITE]];
+        [this.users_decks[WHITE], this.users_decks[BLACK]] = [this.users_decks[BLACK], this.users_decks[WHITE]];
+        this.decks[WHITE] = this.users_decks[WHITE][WHITE];
+        this.decks[BLACK] = this.users_decks[BLACK][BLACK];
 
+        // Reset Variables
+        this.draw_offers = {};
+        this.draw_offers[WHITE] = false;
+        this.draw_offers[BLACK] = false;
+        this.color_to_move = WHITE;
+        this.winner = null;
+        this.is_joinable = false;
+        this.is_playing = false;
+        this.is_game_over = false;
+        this.nb_half_moves = 0;
+
+        // Start game
+        return this.startGame();
     }
 }
 

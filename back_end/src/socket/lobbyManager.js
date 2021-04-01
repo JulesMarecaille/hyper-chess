@@ -24,7 +24,10 @@ function connection(sio, socket, sequelize_connection) {
         game_socket.on("requestGameOffers", onRequestGameOffers);
         game_socket.on("playerResign", onResign);
         game_socket.on("proposeDraw", onProposeDraw);
-        game_socket.on("acceptDraw", onAcceptDraw)
+        game_socket.on("acceptDraw", onAcceptDraw);
+        game_socket.on("offerRematch", onOfferRematch);
+        game_socket.on("acceptRematch", onAcceptRematch);
+        game_socket.on("declineRematch", onDeclineRematch);
     } catch (e) {
         console.log(e)
     }
@@ -110,12 +113,35 @@ function onPlayerJoinedGame(data) {
 }
 
 function onProposeDraw(data){
-    this.to(game_id).emit('opponentOfferDraw')
+    this.to(data.game_id).emit('opponentOfferDraw')
     games_state[data.game_id].offerDraw(data.color);
 }
 
 function onAcceptDraw(data){
     games_state[data.game_id].acceptDraw(data.color);
+}
+
+function onOfferRematch(data){
+    if(games_state[data.game_id]){
+        games_state[data.game_id]
+        this.to(data.game_id).emit('opponentOfferRematch');
+    } else {
+        this.emit('opponentDeclineRematch');
+        leaveGame(data.game_id, this)
+    }
+}
+
+function onAcceptRematch(data){
+    if(games_state[data.game_id]){
+        io.sockets.in(data.game_id).emit('startGame', games_state[data.game_id].rematch())
+    } else {
+        leaveGame(data.game_id, this)
+    }
+}
+
+function onDeclineRematch(data){
+    this.to(data.game_id).emit('opponentDeclineRematch')
+    leaveGame(data.game_id, this)
 }
 
 
