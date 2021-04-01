@@ -1,7 +1,7 @@
 import React from 'react'
 import { COLORS_NAME } from '../model/constants.js'
 
-class Piece extends React.Component {
+class PieceDraw extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,4 +42,4 @@ class Piece extends React.Component {
 
 }
 
-export default Piece
+export default PieceDraw

@@ -1,7 +1,7 @@
 import React from 'react'
 import Board from '../model/Board'
 import Square from './Square'
-import Piece from './Piece'
+import PieceDraw from './PieceDraw'
 import { PIECE_MAPPING } from '../model/pieces/index.js'
 import './style.css'
 import { WHITE, BLACK, COLORS_NAME } from '../model/constants.js'
@@ -370,7 +370,7 @@ class Game extends React.Component {
             let piece = new PIECE_MAPPING[item](this.props.side);
             options.push(<div className="piece-container">
                             <div className="img-overlay" onClick={this.overlaySelection.bind(this, item)}>
-                                <Piece piece={piece}/>
+                                <PieceDraw piece={piece}/>
                             </div>
                         </div>);
         });

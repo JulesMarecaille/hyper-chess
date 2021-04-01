@@ -98,5 +98,33 @@ module.exports = {
         value: 2,
         allowed_positions: ALLOWED_POS["Pawn"],
         cost:250
+    },
+
+    "PlagueOne": {
+        is_king: false,
+        value: 1,
+        allowed_positions: ALLOWED_POS["Pawn"],
+        cost:400
+    },
+
+    "PlagueThree": {
+        is_king: false,
+        value: 3,
+        allowed_positions: ALLOWED_POS["Knight"].concat(ALLOWED_POS["Bishop"]),
+        cost:400
+    },
+
+    "PlagueFive": {
+        is_king: false,
+        value: 5,
+        allowed_positions: ALLOWED_POS["Rook"],
+        cost:400
+    },
+
+    "PlagueNine": {
+        is_king: false,
+        value: 9,
+        allowed_positions: ALLOWED_POS["Queen"],
+        cost:400
     }
 }

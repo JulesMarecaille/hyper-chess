@@ -74,6 +74,27 @@ module.exports.initCollection = (connection) => {
             allowNull: false,
             defaultValue: false
         },
+        //Plague Set
+        PlagueOne: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        PlagueThree: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        PlagueFive: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        PlagueNine: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        }
     }, {
         defaultScope: {
         },

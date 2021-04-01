@@ -1,5 +1,5 @@
 import React from 'react'
-import Piece from './Piece'
+import PieceDraw from './PieceDraw'
 
 class Square extends React.Component {
 
@@ -41,7 +41,7 @@ class Square extends React.Component {
         }
         // Add Piece if there's a piece on this square
         if (this.props.piece) {
-            piece = <Piece piece={this.props.piece}
+            piece = <PieceDraw piece={this.props.piece}
                            dragStart={this.handleDragStart.bind(this)}
                            dragEnd={this.props.dragEnd}
                            dragging={this.props.dragging}

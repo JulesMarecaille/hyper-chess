@@ -1,5 +1,6 @@
 import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK} from '../constants.js'
 import {PIECE_MAPPING} from './index.js'
+import PieceDraw from '../../ui/PieceDraw.js'
 
 function reverseBehavior(table){
 	let top = 0;
@@ -42,8 +43,8 @@ class Piece{
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
+		this.draw = <PieceDraw piece={this}/>;
   	}
-
 
 	makeAction(move, selection){//will return a new, altered move to do according to the selection
 		return null;			//we might wanna add a list of moves, if we want to make other pieces moves
