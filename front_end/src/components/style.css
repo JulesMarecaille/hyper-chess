@@ -792,7 +792,7 @@ textarea:focus, input:focus{
     padding: 0 2px;
 }
 /**************************************************
-* UPDATE ELO / COINS
+* UPDATE ELO / COINS / REMATCH
 ***************************************************/
 .update {
     width: 100%;
@@ -834,6 +834,21 @@ textarea:focus, input:focus{
     color: var(--color-coins);
     padding-top: 2px;
     margin-left: 4px;
+}
+
+.infos{
+    font-style: italic;
+    font-size: 12px;
+    color: #a4a4a4;
+}
+
+.overlay .rematch-infos{
+    width: 100%;
+    text-align: center;
+    font-style: italic;
+    font-size: 12px;
+    color: #a4a4a4;
+    padding-top: 8px;
 }
 
 /****************************************************

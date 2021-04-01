@@ -19,7 +19,6 @@ class ViewPlayGame extends React.Component {
             side: null,
             players: null,
             decks: null,
-            endgame_msg: "",
             is_overlay_open: true,
             time_remaining: {},
             color_to_move: WHITE,
@@ -29,6 +28,10 @@ class ViewPlayGame extends React.Component {
             coins_won: null,
             player_offer_draw: false,
             opponent_offer_draw: false,
+            opponent_declined_rematch: false,
+            opponent_offer_rematch: false,
+            can_offer_rematch: true,
+            offered_rematch: false,
             player_rejected_offer: false,
             player_clicked_resign: false
         }
@@ -47,12 +50,28 @@ class ViewPlayGame extends React.Component {
                 side: side,
                 players: data.players,
                 decks: data.decks,
-                time_remaining: data.time_remaining
+                time_remaining: data.time_remaining,
+                is_game_over: false,
+                is_overlay_open: true,
+                color_to_move: WHITE,
+                nb_half_moves: 0,
+                game_over_reason : "",
+                elo_differences: null,
+                coins_won: null,
+                player_offer_draw: false,
+                opponent_offer_draw: false,
+                opponent_declined_rematch: false,
+                opponent_offer_rematch: false,
+                can_offer_rematch: true,
+                offered_rematch: false,
+                player_rejected_offer: false,
+                player_clicked_resign: false
             });
             this.game_start_sound.play()
         })
 
         socket.on("gameOver", (data) => {
+            console.log(data)
             this.setState({
                 winner: data.winner,
                 is_game_over: true,
@@ -74,6 +93,38 @@ class ViewPlayGame extends React.Component {
             this.setState({
                 opponent_offer_draw: true
             })
+        })
+
+        socket.on("opponentOfferRematch", () => {
+            this.setState({
+                opponent_offer_rematch: true
+            })
+        })
+
+        socket.on("opponentDeclineRematch", () => {
+            this.setState({
+                opponent_declined_rematch: true
+            })
+        })
+    }
+
+    handleOfferRematch(){
+        this.setState({
+            can_offer_rematch: false,
+            offered_rematch: true
+        })
+        socket.emit("offerRematch", {game_id: this.props.game_id});
+    }
+
+    handleAcceptRematch(){
+        socket.emit("acceptRematch", {game_id: this.props.game_id});
+    }
+
+    handleDeclineRematch(){
+        socket.emit("declineRematch", {game_id: this.props.game_id});
+        this.setState({
+            opponent_offer_rematch: false,
+            can_offer_rematch: false
         })
     }
 
@@ -129,7 +180,7 @@ class ViewPlayGame extends React.Component {
                 </div>);
         }
         let update_coins = '';
-        if(this.state.coins_won[this.state.side] > 0){
+        if(this.state.coins_won && this.state.coins_won[this.state.side] > 0){
             update_coins = (
                 <div class="update">
                     <span class="update-title">Coins collected</span>
@@ -143,15 +194,43 @@ class ViewPlayGame extends React.Component {
                 </div>
             );
         }
+        let rematch_infos = '';
+        if (this.state.opponent_offer_rematch){
+            rematch_infos = <div class="rematch-infos">Your opponent offered a rematch.</div>
+        } else if (this.state.opponent_declined_rematch) {
+            rematch_infos = <div class="rematch-infos">Your opponent declined your offer for a rematch.</div>
+        } else if (this.state.offered_rematch){
+            rematch_infos = <div class="rematch-infos">You offered your opponent a rematch.</div>
+        }
+        let rematch_button = ''
+        if(this.state.can_offer_rematch){
+            rematch_button = <button class="button" onClick={this.handleOfferRematch.bind(this)}>Offer rematch</button>
+        }
+
+        let actions = '';
+        if(!this.state.opponent_offer_rematch){
+            actions = (
+                <div class="button-container">
+                    <button class="button" onClick={this.props.onExitGame}>Back to Lobby</button>
+                    {rematch_button}
+                </div>
+            )
+        } else {
+            actions = (
+                <div class="button-container">
+                    <button class="button" onClick={this.handleAcceptRematch.bind(this)}>Accept</button>
+                    <button class="button" onClick={this.handleDeclineRematch.bind(this)}>Decline</button>
+                </div>
+            )
+        }
         return (
             <div class="box">
                 {box_title}
                 <div className="content">
                     {update_elo}
                     {update_coins}
-                    <div class="button-container">
-                        <button class="button" onClick={this.props.onExitGame}>Back to Lobby</button>
-                    </div>
+                    {rematch_infos}
+                    {actions}
                 </div>
             </div>
         )
@@ -198,6 +277,7 @@ class ViewPlayGame extends React.Component {
     }
 
     drawActionInterface(){
+        if(this.state.is_game_over){ return ""; }
         let actions;
         if(!this.state.player_offer_draw && !this.state.opponent_offer_draw){
             if(this.state.player_clicked_resign){
@@ -303,7 +383,7 @@ class ViewPlayGame extends React.Component {
     render() {
         let overlay = '';
         let game = '';
-        if(this.state.players){
+        if(this.state.side !== null){
             game = (
                 <div>
                     <div className="chess-board-container">
