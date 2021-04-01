@@ -69,7 +69,7 @@ module.exports.initCollection = (connection) => {
             allowNull: false,
             defaultValue: false
         },
-        Fearful: {
+        FearfulPawn: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false

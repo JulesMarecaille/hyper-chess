@@ -93,7 +93,7 @@ module.exports = {
         cost:200
     },
 
-    "Fearful": {
+    "FearfulPawn": {
         is_king: false,
         value: 2,
         allowed_positions: ALLOWED_POS["Pawn"],

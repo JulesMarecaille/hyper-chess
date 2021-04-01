@@ -60,7 +60,10 @@ class DeckEntry extends React.Component {
                     selected_square = -1;
                 }
                 let name = this.deck.pieces[square];
-                let piece = name ? new PIECE_MAPPING[name](WHITE) : null;
+                let piece = null;
+                if (name && PIECE_MAPPING[name]){
+                    piece = name ? new PIECE_MAPPING[name](WHITE) : null;
+                }
                 let is_an_option = this.props.valid_piece_positions && this.props.valid_piece_positions.includes(square);
                 let is_clickable = (this.props.can_pieces_be_selected && piece) ||
                                    (this.props.valid_piece_positions && this.props.valid_piece_positions.includes(square));
@@ -102,7 +105,10 @@ class DeckEntry extends React.Component {
         let value = 0;
         for (let k in this.deck.pieces){
             let piece_name = this.deck.pieces[k]
-            let piece_value = piece_name ? new PIECE_MAPPING[piece_name](WHITE).value : 0;
+            let piece_value = 0;
+            if (piece_name && PIECE_MAPPING[piece_name]){
+                piece_value = new PIECE_MAPPING[piece_name](WHITE).value;
+            }
             value += piece_value;
         }
         let value_class = value > 40 ? "value over" : "value";

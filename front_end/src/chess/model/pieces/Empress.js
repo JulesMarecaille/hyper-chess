@@ -18,7 +18,7 @@ class Empress extends Piece{
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0];
-		let description = "A rook and a horse combined";
+		let description = "The perfect combination of a Classic Rook and a Classic Knight.";
 		super(color, behavior, 'Empress', 'Empress', 9, description, ALLOWED.QUEEN, 200);
 	}
 }
