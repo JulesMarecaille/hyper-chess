@@ -46,6 +46,27 @@ class Game extends React.Component {
         });
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.side !== this.props.side) {
+            this.setState({
+                boardObject: new Board(this.props.whiteDeck, this.props.blackDeck),
+                dragged_square: -1,
+                dragged_element: null,
+                selected_square: -1,
+                mouse_over_square: -1,
+                highlighted_moves: [],
+                opponent_highlighted_moves: [],
+                game_over: false,
+                winner: null,
+                draw: null,
+                is_check: false,
+                options_selection:[],
+                premove: null
+            });
+            this.user_have_to_select = false;
+        }
+    }
+
     componentWillUnmount(){
         socket.removeAllListeners("opponentMove");
     }
