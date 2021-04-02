@@ -9,10 +9,15 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 class Lobby extends React.Component {
-    state = {
-        gameoffers: [],
-        is_loading: false
+    constructor(props){
+        super(props);
+        this.state = {
+            gameoffers: [],
+            is_loading: false
+        }
+        this.reload_games_interval = null;
     }
+
 
     componentDidMount(){
         socket.on("receiveGameOffers", (data) => {
@@ -22,11 +27,12 @@ class Lobby extends React.Component {
             });
         });
         this.getGameOffers();
-        setInterval(this.getGameOffers.bind(this), 5000);
+        this.reload_games_interval = setInterval(this.getGameOffers.bind(this), 5000);
     }
 
     componentWillUnmount(){
         socket.removeAllListeners("receiveGameOffers");
+        clearInterval(this.reload_games_interval);
     }
 
     getGameOffers(){

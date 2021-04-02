@@ -1,5 +1,5 @@
 import React from 'react'
-import { Deck } from 'hyperchess_model'
+import { Deck } from 'hyperchess_model/lib'
 import { Loader } from '../navigation';
 import { ViewDecksBrowse, ViewDecksEdition} from './decks'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'

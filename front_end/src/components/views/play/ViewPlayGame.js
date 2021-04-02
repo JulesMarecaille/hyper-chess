@@ -5,7 +5,7 @@ import { Loader } from '../../navigation'
 import { MdFlag, MdClose, MdCheck } from 'react-icons/md'
 import { FaRegHandshake } from 'react-icons/fa'
 import { BiCoin } from 'react-icons/bi'
-import { Deck } from 'hyperchess_model'
+import { Deck } from 'hyperchess_model/lib'
 import { WHITE, BLACK, swapColor } from 'hyperchess_model/lib/constants';
 import { socket } from '../../../connection/socket';
 
@@ -64,9 +64,11 @@ class ViewPlayGame extends React.Component {
                 can_offer_rematch: true,
                 offered_rematch: false,
                 player_rejected_offer: false,
-                player_clicked_resign: false
+                player_clicked_resign: false,
+                opponent_disconnected: false
             });
             this.game_start_sound.play()
+            this.disconnection_interval_obj = null;
         })
 
         socket.on("gameOver", (data) => {
@@ -105,6 +107,47 @@ class ViewPlayGame extends React.Component {
                 opponent_declined_rematch: true
             })
         })
+
+        socket.on("opponentDisconnected", () => {
+            this.setState({
+                opponent_disconnected: true
+            })
+            this.setState({
+                time_before_win_by_disconnection: 30
+            })
+            if(!this.disconnection_interval_obj){
+                this.disconnection_interval_obj = setInterval(() => {
+                    if(this.state.time_before_win_by_disconnection > 0){
+                        this.setState({
+                            time_before_win_by_disconnection: this.state.time_before_win_by_disconnection - 1
+                        })
+                    } else {
+                        clearInterval(this.disconnection_interval_obj);
+                    }
+                }, 1000)
+            }
+        })
+
+        socket.on("opponentReconnected", () => {
+            this.setState({
+                opponent_disconnected: false
+            })
+            if(this.disconnection_interval_obj){
+                clearInterval(this.disconnection_interval_obj);
+                this.disconnection_interval_obj = null;
+            }
+        })
+
+        if(this.props.reconnectionData){
+            let data = this.props.reconnectionData;
+            let side = BLACK;
+            if (data.players[WHITE].id === this.props.user.id){
+                side = WHITE;
+            }
+            data.side = side;
+            this.setState(data)
+            this.game_start_sound.play()
+        }
     }
 
     handleOfferRematch(){
@@ -131,6 +174,12 @@ class ViewPlayGame extends React.Component {
         this.props.onExitGame();
         socket.removeAllListeners("startGame");
         socket.removeAllListeners("gameOver");
+        socket.removeAllListeners("reconnectToGame");
+        socket.removeAllListeners("opponentOfferDraw");
+        socket.removeAllListeners("opponentOfferRematch");
+        socket.removeAllListeners("opponentDeclineRematch");
+        socket.removeAllListeners("opponentDisconnected");
+        socket.removeAllListeners("opponentReconnected");
     }
 
     drawEndGameScreen(){
@@ -202,7 +251,7 @@ class ViewPlayGame extends React.Component {
             rematch_infos = <div class="rematch-infos">You offered your opponent a rematch.</div>
         }
         let rematch_button = ''
-        if(this.state.can_offer_rematch){
+        if(this.state.can_offer_rematch && this.state.elo_differences && !this.state.opponent_disconnected){
             rematch_button = <button class="button" onClick={this.handleOfferRematch.bind(this)}>Offer rematch</button>
         }
 
@@ -278,9 +327,15 @@ class ViewPlayGame extends React.Component {
     drawActionInterface(){
         if(this.state.is_game_over){ return ""; }
         let actions;
-        if(!this.state.player_offer_draw && !this.state.opponent_offer_draw){
+        if(this.state.opponent_disconnected){
+            actions = (
+                <div>
+                    <div className="info">Your opponent left. You will win in {this.state.time_before_win_by_disconnection} seconds.</div>
+                </div>
+            )
+        } else if(!this.state.player_offer_draw && !this.state.opponent_offer_draw){
             if(this.state.player_clicked_resign){
-                actions =  (
+                actions = (
                     <div>
                         <div className="info">Are you sure you want to resign?</div>
                         <div class="actions">
@@ -348,7 +403,7 @@ class ViewPlayGame extends React.Component {
     }
 
     resign(){
-        socket.emit("playerResign", {game_id: this.props.game_id, color: this.state.side})
+        socket.emit("playerResign", {game_id: this.props.game_id})
     }
 
     handleGameOver(winner){
@@ -389,6 +444,7 @@ class ViewPlayGame extends React.Component {
                         {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[WHITE], WHITE) : this.drawPlayerInfo(this.state.players[BLACK], BLACK)}
                         <Game side={this.state.side}
                               game_id={this.props.game_id}
+                              reconnectionData={this.props.reconnectionData}
                               whitePlayer={this.state.players[WHITE]}
                               blackPlayer={this.state.players[BLACK]}
                               whiteDeck={Deck.buildFromPayload(this.state.decks[WHITE])}

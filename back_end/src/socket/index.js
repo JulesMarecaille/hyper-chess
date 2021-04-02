@@ -11,8 +11,8 @@ module.exports = (server, connection) => {
     io.on('connection', async (socket) => {
         // Receive info from the client
         const token = socket.handshake.query.token;
-        checkAuthNoDatabase(token).then(() => {
-            lobbyManager.connection(io, socket, connection)
+        checkAuthNoDatabase(token).then((user_id) => {
+            lobbyManager.connection(io, socket, connection, user_id)
         }).catch((err) => {
             socket.emit('status' , "Couldn't authenticate the token.");
             socket.disconnect();
