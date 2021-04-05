@@ -1,5 +1,5 @@
 import React from 'react'
-import Piece from '../../../chess/ui/Piece'
+import Piece from '../../chess/Piece'
 import { BiCoin } from 'react-icons/bi'
 import { Loader } from '../../navigation';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
