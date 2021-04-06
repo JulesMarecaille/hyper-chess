@@ -1,4 +1,4 @@
-import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK} from '../constants.js'
+import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK} from '../constants'
 import {PIECE_MAPPING} from './index.js'
 
 function reverseBehavior(table){
@@ -55,7 +55,7 @@ class Piece{
 
 	//pour une BOARD donnée et une case SQUARE donnée, verifie toute les cases atteignables
 	//return une liste de case possible sous forme texte.
-	getLegalMoves(board, square, last_move, is_rock_check = true){
+	getLegalSquares(board, square, last_move, is_rock_check = true){
 		let pos;
 		let legal_move = [];
 		for (let k = 0; k < this.behavior_size; k++){

@@ -4,8 +4,8 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { Loader } from '../navigation';
 import { FaLock, FaUnlock } from 'react-icons/fa'
-import { PIECE_MAPPING } from '../../chess/model/pieces'
-import { WHITE, BLACK } from '../../chess/model/constants'
+import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
 class ViewCollection extends React.Component {
     state = {

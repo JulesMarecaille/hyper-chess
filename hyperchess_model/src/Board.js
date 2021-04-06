@@ -1,4 +1,4 @@
-import { WHITE, BLACK, SQUARES, swapColor } from './constants.js'
+import { WHITE, BLACK, SQUARES, swapColor } from './constants'
 import { cloneDeep } from "lodash"
 import { PIECE_MAPPING } from './pieces'
 
@@ -15,6 +15,19 @@ class Board {
 		this.is_draw = false;
 		this.winner = null;
 		this.initializeBoard(this.player_white, this.player_black);
+	}
+
+	isMoveLegal(move){
+		if(move.player_color == this.color_to_move){
+			for(let legal_move of this.getLegalMovesFromPlayer(this.color_to_move)){
+				if(move.player_color === legal_move.player_color &&
+				   move.to === legal_move.to &&
+			   	   move.from === legal_move.from){
+					   return true
+				}
+			}
+		}
+		return false
 	}
 
 	getLegalMovesFromPiece(square){
@@ -88,10 +101,6 @@ class Board {
 		}
 	}
 
-	isMoveLegal(move){
-	        return (this.getLegalMovesFromPiece(move.from).includes(move.to) && this.color_to_move === move.player_color);
-	}
-
 	updateHasGameEnded(){
 		let is_checkmate = this.isCheckmate(this.color_to_move);
 		let is_stalemate = this.isStalemate(this.color_to_move);
@@ -108,7 +117,7 @@ class Board {
 
 	isCheck(color){
 		let opponent_moves = this.getLegalMovesFromPlayer(swapColor(color))
-		return opponent_moves.includes(this.kings_positions[color]);
+		return opponent_moves.map(x => x.to).includes(this.kings_positions[color]);
 	}
 
 	isCheckmate(color){
@@ -132,7 +141,7 @@ function getLegalMovesFromPieceFromBoard(
 	check_king_safety=true){
 	// Get where the piece can go to
 	let piece = board[square];
-	let candidate_squares = piece.getLegalMoves(board, square, opponent_last_move);
+	let candidate_squares = piece.getLegalSquares(board, square, opponent_last_move);
 	let legal_moves = []
 	for (let candidate_square of candidate_squares){
 		// Check if this move put our king in danger
@@ -141,7 +150,7 @@ function getLegalMovesFromPieceFromBoard(
 			let move = {
 				'to': candidate_square,
 				'from': square,
-				'player': piece.color
+				'player_color': piece.color
 			};
 			let tmp_board = cloneDeep(board)
 			let tmp_kings_positions = cloneDeep(kings_positions)
@@ -153,11 +162,15 @@ function getLegalMovesFromPieceFromBoard(
 			// See if our opponent can capture our king after our move
 			// The opponent can capture our king regardless of his king safety
 			let opponent_moves = getLegalMovesFromPlayerFromBoard(tmp_board, swapColor(piece.color), tmp_kings_positions, move, false);
-			if (opponent_moves.includes(tmp_kings_positions[piece.color])){
+			if (opponent_moves.map(x => x.to).includes(tmp_kings_positions[piece.color])){
 				continue;
 			}
 		}
-		legal_moves.push(candidate_square);
+		legal_moves.push({
+			'to': candidate_square,
+			'from': square,
+			'player_color': piece.color
+		});
 	}
 	return legal_moves;
 }

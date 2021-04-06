@@ -1,13 +1,12 @@
 import React from 'react'
 import ReactTooltip from 'react-tooltip';
-import Game from '../../../chess/ui/Game.js'
-import Clock from '../../../chess/ui/Clock.js'
+import { Game, Clock } from '../../chess'
 import { Loader } from '../../navigation'
 import { MdFlag, MdClose, MdCheck } from 'react-icons/md'
 import { FaRegHandshake } from 'react-icons/fa'
 import { BiCoin } from 'react-icons/bi'
-import Deck from '../../../chess/model/Deck.js'
-import { WHITE, BLACK, swapColor } from '../../../chess/model/constants.js';
+import { Deck } from 'hyperchess_model'
+import { WHITE, BLACK, swapColor } from 'hyperchess_model/lib/constants';
 import { socket } from '../../../connection/socket';
 
 class ViewPlayGame extends React.Component {

@@ -2,7 +2,7 @@ import React from 'react'
 import { ViewPlayLobby, ViewPlayGame } from './play'
 import { Loader } from '../navigation'
 import { socket } from '../../connection/socket'
-import { WHITE, BLACK } from '../../chess/model/constants'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 import { v4 as uuidv4 } from 'uuid';
 
 class ViewPlay extends React.Component {

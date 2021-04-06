@@ -1,5 +1,5 @@
 import Piece from './Piece.js'
-import {ALLOWED} from '../constants.js'
+import {ALLOWED} from '../constants'
 
 class Archimage extends Piece{
 	constructor(color){

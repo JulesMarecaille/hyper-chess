@@ -1,9 +1,9 @@
 import React from 'react'
 import DeckEntry from './DeckEntry'
-import Square from '../../../chess/ui/Square'
-import { PIECE_MAPPING} from '../../../chess/model/pieces/index'
-import { WHITE, BLACK, ALLOWED_POS, ALLOWED } from '../../../chess/model/constants.js'
-import {getAllowedPosition} from '../../../chess/model/utils.js'
+import { Square } from '../../chess'
+import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
+import { WHITE, BLACK, ALLOWED_POS, ALLOWED } from 'hyperchess_model/lib/constants'
+import { getAllowedPosition } from 'hyperchess_model'
 
 class ViewDecksEdition extends React.Component {
     constructor(props){

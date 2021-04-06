@@ -1,16 +1,9 @@
-import { SQUARES } from './constants.js'
-import { v4 as uuidv4 } from 'uuid';
-import { WHITE, BLACK } from './constants.js'
+import { SQUARES, WHITE, BLACK } from './constants'
 
 class Deck {
-    constructor(id=uuidv4(), name='New Deck', pieces=new Array(16)) {
-        this.id = id;
+    constructor(name='New Deck', pieces=new Array(16)) {
         this.name = name;
         this.pieces = pieces;
-    }
-
-    getId(){
-        return this.id
     }
 
     getPiecesAsWhite(){
@@ -56,7 +49,7 @@ class Deck {
     }
 
     static buildFromPayload(payload){
-        return new Deck(0, payload.name, payload.pieces)
+        return new Deck(payload.name, payload.pieces)
     }
 }
 

@@ -1,5 +1,5 @@
 import Piece from './Piece.js'
-import {ALLOWED} from '../constants.js'
+import {ALLOWED} from '../constants'
 
 function isSquareChecked(board, square, color, last_move)
 {
@@ -10,7 +10,7 @@ function isSquareChecked(board, square, color, last_move)
 	{
 		if (board[index] && board[index].color !== color && board[index])
 		{
-			list = board[index].getLegalMoves(board, index, last_move, 0);
+			list = board[index].getLegalSquares(board, index, last_move, 0);
 			if (list.includes(square))
 				return (true);
 		}

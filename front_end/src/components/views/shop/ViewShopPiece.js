@@ -3,8 +3,8 @@ import Piece from '../../chess/Piece'
 import { BiCoin } from 'react-icons/bi'
 import { Loader } from '../../navigation';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
-import { PIECE_MAPPING } from '../../../chess/model/pieces'
-import { WHITE, BLACK } from '../../../chess/model/constants'
+import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
 class ViewShopPiece extends React.Component {
     constructor(props){

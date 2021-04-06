@@ -1,8 +1,8 @@
 import React from 'react'
-import Square from '../../../chess/ui/Square'
-import { PIECE_MAPPING} from '../../../chess/model/pieces/index'
-import '../../../chess/ui/style.css'
-import { WHITE, BLACK } from '../../../chess/model/constants'
+import { Square } from '../../chess'
+// import '../../chess/ui/style.css'
+import { PIECE_MAPPING} from 'hyperchess_model/lib/pieces'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
 class DeckEntry extends React.Component {
     constructor(props) {
