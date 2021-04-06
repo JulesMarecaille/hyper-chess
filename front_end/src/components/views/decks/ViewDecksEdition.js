@@ -12,7 +12,8 @@ class ViewDecksEdition extends React.Component {
             selected_piece: null,
             selected_piece_from_entry: null,
             color: WHITE,
-            valid_piece_positions: []
+            valid_piece_positions: [],
+            is_delete_overlay_open: false
         };
         this.pieces_list = [];
         for(const [piece_name, is_bought] of Object.entries(this.props.collection)){
@@ -42,6 +43,41 @@ class ViewDecksEdition extends React.Component {
 
     handleUpdateDeck(){
         this.setState({update:1})
+    }
+
+    openOverlay(){
+        this.setState({
+            is_delete_overlay_open: true
+        })
+    }
+
+    closeOverlay(){
+        this.setState({
+            is_delete_overlay_open: false
+        })
+    }
+
+    drawOverlay(){
+        if(this.state.is_delete_overlay_open){
+            return (
+                <div class="overlay">
+                    <div class="box">
+                        <div className="title white">
+                            <div>
+                                <span class="main">Delete this deck?</span>
+                            </div>
+                        </div>
+                        <div className="content">
+                            <div class="button-container">
+                                <button class="button white" onClick={this.props.onDeleteDeck.bind(this)}>Yes</button>
+                                <button class="button white" onClick={this.closeOverlay.bind(this)}>No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        return "";
     }
 
     drawChessBoardOfCollection() {
@@ -148,10 +184,11 @@ class ViewDecksEdition extends React.Component {
     render(){
         let delete_button = '';
         if(this.props.isDeletable){
-            delete_button = <div class="button" onClick={this.props.onDeleteDeck.bind(this)}>Delete</div>
+            delete_button = <div class="button" onClick={this.openOverlay.bind(this)}>Delete</div>
         }
         return (
             <div class="edition-container view-padding">
+                {this.drawOverlay()}
                 <div className="edition">
                     {this.drawChessBoardOfCollection()}
                     {this.drawPieceInfo()}

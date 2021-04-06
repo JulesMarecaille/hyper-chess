@@ -443,7 +443,7 @@ textarea:focus, input:focus{
 
 .overlay .box{
     width: 400px;
-    min-height: 150px;
+    min-height: 100px;
     background-color: #fff;
     border-radius: 15px;
     display: block;
@@ -468,6 +468,11 @@ textarea:focus, input:focus{
 
 .overlay .box .title.grey{
     background-color: #333;
+}
+
+.overlay .box .title.white{
+    background-color: #fff;
+    color: #000;
 }
 
 .overlay .box .title.green{
