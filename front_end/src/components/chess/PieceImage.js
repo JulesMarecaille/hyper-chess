@@ -15,8 +15,6 @@ class PieceImage extends React.Component {
         })
     }
 
-
-
     render() {
         let img = process.env.PUBLIC_URL + '/assets/pieces/' + this.props.piece.name + COLORS_NAME[this.props.piece.color] + '.svg';
         if (this.state.error){
@@ -25,7 +23,6 @@ class PieceImage extends React.Component {
         return (
         <React.Fragment>
             <div className="piece-container">
-
                 <div style={{backgroundImage: `url(${img})`}}
                      onDragStart={this.props.dragStart}
                      onDrag={this.props.dragging}
@@ -36,13 +33,6 @@ class PieceImage extends React.Component {
             </div>
         </React.Fragment>)
     }
-
-    /*
-    onDragStart={this.props.onDragStart}
-    onDragEnd={this.props.onDragEnd}
-    draggable={true}
-    */
-
 }
 
 export default PieceImage

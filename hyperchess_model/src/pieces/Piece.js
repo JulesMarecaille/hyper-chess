@@ -1,9 +1,5 @@
 import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK} from '../constants'
 import {PIECE_MAPPING} from './index.js'
-<<<<<<< HEAD
-=======
-import PieceImage from '../../ui/PieceImage.js'
->>>>>>> d73e0eaa70e1d2f05346d4d2be80378b2e7737d9
 
 function reverseBehavior(table){
 	let top = 0;
@@ -48,10 +44,6 @@ class Piece{
 			this.behavior = reverseBehavior(this.behavior);
 		}
 		this.image = null;
-<<<<<<< HEAD
-=======
-		this.display_number = null;
->>>>>>> d73e0eaa70e1d2f05346d4d2be80378b2e7737d9
   	}
 
 	makeAction(move, selection){//will return a new, altered move to do according to the selection
