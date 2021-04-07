@@ -31,8 +31,9 @@ class Plague extends ClassicPawn{
         this.allowed = allowed;
 		this.value = size;
         this.cost = 400;
-		this.display = size;
-		this.draw = <div><div className="overlay-number">{this.display}</div><PieceDraw piece={this}/></div>;
+		this.display_number = size;
+		this.draw = <PieceDraw piece={this}/>;
+		this.draw_display_number = <div className="overlay-number">{this.display_number}</div>;
 	}
 
     move(move, board, last_move){

@@ -29,7 +29,7 @@ class ViewShopBrowse extends React.Component {
             all_pieces.push(
                 <div class="piece-entry" onClick={this.props.onSelectedPiece.bind(this, piece_white)}>
                     <div class="piece white">{piece_white.draw}</div>
-                    <div class="piece black">{piece_black.draw}</div>
+                    <div class="piece black">{piece_white.draw_display_number}{piece_black.draw}</div>
                     <div class="name">{piece_white.label}<span class="value">({piece_white.value})</span></div>
                     {cost}
                 </div>

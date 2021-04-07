@@ -40,10 +40,12 @@ class Piece{
 		this.moved = false;
 		this.description = description;
 		this.set_name = "No set";
+		this.display_number = null;
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
 		this.draw = <PieceDraw piece={this}/>;
+		this.draw_display_number = null;
   	}
 
 	makeAction(move, selection){//will return a new, altered move to do according to the selection
