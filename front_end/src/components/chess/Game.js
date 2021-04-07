@@ -1,5 +1,5 @@
 import React from 'react'
-import {Board} from 'hyperchess_model'
+import {Board} from 'hyperchess_model/lib'
 import Square from './Square'
 import Piece from './Piece'
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
@@ -44,6 +44,20 @@ class Game extends React.Component {
                 })
             }
         });
+
+        if(this.props.reconnectionData){
+            let board_object = Board.buildFromHistory(this.props.whiteDeck, this.props.blackDeck, this.props.reconnectionData.history)
+            this.setState({
+                boardObject: board_object,
+                selected_square: -1,
+                highlighted_squares: [],
+                opponent_highlighted_squares: [],
+                game_over: board_object.game_over,
+                is_draw: board_object.is_draw,
+                winner: board_object.winner,
+                is_check: board_object.is_check[board_object.color_to_move]
+            });
+        }
     }
 
     componentDidUpdate(prevProps) {

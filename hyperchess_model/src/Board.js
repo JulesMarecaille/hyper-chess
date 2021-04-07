@@ -131,6 +131,14 @@ class Board {
 	getLastMove(){
 		return this.history.slice(-1)[0];
 	}
+
+	static buildFromHistory(deck_white, deck_black, history){
+		let new_board = new Board(deck_white, deck_black);
+		for(let move of history){
+			new_board.makeMove(move)
+		}
+		return new_board;
+	}
 }
 
 function getLegalMovesFromPieceFromBoard(

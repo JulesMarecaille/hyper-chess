@@ -6,7 +6,7 @@ var io;
 var sequelize;
 const { WHITE, BLACK, MAX_DAILY_GAME_COINS, COINS_PER_WIN } = require("hyperchess_model/constants")
 
-function connection(sio, socket, sequelize_connection) {
+function connection(sio, socket, sequelize_connection, user_id) {
     try {
         io = sio;
         sequelize = sequelize_connection;
@@ -25,6 +25,7 @@ function connection(sio, socket, sequelize_connection) {
         game_socket.on("offerRematch", onOfferRematch);
         game_socket.on("acceptRematch", onAcceptRematch);
         game_socket.on("declineRematch", onDeclineRematch);
+        game_socket.on("tryToReconnect", onTryToReconnect);
     } catch (e) {
         console.log(e)
     }
@@ -37,7 +38,7 @@ function onDisconnect() {
 function onDisconnecting() {
     for(room of Array.from(this.rooms)){
         let game_id = room;
-        leaveGame(game_id, this);
+        leaveGame(game_id, this)
     }
 }
 
@@ -80,7 +81,7 @@ function onLeaveGame(game_id){
 }
 
 function onResign(data){
-    games_state[data.game_id].resign(data.color);
+    games_state[data.game_id].resign(this.id);
 }
 
 function onPlayerJoinedGame(data) {
@@ -138,6 +139,16 @@ function onDeclineRematch(data){
     leaveGame(data.game_id, this)
 }
 
+function onTryToReconnect(data){
+    for(let [game_id, game_state] of Object.entries(games_state)){
+        if(game_state.canUserReconnect(data.user_id)){
+            this.emit('reconnectToGame', game_state.playerReconnecting(data.user_id, this.id));
+            this.to(game_id).emit("opponentReconnected", {})
+            this.join(game_state.game_id)
+            break;
+        }
+    }
+}
 
 // Utils
 async function gameOver(game_id, winner, time_remaining, reason, players, elo_differences, time, increment, nb_half_moves){
@@ -173,13 +184,20 @@ async function gameOver(game_id, winner, time_remaining, reason, players, elo_di
     // If game wasn't canceled, handle game results and user changes
     if(elo_differences){
         gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won);
+    } else {
+        delete games_state[game_id];
     }
 }
 
 function leaveGame(game_id, socket){
     if(games_state[game_id]){
-        games_state[game_id].playerLeft(socket.id)
-        delete games_state[game_id];
+        let to_delete = games_state[game_id].playerLeft(socket.id)
+        if(to_delete){
+            games_state[game_id] = null;
+            delete games_state[game_id];
+        } else {
+            socket.to(game_id).emit("opponentDisconnected", {})
+        }
     }
     socket.leave(game_id)
 }
