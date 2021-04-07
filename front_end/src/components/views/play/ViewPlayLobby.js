@@ -1,7 +1,7 @@
 import React from 'react'
 import Lobby from './Lobby'
 import { InfoPanel } from '../../navigation'
-import { WHITE, BLACK } from '../../../chess/model/constants.js'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
 class ViewPlayLobby extends React.Component {
     state = {

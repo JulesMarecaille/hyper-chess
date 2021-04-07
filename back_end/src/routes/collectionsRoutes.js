@@ -1,5 +1,5 @@
 const { checkAuth, sendOkResponse } = require("../utils.js")
-const pieces_info = require("../chess/pieces_info")
+const { PIECE_MAPPING } = require("hyperchess_model/pieces")
 
 module.exports = (app, connection) => {
     const { Collection } = require("../entities")(connection)
@@ -52,7 +52,7 @@ module.exports = (app, connection) => {
     app.get("/collections/unlock/:piece", (req, res) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Collection.findOne({where: {UserId: user.id}}).then((collection) => {
-                let cost = pieces_info[req.params.piece].cost;
+                let cost = new PIECE_MAPPING[req.params.piece](null).cost;
                 if(user.coins - cost > 0){
                     user.coins = user.coins - cost;
                     let data = {};

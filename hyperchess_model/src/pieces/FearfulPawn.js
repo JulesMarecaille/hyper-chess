@@ -1,5 +1,5 @@
 import ClassicPawn from './ClassicPawn.js'
-import {ALLOWED} from '../constants.js'
+import {ALLOWED} from '../constants'
 
 class FearfulPawn extends ClassicPawn{
 	constructor(color){

@@ -5,7 +5,7 @@ export const MOVE_MASK = {
     MOVE : 1,
     ATTACK : 1 << 1,
     SEE_THROUGH : 1 << 2,
-    ATTACK_ALLY : 1 << 3,
+    ATTACK_ALLY : 1 << 3
 }
 
 export const ALLOWED = {
@@ -60,3 +60,8 @@ export function swapColor(color){
 
 // Elo Constant
 export const K = 18;
+
+// Economy
+export const MAX_DAILY_GAME_COINS = 200;
+export const COINS_PER_WIN = 25;
+export const DAILY_REWARD_COINS = 50;

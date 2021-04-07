@@ -1,15 +1,17 @@
 import Piece from './Piece.js'
-import {ALLOWED} from '../constants.js'
+import {ALLOWED} from '../constants'
 
 function isSquareChecked(board, square, color, last_move){
 	let index = 0;
 	let list = [];
-	while (index < 128){
-		if (board[index] && board[index].color !== color && board[index]){
-			list = board[index].getLegalMoves(board, index, last_move, 0);
-			if (list.includes(square)){
-				return true;
-			}
+
+	while (index < 128)
+	{
+		if (board[index] && board[index].color !== color && board[index])
+		{
+			list = board[index].getLegalSquares(board, index, last_move, 0);
+			if (list.includes(square))
+				return (true);
 		}
 		index++;
 	}

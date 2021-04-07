@@ -1,11 +1,11 @@
 import React from 'react'
-import PieceDraw from '../../chess/ui/PieceDraw'
+import PieceImage from '../chess/PieceImage'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { Loader } from '../navigation';
 import { FaLock, FaUnlock } from 'react-icons/fa'
-import { PIECE_MAPPING } from '../../chess/model/pieces'
-import { WHITE, BLACK } from '../../chess/model/constants'
+import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
 class ViewCollection extends React.Component {
     state = {
@@ -43,10 +43,10 @@ class ViewCollection extends React.Component {
                 <div class="main-infos">
                     <div class="image">
                         <div class="white">
-                            <PieceDraw piece={piece}/>
+                            <PieceImage piece={piece}/>
                         </div>
                         <div class="black">
-                            <PieceDraw piece={piece_black}/>
+                            <PieceImage piece={piece_black}/>
                         </div>
                     </div>
                     <span class="name">{piece.label}</span>

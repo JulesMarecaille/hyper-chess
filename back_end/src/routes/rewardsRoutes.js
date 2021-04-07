@@ -1,4 +1,5 @@
 const { checkAuth, sendOkResponse } = require("../utils.js")
+const { DAILY_REWARD_COINS } = require("hyperchess_model/constants")
 
 module.exports = (app, connection) => {
     const { Rewards } = require("../entities")(connection)
@@ -27,7 +28,7 @@ module.exports = (app, connection) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Rewards.findOne({where: {UserId: user.id}}).then((rewards) => {
                 if(rewards.last_daily_coins_collected < new Date().setHours(0, 0, 0, 0)){
-                    user.coins += 50;
+                    user.coins += DAILY_REWARD_COINS;
                     user.save().then(() => {
                         sendOkResponse(res, {});
                         rewards.last_daily_coins_collected = new Date();

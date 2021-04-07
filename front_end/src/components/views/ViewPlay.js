@@ -1,8 +1,8 @@
 import React from 'react'
 import { ViewPlayLobby, ViewPlayGame } from './play'
 import { Loader } from '../navigation'
-import { socket } from '../../connection/socket'
-import { WHITE, BLACK } from '../../chess/model/constants'
+import { socket, initSocket } from '../../connection/socket'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 import { v4 as uuidv4 } from 'uuid';
 
 class ViewPlay extends React.Component {
@@ -16,12 +16,14 @@ class ViewPlay extends React.Component {
 
         // Game
         game_id: null,
+        reconnection_data: null,
 
         // interface
         is_loading: true
     }
 
     componentDidMount(){
+        initSocket(this.props.api.token)
         socket.on("joinError", (error_msg) => {
             this.setState({
                 game_id: null,
@@ -29,6 +31,15 @@ class ViewPlay extends React.Component {
                 error: true
             })
         });
+
+        socket.on("reconnectToGame", (data) => {
+            this.setState({
+                game_id: data.game_id,
+                reconnection_data: data
+            })
+        })
+
+        socket.emit("tryToReconnect", {user_id: this.props.user.id});
 
         this.props.api.getSelectedDecksFromUser(this.props.user.id).then((decks) => {
             this.setState({
@@ -39,8 +50,8 @@ class ViewPlay extends React.Component {
     }
 
     componentWillUnmount(){
-        this.exitGame();
         socket.removeAllListeners("joinError");
+        socket.removeAllListeners("reconnectToGame");
     }
 
     createGame(time, increment){
@@ -50,7 +61,8 @@ class ViewPlay extends React.Component {
             increment: increment,
             game_id: game_id,
             user: this.props.user,
-            user_decks: this.state.decks
+            user_decks: this.state.decks,
+            reconnection_data: null
         }
         socket.emit("createNewGame", data)
         this.setState({
@@ -61,7 +73,8 @@ class ViewPlay extends React.Component {
     joinGame(game_id){
         this.setState({
             game_id: game_id,
-            game_offer_was_deleted: false
+            game_offer_was_deleted: false,
+            reconnection_data: null
         });
         socket.emit("playerJoinedGame", {game_id: game_id, user: this.props.user, user_decks: this.state.decks})
     }
@@ -70,7 +83,8 @@ class ViewPlay extends React.Component {
         if (this.state.game_id){
             socket.emit("leaveGame", this.state.game_id)
             this.setState({
-                game_id: null
+                game_id: null,
+                reconnection_data: null
             });
         }
     }
@@ -84,6 +98,7 @@ class ViewPlay extends React.Component {
                 <ViewPlayGame api={this.props.api}
                               user={this.props.user}
                               game_id={this.state.game_id}
+                              reconnectionData={this.state.reconnection_data}
                               onExitGame={this.exitGame.bind(this)}
                               onUpdateUser={this.props.onUpdateUser}
                               />

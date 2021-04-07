@@ -16,8 +16,6 @@ import {
 } from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
-import { socket, initSocket } from './connection/socket';
-import { withRouter } from 'react-router-dom';
 
 
 class App extends React.Component {
@@ -42,7 +40,6 @@ class App extends React.Component {
                 token: token
             })
             this.state.api.setToken(token);
-            initSocket(token)
         }
     }
 
@@ -56,7 +53,6 @@ class App extends React.Component {
         //The cookies expires in 30 days
         cookies.set('HyperChessUser', user, { path: '/', expires: new Date(Date.now()+2592000) });
         cookies.set('HyperChessToken', token, { path: '/', expires: new Date(Date.now()+2592000) });
-        initSocket(token)
     }
 
     handleLogout(){

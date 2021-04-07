@@ -1,10 +1,12 @@
 import io from 'socket.io-client'
 
 const URL = 'http://localhost:5001/'
-var socket;
+var socket = null;
 
 function initSocket(token){
-    socket = io(URL, { query: {"token": token}})
+    if(!socket){
+        socket = io(URL, { query: {"token": token}})
+    }
 }
 
 

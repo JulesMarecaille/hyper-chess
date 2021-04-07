@@ -54,7 +54,7 @@ exports.checkAuthNoDatabase = (token) => {
             if (err) {
                 reject({ auth: false, message: "Failed to authenticate token." });
             }
-            resolve();
+            resolve(decoded.id);
         });
     });
 }

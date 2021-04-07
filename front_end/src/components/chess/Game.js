@@ -1,10 +1,10 @@
 import React from 'react'
-import Board from '../model/Board'
+import {Board} from 'hyperchess_model/lib'
 import Square from './Square'
-import PieceDraw from './PieceDraw'
-import { PIECE_MAPPING } from '../model/pieces/index.js'
+import PieceImage from './PieceImage'
+import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 import './style.css'
-import { WHITE, BLACK, COLORS_NAME } from '../model/constants.js'
+import { BLACK } from 'hyperchess_model/lib/constants'
 import { socket } from '../../connection/socket';
 
 class Game extends React.Component {
@@ -16,8 +16,8 @@ class Game extends React.Component {
             dragged_element: null,
             selected_square: -1,
             mouse_over_square: -1,
-            highlighted_moves: [],
-            opponent_highlighted_moves: [],
+            highlighted_squares: [],
+            opponent_highlighted_squares: [],
             game_over: false,
             winner: null,
             draw: null,
@@ -44,6 +44,20 @@ class Game extends React.Component {
                 })
             }
         });
+
+        if(this.props.reconnectionData){
+            let board_object = Board.buildFromHistory(this.props.whiteDeck, this.props.blackDeck, this.props.reconnectionData.history)
+            this.setState({
+                boardObject: board_object,
+                selected_square: -1,
+                highlighted_squares: [],
+                opponent_highlighted_squares: [],
+                game_over: board_object.game_over,
+                is_draw: board_object.is_draw,
+                winner: board_object.winner,
+                is_check: board_object.is_check[board_object.color_to_move]
+            });
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -54,8 +68,8 @@ class Game extends React.Component {
                 dragged_element: null,
                 selected_square: -1,
                 mouse_over_square: -1,
-                highlighted_moves: [],
-                opponent_highlighted_moves: [],
+                highlighted_squares: [],
+                opponent_highlighted_squares: [],
                 game_over: false,
                 winner: null,
                 draw: null,
@@ -77,25 +91,25 @@ class Game extends React.Component {
         let piece = this.state.boardObject.board[square];
         if (this.state.selected_square !== square
             && piece
-            && !this.state.highlighted_moves.includes(square))
+            && !this.state.highlighted_squares.includes(square))
         {
-            let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square);
+            let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square).map(x => x.to);
             if(piece.color === this.props.side){
                 // Select player piece
                 this.setState({
                     selected_square: square,
-                    highlighted_moves: legal_piece_moves,
-                    opponent_highlighted_moves: []
+                    highlighted_squares: legal_piece_moves,
+                    opponent_highlighted_squares: []
                 });
             } else {
                 // Select opponent piece
                 this.setState({
-                    highlighted_moves: [],
-                    opponent_highlighted_moves: legal_piece_moves
+                    highlighted_squares: [],
+                    opponent_highlighted_squares: legal_piece_moves
                 });
             }
         } else if ( this.state.selected_square !== -1
-                    && this.state.highlighted_moves.includes(square))
+                    && this.state.highlighted_squares.includes(square))
         {
             // Make move
             let options;
@@ -114,8 +128,8 @@ class Game extends React.Component {
                     this.setState({
                         premove: move,
                         selected_square: -1,
-                        highlighted_moves: [],
-                        opponent_highlighted_moves: [],
+                        highlighted_squares: [],
+                        opponent_highlighted_squares: [],
                     });
                 }
             }
@@ -123,8 +137,8 @@ class Game extends React.Component {
             // Reset click state
             this.setState({
                 selected_square: -1,
-                highlighted_moves: [],
-                opponent_highlighted_moves: [],
+                highlighted_squares: [],
+                opponent_highlighted_squares: [],
                 premove: null
             });
         }
@@ -137,16 +151,16 @@ class Game extends React.Component {
         if (this.state.dragged_square === -1
             && piece
             && piece.color === this.props.side
-            && !this.state.highlighted_moves.includes(square))
+            && !this.state.highlighted_squares.includes(square))
         {
             // Select player piece
-            let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square);
+            let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square).map(x => x.to);
             this.setState({
                 selected_square: square,
                 dragged_square: square,
                 dragged_element: evt.target,
-                highlighted_moves: legal_piece_moves,
-                opponent_highlighted_moves: [],
+                highlighted_squares: legal_piece_moves,
+                opponent_highlighted_squares: [],
                 premove: null
             });
         } else {
@@ -182,12 +196,12 @@ class Game extends React.Component {
                 this.setState({
                     premove: move,
                     selected_square: -1,
-                    highlighted_moves: [],
-                    opponent_highlighted_moves: []
+                    highlighted_squares: [],
+                    opponent_highlighted_squares: []
                 })
             }
         }
-        if (this.state.highlighted_moves.includes(square)
+        if (this.state.highlighted_squares.includes(square)
             && this.props.side === this.state.boardObject.color_to_move)
         {
             options = this.state.boardObject.getAction(move)
@@ -250,8 +264,8 @@ class Game extends React.Component {
         this.props.onPlayerMoved(time_remaining)
         this.setState({
             selected_square: -1,
-            highlighted_moves: [],
-            opponent_highlighted_moves: [],
+            highlighted_squares: [],
+            opponent_highlighted_squares: [],
             game_over: boardResponse.game_over,
             is_draw: boardResponse.is_draw,
             winner: boardResponse.winner,
@@ -288,11 +302,11 @@ class Game extends React.Component {
                     square_color = "light"
                 }
                 let piece = this.state.boardObject.board[square];
-                let is_an_option = (this.state.highlighted_moves.includes(square) || this.state.opponent_highlighted_moves.includes(square));
+                let is_an_option = (this.state.highlighted_squares.includes(square) || this.state.opponent_highlighted_squares.includes(square));
                 let is_selected = (this.state.selected_square === square);
                 let is_last_move = (last_move_squares.includes(square))
                 // The square can be clicked if it's a move option or if there's a piece on it
-                let is_clickable = (this.state.highlighted_moves.includes(square) || (piece));
+                let is_clickable = (this.state.highlighted_squares.includes(square) || (piece));
                 let is_check = (piece && piece.is_king && this.state.is_check && piece.color === this.state.boardObject.color_to_move);
                 let is_draggable = (piece && (piece.color === this.props.side))
                 let is_premove = (premove_squares.includes(square));
@@ -339,8 +353,8 @@ class Game extends React.Component {
             this.setState({
                 premove: new_move,
                 selected_square: -1,
-                highlighted_moves: [],
-                opponent_highlighted_moves: [],
+                highlighted_squares: [],
+                opponent_highlighted_squares: [],
             });
         }
         this.setState({
@@ -370,7 +384,7 @@ class Game extends React.Component {
             let piece = new PIECE_MAPPING[item](this.props.side);
             options.push(<div className="piece-container">
                             <div className="img-overlay" onClick={this.overlaySelection.bind(this, item)}>
-                                <PieceDraw piece={piece}/>
+                                <PieceImage piece={piece}/>
                             </div>
                         </div>);
         });

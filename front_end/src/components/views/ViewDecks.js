@@ -1,8 +1,8 @@
 import React from 'react'
-import Deck from '../../chess/model/Deck'
+import { Deck } from 'hyperchess_model/lib'
 import { Loader } from '../navigation';
 import { ViewDecksBrowse, ViewDecksEdition} from './decks'
-import { WHITE, BLACK } from '../../chess/model/constants.js'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
 function arrayEquals(a, b) {
   return Array.isArray(a) &&

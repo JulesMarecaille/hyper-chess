@@ -1,11 +1,10 @@
 import Piece from './Piece.js'
-import {ALLOWED, WHITE, BLACK} from '../constants.js'
+import {ALLOWED, WHITE, BLACK} from '../constants'
 import { cloneDeep } from "lodash"
 import { squaresPassed } from '../utils.js'
 
 class ClassicPawn extends Piece{
-	constructor(color){
-		let behavior = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	constructor(color, behavior = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -19,7 +18,8 @@ class ClassicPawn extends Piece{
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+	{
 		let description = "The classic pawn from the classic game of chess.";
 		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN, 0);
 		this.is_pawn = true;

@@ -1,10 +1,10 @@
 import React from 'react'
-import PieceDraw from '../../../chess/ui/PieceDraw'
+import PieceImage from '../../chess/PieceImage'
 import { BiCoin } from 'react-icons/bi'
 import { Loader } from '../../navigation';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
-import { PIECE_MAPPING } from '../../../chess/model/pieces'
-import { WHITE, BLACK } from '../../../chess/model/constants'
+import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
 class ViewShopPiece extends React.Component {
     constructor(props){
@@ -82,10 +82,10 @@ class ViewShopPiece extends React.Component {
                         <div class="infos">
                             <div class="image">
                                 <div class="piece white">
-                                    <PieceDraw piece={this.props.piece}/>
+                                    <PieceImage piece={this.props.piece}/>
                                 </div>
                                 <div class="piece black">
-                                    <PieceDraw piece={new PIECE_MAPPING[this.props.piece.name](BLACK)}/>
+                                    <PieceImage piece={new PIECE_MAPPING[this.props.piece.name](BLACK)}/>
                                 </div>
                             </div>
                             <div class="name-positions">

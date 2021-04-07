@@ -4,12 +4,9 @@ var games_state = {};
 var gameSocket;
 var io;
 var sequelize;
-const WHITE = 0;
-const BLACK = 1;
-const MAX_DAILY_GAME_COINS = 200;
-const COINS_PER_WIN = 25;
+const { WHITE, BLACK, MAX_DAILY_GAME_COINS, COINS_PER_WIN } = require("hyperchess_model/constants")
 
-function connection(sio, socket, sequelize_connection) {
+function connection(sio, socket, sequelize_connection, user_id) {
     try {
         io = sio;
         sequelize = sequelize_connection;
@@ -28,6 +25,7 @@ function connection(sio, socket, sequelize_connection) {
         game_socket.on("offerRematch", onOfferRematch);
         game_socket.on("acceptRematch", onAcceptRematch);
         game_socket.on("declineRematch", onDeclineRematch);
+        game_socket.on("tryToReconnect", onTryToReconnect);
     } catch (e) {
         console.log(e)
     }
@@ -40,7 +38,7 @@ function onDisconnect() {
 function onDisconnecting() {
     for(room of Array.from(this.rooms)){
         let game_id = room;
-        leaveGame(game_id, this);
+        leaveGame(game_id, this)
     }
 }
 
@@ -62,14 +60,11 @@ function onRequestGameOffers(user_id){
 
 function onMakeMove(data) {
     const game_id = data.game_id
-    if(data.move.player_color === games_state[game_id].color_to_move && !games_state[game_id].is_game_over){
-        if(data.is_game_over){
-            games_state[game_id].gameOver(data.winner, "By checkmate.");
-        } else {
-            time_remaining = games_state[game_id].shiftTurn();
+    if(!games_state[game_id].is_game_over){
+        games_state[game_id].playMove(data.move, (time_remaining) => {
             let payload = {move: data.move, time_remaining: time_remaining};
             this.to(game_id).emit('opponentMove', payload);
-        }
+        });
     }
 }
 
@@ -86,7 +81,7 @@ function onLeaveGame(game_id){
 }
 
 function onResign(data){
-    games_state[data.game_id].resign(data.color);
+    games_state[data.game_id].resign(this.id);
 }
 
 function onPlayerJoinedGame(data) {
@@ -144,6 +139,16 @@ function onDeclineRematch(data){
     leaveGame(data.game_id, this)
 }
 
+function onTryToReconnect(data){
+    for(let [game_id, game_state] of Object.entries(games_state)){
+        if(game_state.canUserReconnect(data.user_id)){
+            this.emit('reconnectToGame', game_state.playerReconnecting(data.user_id, this.id));
+            this.to(game_id).emit("opponentReconnected", {})
+            this.join(game_state.game_id)
+            break;
+        }
+    }
+}
 
 // Utils
 async function gameOver(game_id, winner, time_remaining, reason, players, elo_differences, time, increment, nb_half_moves){
@@ -161,7 +166,7 @@ async function gameOver(game_id, winner, time_remaining, reason, players, elo_di
         if(rewards.todays_coins_collected < MAX_DAILY_GAME_COINS){
             rewards.todays_coins_collected += COINS_PER_WIN
             rewards.last_game_coins_collected = new Date();
-            coins_won[winner] = 25;
+            coins_won[winner] = COINS_PER_WIN;
         }
         rewards.save();
     }
@@ -179,13 +184,20 @@ async function gameOver(game_id, winner, time_remaining, reason, players, elo_di
     // If game wasn't canceled, handle game results and user changes
     if(elo_differences){
         gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won);
+    } else {
+        delete games_state[game_id];
     }
 }
 
 function leaveGame(game_id, socket){
     if(games_state[game_id]){
-        games_state[game_id].playerLeft(socket.id)
-        delete games_state[game_id];
+        let to_delete = games_state[game_id].playerLeft(socket.id)
+        if(to_delete){
+            games_state[game_id] = null;
+            delete games_state[game_id];
+        } else {
+            socket.to(game_id).emit("opponentDisconnected", {})
+        }
     }
     socket.leave(game_id)
 }

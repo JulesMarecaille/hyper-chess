@@ -1,7 +1,7 @@
 import React from 'react'
-import { COLORS_NAME } from '../model/constants.js'
+import { COLORS_NAME } from 'hyperchess_model/lib/constants'
 
-class PieceDraw extends React.Component {
+class PieceImage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,6 +15,8 @@ class PieceDraw extends React.Component {
         })
     }
 
+
+
     render() {
         let img = process.env.PUBLIC_URL + '/assets/pieces/' + this.props.piece.name + COLORS_NAME[this.props.piece.color] + '.svg';
         if (this.state.error){
@@ -23,6 +25,7 @@ class PieceDraw extends React.Component {
         return (
         <React.Fragment>
             <div className="piece-container">
+
                 <div style={{backgroundImage: `url(${img})`}}
                      onDragStart={this.props.dragStart}
                      onDrag={this.props.dragging}
@@ -42,4 +45,4 @@ class PieceDraw extends React.Component {
 
 }
 
-export default PieceDraw
+export default PieceImage
