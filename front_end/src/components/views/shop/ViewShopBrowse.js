@@ -1,13 +1,13 @@
 import React from 'react'
 import DailyReward from './DailyReward'
-import Piece from '../../../chess/ui/Piece'
+import Piece from '../../chess/Piece'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
 import { BiCoin } from 'react-icons/bi'
 import { MdSearch, MdRadioButtonChecked, MdRadioButtonUnchecked } from 'react-icons/md'
-import { PIECE_MAPPING} from '../../../chess/model/pieces/index'
-import { WHITE, BLACK } from '../../../chess/model/constants.js'
+import { PIECE_MAPPING} from 'hyperchess_model/lib/pieces'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
 class ViewShopBrowse extends React.Component {
     constructor(props){

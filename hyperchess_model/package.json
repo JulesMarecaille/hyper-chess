@@ -1,0 +1,28 @@
+{
+  "name": "hyperchess_model",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib"
+  },
+  "exports": {
+      ".": "./lib/index.js",
+      "./constants": "./lib/constants/index.js",
+      "./pieces":  "./lib/pieces/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "babel": {
+    "presets": [],
+    "plugins": [
+      "@babel/plugin-transform-modules-commonjs"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/plugin-transform-modules-commonjs": "^7.13.8"
+  }
+}

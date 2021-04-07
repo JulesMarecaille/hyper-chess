@@ -1,5 +1,5 @@
 import Piece from './Piece.js'
-import {ALLOWED, WHITE, BLACK} from '../constants.js'
+import {ALLOWED, WHITE, BLACK} from '../constants'
 import { cloneDeep } from "lodash"
 import { squaresPassed } from '../utils.js'
 

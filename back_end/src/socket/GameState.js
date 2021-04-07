@@ -1,5 +1,5 @@
-const WHITE = 0;
-const BLACK = 1;
+const { WHITE, BLACK, swapColor } = require("hyperchess_model/constants");
+const { Board, Deck } = require("hyperchess_model");
 const TICK = 1000;
 
 class GameState {
@@ -21,6 +21,7 @@ class GameState {
         this.draw_offers = {};
         this.draw_offers[WHITE] = false;
         this.draw_offers[BLACK] = false;
+        this.board_object = null;
     }
 
     addPlayer(user, user_decks){
@@ -74,20 +75,30 @@ class GameState {
         this.gameOver(swapColor(resign_color), "By resignation.")
     }
 
-    shiftTurn(){
-        this.color_to_move = swapColor(this.color_to_move);
-        this.nb_half_moves = this.nb_half_moves + 1;
-        if (this.nb_half_moves >= 2){
-            this.clocks[swapColor(this.color_to_move)].pause()
-            this.clocks[this.color_to_move].start()
+    playMove(move, emit_move_callback){
+        if(this.board_object.isMoveLegal(move)){
+            this.nb_half_moves = this.nb_half_moves + 1;
+            if (this.nb_half_moves >= 2){
+                this.clocks[swapColor(this.board_object.color_to_move)].pause()
+                this.clocks[this.board_object.color_to_move].start()
+            }
+            let res = {}
+            res[WHITE] = this.clocks[WHITE].getTimeRemaining();
+            res[BLACK] = this.clocks[BLACK].getTimeRemaining();
+            this.draw_offers[WHITE] = false;
+            this.draw_offers[BLACK] = false;
+            emit_move_callback(res);
+            let result = this.board_object.makeMove(move)
+            this.is_game_over = result.game_over;
+            this.winner = result.winner;
+            if(this.is_game_over){
+                if(this.winner !== null){
+                    this.gameOver(this.winner, "By checkmate.")
+                } else {
+                    this.gameOver(this.winner, "By repetition.")
+                }
+            }
         }
-        let res = {}
-        res[WHITE] = this.clocks[WHITE].getTimeRemaining();
-        res[BLACK] = this.clocks[BLACK].getTimeRemaining();
-
-        this.draw_offers[WHITE] = false;
-        this.draw_offers[BLACK] = false;
-        return res;
     }
 
     startGame(){
@@ -97,6 +108,7 @@ class GameState {
         let time_remaining = {};
         time_remaining[WHITE] = this.time;
         time_remaining[BLACK] = this.time;
+        this.board_object = new Board(Deck.buildFromPayload(this.decks[WHITE]), Deck.buildFromPayload(this.decks[BLACK]));
         return { players: this.players, decks: this.decks, time_remaining: time_remaining};
     }
 
@@ -158,6 +170,7 @@ class GameState {
         this.decks[BLACK] = this.users_decks[BLACK][BLACK];
 
         // Reset Variables
+        this.clocks = {};
         this.draw_offers = {};
         this.draw_offers[WHITE] = false;
         this.draw_offers[BLACK] = false;
@@ -167,6 +180,7 @@ class GameState {
         this.is_playing = false;
         this.is_game_over = false;
         this.nb_half_moves = 0;
+        this.board_object = null;
 
         // Start game
         return this.startGame();
@@ -176,13 +190,6 @@ class GameState {
 function getRandomColor() {
   let number = Math.floor(Math.random() * Math.floor(2));
   return [WHITE, BLACK][number]
-}
-
-function swapColor(color){
-    if(color === BLACK){
-        return WHITE;
-    }
-    return BLACK;
 }
 
 class Clock{
@@ -195,7 +202,7 @@ class Clock{
     }
 
     start(){
-        //Every 2s
+        //Every TICK
         this.interval_obj = setInterval(() => {
             this.time = this.time - TICK;
             if (this.time <= 0){

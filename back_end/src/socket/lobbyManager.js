@@ -4,10 +4,7 @@ var games_state = {};
 var gameSocket;
 var io;
 var sequelize;
-const WHITE = 0;
-const BLACK = 1;
-const MAX_DAILY_GAME_COINS = 200;
-const COINS_PER_WIN = 25;
+const { WHITE, BLACK, MAX_DAILY_GAME_COINS, COINS_PER_WIN } = require("hyperchess_model/constants")
 
 function connection(sio, socket, sequelize_connection) {
     try {
@@ -62,14 +59,11 @@ function onRequestGameOffers(user_id){
 
 function onMakeMove(data) {
     const game_id = data.game_id
-    if(data.move.player_color === games_state[game_id].color_to_move && !games_state[game_id].is_game_over){
-        if(data.is_game_over){
-            games_state[game_id].gameOver(data.winner, "By checkmate.");
-        } else {
-            time_remaining = games_state[game_id].shiftTurn();
+    if(!games_state[game_id].is_game_over){
+        games_state[game_id].playMove(data.move, (time_remaining) => {
             let payload = {move: data.move, time_remaining: time_remaining};
             this.to(game_id).emit('opponentMove', payload);
-        }
+        });
     }
 }
 
@@ -161,7 +155,7 @@ async function gameOver(game_id, winner, time_remaining, reason, players, elo_di
         if(rewards.todays_coins_collected < MAX_DAILY_GAME_COINS){
             rewards.todays_coins_collected += COINS_PER_WIN
             rewards.last_game_coins_collected = new Date();
-            coins_won[winner] = 25;
+            coins_won[winner] = COINS_PER_WIN;
         }
         rewards.save();
     }

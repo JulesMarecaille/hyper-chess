@@ -16,8 +16,7 @@ import {
 } from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
-import { socket, initSocket } from './connection/socket';
-import { withRouter } from 'react-router-dom';
+import { initSocket } from './connection/socket';
 
 
 class App extends React.Component {

@@ -1,8 +1,7 @@
 const { checkAuth, sendOkResponse } = require("../utils.js")
 const { Op } = require("sequelize");
-const pieces_info = require("../chess/pieces_info")
-const WHITE = 0;
-const BLACK = 1;
+const { WHITE, BLACK } = require("hyperchess_model/constants")
+const { getAllowedPosition } = require("hyperchess_model")
 
 module.exports = (app, connection) => {
     const { Deck } = require("../entities")(connection)
@@ -187,17 +186,17 @@ function isDeckValid(pieces){
     let invalid_piece = false;
     for(let i=0; i < pieces.length; i++){
         if(pieces[i]){
-            let piece_info = pieces_info[pieces[i]];
+            let piece = new PIECE_MAPPING[pieces[i]](WHITE);
             if(i < 8){
                 number_of_pawns += 1;
             }
-            if(piece_info.is_king){
+            if(piece.is_king){
                 has_king = true
             }
-            if(!piece_info.allowed_positions.includes(i)){
+            if(!getAllowedPosition(piece.allowed).includes(i)){
                 invalid_piece = true
             }
-            value += piece_info.value;
+            value += piece.value;
         }
     }
     return (has_king && !(number_of_pawns < 8) && value <= 40 && !invalid_piece)

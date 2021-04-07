@@ -60,3 +60,8 @@ export function swapColor(color){
 
 // Elo Constant
 export const K = 18;
+
+// Economy
+export const MAX_DAILY_GAME_COINS = 200;
+export const COINS_PER_WIN = 25;
+export const DAILY_REWARD_COINS = 50;

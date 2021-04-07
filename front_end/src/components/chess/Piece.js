@@ -1,5 +1,5 @@
 import React from 'react'
-import { COLORS_NAME } from '../model/constants.js'
+import { COLORS_NAME } from 'hyperchess_model/lib/constants'
 
 class Piece extends React.Component {
     constructor(props) {

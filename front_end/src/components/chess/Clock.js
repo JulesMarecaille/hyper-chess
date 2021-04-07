@@ -1,5 +1,5 @@
 import React from 'react'
-import { WHITE } from '../model/constants.js'
+import { WHITE } from 'hyperchess_model/lib/constants'
 import {
     WiTime1,
     WiTime2,
