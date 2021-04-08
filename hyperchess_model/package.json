@@ -7,9 +7,9 @@
     "build": "babel src -d lib"
   },
   "exports": {
-      ".": "./lib/index.js",
-      "./constants": "./lib/constants/index.js",
-      "./pieces":  "./lib/pieces/index.js"
+    ".": "./lib/index.js",
+    "./constants": "./lib/constants/index.js",
+    "./pieces": "./lib/pieces/index.js"
   },
   "author": "",
   "license": "ISC",

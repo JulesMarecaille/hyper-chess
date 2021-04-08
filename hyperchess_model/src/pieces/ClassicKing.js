@@ -1,8 +1,7 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants'
 
-function isSquareChecked(board, square, color, last_move)
-{
+function isSquareChecked(board, square, color, last_move){
 	let index = 0;
 	let list = [];
 
@@ -16,13 +15,11 @@ function isSquareChecked(board, square, color, last_move)
 		}
 		index++;
 	}
-	return (false);
+	return false;
 }
 
-class ClassicKing extends Piece
-{
-	constructor(color)
-	{
+class ClassicKing extends Piece{
+	constructor(color){
 		let behavior = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -44,61 +41,52 @@ class ClassicKing extends Piece
 		this.set_name = "Classic"
 	}
 
-	isRockable(board, target_pos, pos, index, last_move)
-	{
+	isRockable(board, target_pos, pos, index, last_move){
 		let target = this.behavior[index];
-		if (target & (1 << 4) && !this.moved)
-		{
+		if (target & (1 << 4) && !this.moved){
 			let mate;
-			if (target_pos < pos) //rock aile reine
-			{
+			if (target_pos < pos){
 				mate = board[target_pos - 2];
-				for (let k = 1; k <  4; k++)
-				{
+				for (let k = 1; k <  4; k++){
 					if (isSquareChecked(board, pos - k, this.color, last_move)
 						|| !this.isEmpty(board, pos - k))
-						return (false);
+					{
+						return false;
+					}
 				}
-			}
-			else
-			{
+			} else {
 				mate = board[target_pos + 1];
-				for (let k = 1; k <  3; k++)
-				{
+				for (let k = 1; k <  3; k++){
 					if (isSquareChecked(board, pos + k, this.color, last_move)
 						|| !this.isEmpty(board, pos + k))
-						return (false);
+					{
+						return false;
+					}
 				}
 			}
 			if (!mate)
-				return (false);
+				return false;
 			if (mate.moved || !mate.rockable)
-				return (false);
+				return false;
 			if (isSquareChecked(board, pos))
-				return (false);
+				return false;
 			return (true);
 		}
 		return (false);
 	}
 
-	move(move_struct, board)
-	{
-
+	move(move_struct, board){
 		board = super.move(move_struct, board);
-		if (Math.abs(move_struct.to - move_struct.from) === 2)
-		{
-			if (move_struct.to > move_struct.from)
-			{
+		if (Math.abs(move_struct.to - move_struct.from) === 2){
+			if (move_struct.to > move_struct.from){
 				board[move_struct.to - 1] = board[move_struct.to + 1];
 				board[move_struct.to + 1] = null;
-			}
-			else if (move_struct.to < move_struct.from)
-			{
+			} else if (move_struct.to < move_struct.from) {
 				board[move_struct.to + 1] = board[move_struct.to - 2];
 				board[move_struct.to - 2] = null;
 			}
 		}
-		return (board);
+		return board;
 	}
 
 }

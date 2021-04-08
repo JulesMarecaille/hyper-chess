@@ -39,11 +39,12 @@ class Piece{
 		this.moved = false;
 		this.description = description;
 		this.set_name = "No set";
+		this.display_number = null;
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
+		this.image = "Error";
   	}
-
 
 	makeAction(move, selection){//will return a new, altered move to do according to the selection
 		return null;			//we might wanna add a list of moves, if we want to make other pieces moves
@@ -53,6 +54,9 @@ class Piece{
 		return null;
 	}
 
+	getDisplayNumber(){
+		return this.display_number;
+	}
 	//pour une BOARD donnée et une case SQUARE donnée, verifie toute les cases atteignables
 	//return une liste de case possible sous forme texte.
 	getLegalSquares(board, square, last_move, is_rock_check = true){

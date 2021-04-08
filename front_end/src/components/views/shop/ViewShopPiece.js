@@ -1,5 +1,5 @@
 import React from 'react'
-import Piece from '../../chess/Piece'
+import PieceImage from '../../chess/PieceImage'
 import { BiCoin } from 'react-icons/bi'
 import { Loader } from '../../navigation';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
@@ -82,10 +82,10 @@ class ViewShopPiece extends React.Component {
                         <div class="infos">
                             <div class="image">
                                 <div class="piece white">
-                                    <Piece piece={this.props.piece}/>
+                                    <PieceImage piece={this.props.piece}/>
                                 </div>
                                 <div class="piece black">
-                                    <Piece piece={new PIECE_MAPPING[this.props.piece.name](BLACK)}/>
+                                    <PieceImage piece={new PIECE_MAPPING[this.props.piece.name](BLACK)}/>
                                 </div>
                             </div>
                             <div class="name-positions">

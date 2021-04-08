@@ -1,6 +1,6 @@
 import React from 'react'
 import DailyReward from './DailyReward'
-import Piece from '../../chess/Piece'
+import PieceImage from '../../chess/PieceImage'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
@@ -81,8 +81,8 @@ class ViewShopBrowse extends React.Component {
             }
             all_pieces.push(
                 <div class="piece-entry" onClick={this.props.onSelectedPiece.bind(this, piece_white)}>
-                    <div class="piece white"><Piece piece={piece_white}/> </div>
-                    <div class="piece black"><Piece piece={piece_black}/></div>
+                    <div class="piece white"><PieceImage piece={piece_white}/></div>
+                    <div class="piece black"><PieceImage piece={piece_black}/></div>
                     <div class="name">{piece_white.label}<span class="value">({piece_white.value})</span></div>
                     {cost}
                 </div>

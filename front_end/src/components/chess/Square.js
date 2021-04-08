@@ -1,5 +1,5 @@
 import React from 'react'
-import Piece from './Piece'
+import PieceImage from './PieceImage'
 
 class Square extends React.Component {
 
@@ -31,6 +31,18 @@ class Square extends React.Component {
         return "";
     }
 
+    drawOverlayNumber(piece){
+        if (!piece){
+            return ;
+        }
+        let number = piece.getDisplayNumber();
+        if (number === null){
+            return ;
+        }
+        return(
+            <div className="overlay-number">{number}</div>);
+    }
+
     render() {
         let option_marker = '';
         let piece = '';
@@ -41,7 +53,7 @@ class Square extends React.Component {
         }
         // Add Piece if there's a piece on this square
         if (this.props.piece) {
-            piece = <Piece piece={this.props.piece}
+            piece = <PieceImage piece={this.props.piece}
                            dragStart={this.handleDragStart.bind(this)}
                            dragEnd={this.props.dragEnd}
                            dragging={this.props.dragging}
@@ -59,6 +71,7 @@ class Square extends React.Component {
                 onDragOver={this.handleDragOver.bind(this)}>
                 {option_marker}
                 {piece}
+                {this.drawOverlayNumber(this.props.piece)}
                 {check_marker}
             </td>
         </React.Fragment>)

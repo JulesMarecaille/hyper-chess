@@ -1,5 +1,5 @@
 import React from 'react'
-import Piece from '../chess/Piece'
+import PieceImage from '../chess/PieceImage'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { Loader } from '../navigation';
@@ -43,10 +43,10 @@ class ViewCollection extends React.Component {
                 <div class="main-infos">
                     <div class="image">
                         <div class="white">
-                            <Piece piece={piece}/>
+                            <PieceImage piece={piece}/>
                         </div>
                         <div class="black">
-                            <Piece piece={piece_black}/>
+                            <PieceImage piece={piece_black}/>
                         </div>
                     </div>
                     <span class="name">{piece.label}</span>

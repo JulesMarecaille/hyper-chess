@@ -11,6 +11,7 @@ import Archimage from './Archimage'
 import Empress from './Empress'
 import Princess from './Princess'
 import FearfulPawn from './FearfulPawn'
+import { PlagueOne, PlagueThree, PlagueFive, PlagueNine } from './Plague'
 
 export const PIECE_MAPPING = {
     "ClassicBishop": ClassicBishop,
@@ -25,5 +26,9 @@ export const PIECE_MAPPING = {
     "Archimage" : Archimage,
     "Empress" : Empress,
     "Princess" : Princess,
-    "FearfulPawn" : FearfulPawn
-}
+    "FearfulPawn" : FearfulPawn,
+    "PlagueOne" : PlagueOne,
+    "PlagueThree" : PlagueThree,
+    "PlagueFive" : PlagueFive,
+    "PlagueNine" : PlagueNine
+ }

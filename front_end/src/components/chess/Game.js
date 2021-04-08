@@ -1,7 +1,7 @@
 import React from 'react'
 import {Board} from 'hyperchess_model/lib'
 import Square from './Square'
-import Piece from './Piece'
+import PieceImage from './PieceImage'
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 import './style.css'
 import { BLACK } from 'hyperchess_model/lib/constants'
@@ -384,7 +384,7 @@ class Game extends React.Component {
             let piece = new PIECE_MAPPING[item](this.props.side);
             options.push(<div className="piece-container">
                             <div className="img-overlay" onClick={this.overlaySelection.bind(this, item)}>
-                                <Piece piece={piece}/>
+                                <PieceImage piece={piece}/>
                             </div>
                         </div>);
         });

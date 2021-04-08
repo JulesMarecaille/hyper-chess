@@ -1,6 +1,6 @@
 import Clock from "./Clock";
 import Game from "./Game"
-import Piece from "./Piece"
+import PieceImage from "./PieceImage"
 import Square from "./Square"
 
-export { Clock, Game, Piece, Square }
+export { Clock, Game, PieceImage, Square }

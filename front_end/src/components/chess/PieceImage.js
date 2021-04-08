@@ -1,7 +1,7 @@
 import React from 'react'
 import { COLORS_NAME } from 'hyperchess_model/lib/constants'
 
-class Piece extends React.Component {
+class PieceImage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,13 +33,6 @@ class Piece extends React.Component {
             </div>
         </React.Fragment>)
     }
-
-    /*
-    onDragStart={this.props.onDragStart}
-    onDragEnd={this.props.onDragEnd}
-    draggable={true}
-    */
-
 }
 
-export default Piece
+export default PieceImage

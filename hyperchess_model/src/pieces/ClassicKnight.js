@@ -1,10 +1,8 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants'
 
-class ClassicKnight extends Piece
-{
-	constructor(color)
-	{
+class ClassicKnight extends Piece{
+	constructor(color){
 		let behavior = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -24,7 +22,6 @@ class ClassicKnight extends Piece
 		super(color, behavior, 'ClassicKnight', 'Classic Knight', 3, description, ALLOWED.KNIGHT, 0);
 		this.set_name = "Classic"
 	}
-
 }
 
 export default ClassicKnight;

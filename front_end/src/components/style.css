@@ -560,7 +560,25 @@ textarea:focus, input:focus{
     width: 100%;
 }
 
+/**************************************************
+* OVERLAY PIECE
+***************************************************/
 
+.overlay-number{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+    color: white;
+    font-size: 13px;
+    font-weight: bolder;
+    background-color: rgba(0,0,0,0.8);
+}
 
 /**************************************************
 * INFO PANEL
