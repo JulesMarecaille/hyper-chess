@@ -2,23 +2,6 @@ import ClassicPawn from './ClassicPawn.js'
 import {ALLOWED} from '../constants'
 import {PIECE_MAPPING} from './index.js'
 
-function reverseBehavior(table){
-	let top = 0;
-	let bottom = 224;
-	while (top < bottom){
-		let k = 0;
-		while (k < 16){
-			let tmp = table[top + k];
-			table[top + k] = table[bottom + k];
-			table[bottom + k] = tmp;
-			k++;
-		}
-		top += 16;
-		bottom -= 16;
-	}
-	return table;
-}
-
 class Plague extends ClassicPawn{
 	constructor(color,
 		size = 1,
@@ -65,6 +48,13 @@ class Plague extends ClassicPawn{
 		} else {
 			return size > 8 ? "PlagueNine" : "PlagueFive";
 		}
+	}
+
+	getDisplayNumber(){
+		if (this.display_number > 1){
+			return this.display_number;
+		}
+		return null;
 	}
 
 	checkAvailableSquare(pos, index, board, last_move){

@@ -43,7 +43,7 @@ class Piece{
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
-		this.image = null;
+		this.image = "Error";
   	}
 
 	makeAction(move, selection){//will return a new, altered move to do according to the selection
@@ -54,6 +54,9 @@ class Piece{
 		return null;
 	}
 
+	getDisplayNumber(){
+		return this.display_number;
+	}
 	//pour une BOARD donnée et une case SQUARE donnée, verifie toute les cases atteignables
 	//return une liste de case possible sous forme texte.
 	getLegalSquares(board, square, last_move, is_rock_check = true){

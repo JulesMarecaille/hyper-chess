@@ -32,11 +32,15 @@ class Square extends React.Component {
     }
 
     drawOverlayNumber(piece){
-        if (!piece || !piece.display_number || piece.display_number === 1){
+        if (!piece){
+            return ;
+        }
+        let number = piece.getDisplayNumber();
+        if (number === null){
             return ;
         }
         return(
-            <div className="overlay-number">{piece.display_number}</div>);
+            <div className="overlay-number">{number}</div>);
     }
 
     render() {
