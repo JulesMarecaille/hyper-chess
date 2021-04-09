@@ -35,7 +35,7 @@ connection.authenticate().then(() => {
         // Create placeholders
         initializeDatabase(connection).then(() => {
             // Init the API
-            const port = 5000
+            const port = 8080
 
             // Init socket server
             const server = new http.Server(app);

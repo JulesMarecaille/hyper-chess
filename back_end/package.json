@@ -4,6 +4,9 @@
     "private": true,
     "description": "chess but more, The API.",
     "author": "Jules Marécaille & Octave Boutrolle",
+    "scripts": {
+      "start": "node server.js"
+    },
     "dependencies": {
         "bcrypt-nodejs": "^0.0.3",
         "body-parser": "^1.19.0",
@@ -15,6 +18,7 @@
         "pg": "^8.5.1",
         "pg-hstore": "^2.3.3",
         "sequelize": "^6.5.0",
-        "socket.io": "^4.0.0"
+        "socket.io": "^4.0.0",
+        "hyperchess_model": "file:../hyperchess_model"
     }
 }
