@@ -22,7 +22,7 @@ class App extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            api: new HyperChessAPI("http://localhost:5000/", ""),
+            api: new HyperChessAPI(process.env.API_SERVER_URL, ""),
             user: null,
             new_account_created: false,
             token: null,
