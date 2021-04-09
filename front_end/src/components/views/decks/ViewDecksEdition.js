@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import DeckEntry from './DeckEntry'
 import { Square } from '../../chess'
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
@@ -62,15 +63,15 @@ class ViewDecksEdition extends React.Component {
             return (
                 <div class="overlay">
                     <div class="box">
-                        <div className="title white">
+                        <div className="title grey">
                             <div>
                                 <span class="main">Delete this deck?</span>
                             </div>
                         </div>
                         <div className="content">
                             <div class="button-container">
-                                <button class="button white" onClick={this.props.onDeleteDeck.bind(this)}>Yes</button>
-                                <button class="button white" onClick={this.closeOverlay.bind(this)}>No</button>
+                                <button class="button" onClick={this.props.onDeleteDeck.bind(this)}>Yes</button>
+                                <button class="button light" onClick={this.closeOverlay.bind(this)}>No</button>
                             </div>
                         </div>
                     </div>
@@ -184,10 +185,13 @@ class ViewDecksEdition extends React.Component {
     render(){
         let delete_button = '';
         if(this.props.isDeletable){
-            delete_button = <div class="button" onClick={this.openOverlay.bind(this)}>Delete</div>
+            delete_button = <div class="button light" onClick={this.openOverlay.bind(this)}>Delete</div>
         }
         return (
             <div class="edition-container view-padding">
+                <Helmet>
+                    <title>HyperChess - Deck {this.props.deck.name}</title>
+                </Helmet>
                 {this.drawOverlay()}
                 <div className="edition">
                     {this.drawChessBoardOfCollection()}

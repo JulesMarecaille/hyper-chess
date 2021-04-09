@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import DailyReward from './DailyReward'
 import PieceImage from '../../chess/PieceImage'
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -143,6 +144,9 @@ class ViewShopBrowse extends React.Component {
     render() {
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - Shop</title>
+            </Helmet>
             <div className="shop-browse-container">
                 <div class="left-panel view-padding">
                     <DailyReward api={this.props.api}
