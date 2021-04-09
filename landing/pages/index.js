@@ -29,8 +29,8 @@ export default function Home() {
                     </div>
                 */}
                 <div className="buttons-container">
-                    <a className="button light" target={process.env.URL_FRONT_END + '/login'}>Log In</a>
-                    <a className="button" target={process.env.URL_FRONT_END + '/signup'}>Sign Up for free</a>
+                    <a className="button light" href={process.env.URL_FRONT_END + '/login'}>Log In</a>
+                    <a className="button" href={process.env.URL_FRONT_END + '/signup'}>Sign Up for free</a>
                 </div>
             </div>
             <PerfectScrollbar className="container"
@@ -39,7 +39,7 @@ export default function Home() {
                 <div className="section centered dark">
                     <div className="content centered">
                         <h1>Discover a new kind of Chess.</h1>
-                        <a className="button" target={process.env.URL_FRONT_END + '/login'}>Play now</a>
+                        <a className="button" href={process.env.URL_FRONT_END + '/login'}>Play now</a>
                     </div>
                     <img src="/landing_page.svg" className="background"></img>
                 </div>
