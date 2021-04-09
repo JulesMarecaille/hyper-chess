@@ -13,11 +13,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, decks)
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -28,11 +28,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, deck);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -43,11 +43,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, decks);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -72,16 +72,16 @@ module.exports = (app, connection) => {
                     payload[WHITE] = decks[1];
                     payload[BLACK] = decks[0];
                 } else {
-                    res.status(500).send(err);
+                    next(err)
                 }
                 sendOkResponse(res, payload);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     })
 
@@ -116,7 +116,7 @@ module.exports = (app, connection) => {
                             sendOkResponse(res, deck);
                         })
                         .catch((err) => {
-                            res.status(500).send(err);
+                            next(err)
                         });
                     } else {
                         res.status(401).send();
@@ -126,11 +126,11 @@ module.exports = (app, connection) => {
                 }
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -143,14 +143,14 @@ module.exports = (app, connection) => {
                     sendOkResponse(res, deck);
                 })
                 .catch((err) => {
-                    res.status(500).send(err);
+                    next(err)
                 });
             } else {
                 res.status(401).send("You already have 9 decks");
             }
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -163,18 +163,18 @@ module.exports = (app, connection) => {
                         sendOkResponse(res, deck);
                     })
                     .catch((err) => {
-                        res.status(500).send(err);
+                        next(err)
                     });
                 } else {
                     res.status(401).send();
                 }
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     })
 }

@@ -5,6 +5,7 @@ var gameSocket;
 var io;
 var sequelize;
 const { WHITE, BLACK, MAX_DAILY_GAME_COINS, COINS_PER_WIN } = require("hyperchess_model/constants")
+const logger = require("../logging/logger")
 
 function connection(sio, socket, sequelize_connection, user_id) {
     try {
@@ -27,165 +28,224 @@ function connection(sio, socket, sequelize_connection, user_id) {
         game_socket.on("declineRematch", onDeclineRematch);
         game_socket.on("tryToReconnect", onTryToReconnect);
     } catch (e) {
-        console.log(e)
+        logger
     }
 }
 
 function onDisconnect() {
-    delete sockets_in_session[this.id];
+    try{
+        delete sockets_in_session[this.id];
+    } catch (e) {
+        logger.error("onDisconnect failed :" + e)
+    }
 }
 
 function onDisconnecting() {
-    for(room of Array.from(this.rooms)){
-        let game_id = room;
-        leaveGame(game_id, this)
+    try{
+        for(room of Array.from(this.rooms)){
+            let game_id = room;
+            leaveGame(game_id, this)
+        }
+    } catch (e){
+        logger.error("onDisconnecting failed :" + e)
     }
 }
 
 function onRequestGameOffers(user_id){
-    let gameoffers = []
-    for([game_id, game_state] of Object.entries(games_state)){
-        let game_state = games_state[game_id]
-        if(game_state.isJoinable() && game_state.creator.id !== user_id){
-            gameoffers.push({
-                id: game_state.game_id,
-                user: game_state.creator,
-                time: game_state.time,
-                increment: game_state.increment
-            })
+    try{
+        let gameoffers = []
+        for([game_id, game_state] of Object.entries(games_state)){
+            let game_state = games_state[game_id]
+            if(game_state.isJoinable() && game_state.creator.id !== user_id){
+                gameoffers.push({
+                    id: game_state.game_id,
+                    user: game_state.creator,
+                    time: game_state.time,
+                    increment: game_state.increment
+                })
+            }
         }
+        this.emit("receiveGameOffers", gameoffers)
+    } catch (e){
+        logger.error("onRequestGameOffers failed :" + e)
     }
-    this.emit("receiveGameOffers", gameoffers)
 }
 
 function onMakeMove(data) {
-    const game_id = data.game_id
-    if(!games_state[game_id].is_game_over){
-        games_state[game_id].playMove(data.move, (time_remaining) => {
-            let payload = {move: data.move, time_remaining: time_remaining};
-            this.to(game_id).emit('opponentMove', payload);
-        });
+    try{
+        const game_id = data.game_id
+        if(!games_state[game_id].is_game_over){
+            games_state[game_id].playMove(data.move, (time_remaining) => {
+                let payload = {move: data.move, time_remaining: time_remaining};
+                this.to(game_id).emit('opponentMove', payload);
+            });
+        }
+    } catch (e){
+        logger.error("onMakeMove failed :" + e)
     }
 }
 
 function onCreateNewGame(data) {
-    this.emit('newGameCreated');
-    data.user.socket_id = this.id;
-    games_state[data.game_id] = new GameState(data.game_id, data.time, data.increment, gameOver)
-    games_state[data.game_id].addPlayer(data.user, data.user_decks)
-    this.join(data.game_id)
+    try {
+        this.emit('newGameCreated');
+        data.user.socket_id = this.id;
+        games_state[data.game_id] = new GameState(data.game_id, data.time, data.increment, gameOver)
+        games_state[data.game_id].addPlayer(data.user, data.user_decks)
+        this.join(data.game_id)
+    } catch (e){
+        logger.error("onMakeMove failed :" + e)
+    }
 }
 
 function onLeaveGame(game_id){
-    leaveGame(game_id, this);
+    try{
+        leaveGame(game_id, this);
+    } catch (e){
+        logger.error("onLeaveGame failed :" + e)
+    }
 }
 
 function onResign(data){
-    games_state[data.game_id].resign(this.id);
+    try {
+        games_state[data.game_id].resign(this.id);
+    } catch (e){
+        logger.error("onResign failed :" + e)
+    }
 }
 
 function onPlayerJoinedGame(data) {
-    // Look up the room ID in the Socket.IO manager object.
-    let game_id = data.game_id
-    let room = io.sockets.adapter.rooms.get(game_id)
-    if (room === undefined) {
-        this.emit('joinError' , "This game does not exist anymore." );
-        return
-    }
-
-    // Check number of players in the room
-    if (room.size < 2) {
-        data.user.socket_id = this.id;
-
-        this.join(game_id);
-        games_state[game_id].addPlayer(data.user, data.user_decks);
-        if (room.size === 2 && games_state[game_id].playersAreDifferent()) {
-            io.sockets.in(game_id).emit('startGame', games_state[game_id].startGame())
+    try{
+        // Look up the room ID in the Socket.IO manager object.
+        let game_id = data.game_id
+        let room = io.sockets.adapter.rooms.get(game_id)
+        if (room === undefined) {
+            this.emit('joinError' , "This game does not exist anymore." );
+            return
         }
-    } else if (room.size >= 2) {
-        this.emit('joinError' , "This game does not exist anymore.");
+
+        // Check number of players in the room
+        if (room.size < 2) {
+            data.user.socket_id = this.id;
+
+            this.join(game_id);
+            games_state[game_id].addPlayer(data.user, data.user_decks);
+            if (room.size === 2 && games_state[game_id].playersAreDifferent()) {
+                io.sockets.in(game_id).emit('startGame', games_state[game_id].startGame())
+            }
+        } else if (room.size >= 2) {
+            this.emit('joinError' , "This game does not exist anymore.");
+        }
+    } catch (e){
+        logger.error("onPlayerJoinedGame failed :" + e)
     }
 }
 
 function onProposeDraw(data){
-    this.to(data.game_id).emit('opponentOfferDraw')
-    games_state[data.game_id].offerDraw(data.color);
+    try{
+        this.to(data.game_id).emit('opponentOfferDraw')
+        games_state[data.game_id].offerDraw(data.color);
+    } catch (e){
+        logger.error("onPlayerJoinedGame failed :" + e)
+    }
 }
 
 function onAcceptDraw(data){
-    games_state[data.game_id].acceptDraw(data.color);
+    try{
+        games_state[data.game_id].acceptDraw(data.color);
+    } catch (e){
+        logger.error("onAcceptDraw failed :" + e)
+    }
 }
 
 function onOfferRematch(data){
-    if(games_state[data.game_id]){
-        games_state[data.game_id]
-        this.to(data.game_id).emit('opponentOfferRematch');
-    } else {
-        this.emit('opponentDeclineRematch');
-        leaveGame(data.game_id, this)
+    try{
+        if(games_state[data.game_id]){
+            games_state[data.game_id]
+            this.to(data.game_id).emit('opponentOfferRematch');
+        } else {
+            this.emit('opponentDeclineRematch');
+            leaveGame(data.game_id, this)
+        }
+    } catch (e){
+        logger.error("onOfferRematch failed :" + e)
     }
 }
 
 function onAcceptRematch(data){
-    if(games_state[data.game_id]){
-        io.sockets.in(data.game_id).emit('startGame', games_state[data.game_id].rematch())
-    } else {
-        leaveGame(data.game_id, this)
+    try{
+        if(games_state[data.game_id]){
+            io.sockets.in(data.game_id).emit('startGame', games_state[data.game_id].rematch())
+        } else {
+            leaveGame(data.game_id, this)
+        }
+    } catch (e){
+        logger.error("onAcceptRematch failed :" + e)
     }
 }
 
 function onDeclineRematch(data){
-    this.to(data.game_id).emit('opponentDeclineRematch')
-    leaveGame(data.game_id, this)
+    try{
+        this.to(data.game_id).emit('opponentDeclineRematch')
+        leaveGame(data.game_id, this)
+    } catch (e){
+        logger.error("onDeclineRematch failed :" + e)
+    }
 }
 
 function onTryToReconnect(data){
-    for(let [game_id, game_state] of Object.entries(games_state)){
-        if(game_state.canUserReconnect(data.user_id)){
-            this.emit('reconnectToGame', game_state.playerReconnecting(data.user_id, this.id));
-            this.to(game_id).emit("opponentReconnected", {})
-            this.join(game_state.game_id)
-            break;
+    try{
+        for(let [game_id, game_state] of Object.entries(games_state)){
+            if(game_state.canUserReconnect(data.user_id)){
+                this.emit('reconnectToGame', game_state.playerReconnecting(data.user_id, this.id));
+                this.to(game_id).emit("opponentReconnected", {})
+                this.join(game_state.game_id)
+                break;
+            }
         }
+    } catch (e){
+        logger.error("onTryToReconnect failed :" + e)
     }
 }
 
 // Utils
 async function gameOver(game_id, winner, time_remaining, reason, players, elo_differences, time, increment, nb_half_moves){
-    const { Rewards } = require("../entities")(sequelize)
-
-    // Give money to the winner if there's a winner and if the game wasn't canceled
-    let coins_won = {};
-    coins_won[WHITE] = 0;
-    coins_won[BLACK] = 0;
-    if((winner === WHITE || winner === BLACK) && elo_differences){
-        rewards = await Rewards.findOne({where: {UserId: players[winner].id}})
-        if(rewards.last_game_coins_collected < new Date().setHours(0, 0, 0, 0)){
-            rewards.todays_coins_collected = 0;
+    try{
+        const { Rewards } = require("../entities")(sequelize)
+        // Give money to the winner if there's a winner and if the game wasn't canceled
+        let coins_won = {};
+        coins_won[WHITE] = 0;
+        coins_won[BLACK] = 0;
+        if((winner === WHITE || winner === BLACK) && elo_differences){
+            rewards = await Rewards.findOne({where: {UserId: players[winner].id}})
+            if(rewards.last_game_coins_collected < new Date().setHours(0, 0, 0, 0)){
+                rewards.todays_coins_collected = 0;
+            }
+            if(rewards.todays_coins_collected < MAX_DAILY_GAME_COINS){
+                rewards.todays_coins_collected += COINS_PER_WIN
+                rewards.last_game_coins_collected = new Date();
+                coins_won[winner] = COINS_PER_WIN;
+            }
+            rewards.save();
         }
-        if(rewards.todays_coins_collected < MAX_DAILY_GAME_COINS){
-            rewards.todays_coins_collected += COINS_PER_WIN
-            rewards.last_game_coins_collected = new Date();
-            coins_won[winner] = COINS_PER_WIN;
+
+        // Tell the clients that the game ended
+        let payload = {
+            winner: winner,
+            time_remaining: time_remaining,
+            reason: reason,
+            elo_differences: elo_differences,
+            coins_won: coins_won
+        };
+        io.sockets.in(game_id).emit('gameOver', payload);
+
+        // If game wasn't canceled, handle game results and user changes
+        if(elo_differences){
+            gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won);
+        } else {
+            delete games_state[game_id];
         }
-        rewards.save();
-    }
-
-    // Tell the clients that the game ended
-    let payload = {
-        winner: winner,
-        time_remaining: time_remaining,
-        reason: reason,
-        elo_differences: elo_differences,
-        coins_won: coins_won
-    };
-    io.sockets.in(game_id).emit('gameOver', payload);
-
-    // If game wasn't canceled, handle game results and user changes
-    if(elo_differences){
-        gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won);
-    } else {
-        delete games_state[game_id];
+    } catch (e){
+        logger.error("gameOver failed :" + e)
     }
 }
 
@@ -228,9 +288,6 @@ function gameResults(players, elo_differences, winner, time, increment, nb_half_
         time_increment: increment,
         number_of_half_moves: nb_half_moves
     })
-    .catch((err) => {
-        console.log(err)
-    });
 
     // Update Elos
     for(const [color, player] of Object.entries(players)){
@@ -238,12 +295,7 @@ function gameResults(players, elo_differences, winner, time, increment, nb_half_
             user.elo += elo_differences[color];
             user.coins += coins_won[color];
             user.save()
-            .catch((err) => {
-                console.log(err)
-            });
-        }).catch((err) => {
-            console.log(err)
-        });
+        })
     }
 }
 

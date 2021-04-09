@@ -1,4 +1,3 @@
-const utils = require("../utils.js");
 const bcrypt = require("bcrypt-nodejs");
 const config = require("../../config.js");
 const rand = require("generate-key");
@@ -28,11 +27,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, users)
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -43,11 +42,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, users)
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -58,11 +57,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, user);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -80,11 +79,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, user);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -106,7 +105,7 @@ module.exports = (app, connection) => {
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -118,11 +117,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, user);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err);
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err);
         });
     });
 
@@ -156,12 +155,12 @@ module.exports = (app, connection) => {
                     sendNewAccountEmail(req.body.email);
                 })
                 .catch((err) => {
-                    res.status(500).send(err);
+                    next(err)
                 });
             }
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 

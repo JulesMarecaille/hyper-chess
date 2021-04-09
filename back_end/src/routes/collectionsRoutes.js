@@ -15,11 +15,11 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, collection);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -33,18 +33,18 @@ module.exports = (app, connection) => {
                         sendOkResponse(res, collection);
                     })
                     .catch((err) => {
-                        res.status(500).send(err);
+                        next(err)
                     });
                 } else {
                     res.status(401).send();
                 }
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
@@ -67,11 +67,11 @@ module.exports = (app, connection) => {
 
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 }
