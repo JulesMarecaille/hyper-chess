@@ -5,7 +5,7 @@
     "description": "chess but more, The API.",
     "author": "Jules Marécaille & Octave Boutrolle",
     "scripts": {
-      "start": "node server.js"
+      "start": "cd node_modules/hyperchess_model && npm run build && cd ../.. && node server.js"
     },
     "dependencies": {
         "bcrypt-nodejs": "^0.0.3",
