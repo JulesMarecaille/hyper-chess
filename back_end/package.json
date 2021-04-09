@@ -19,6 +19,9 @@
         "pg-hstore": "^2.3.3",
         "sequelize": "^6.5.0",
         "socket.io": "^4.0.0",
-        "hyperchess_model": "file:../hyperchess_model"
+        "hyperchess_model": "file:../hyperchess_model",
+        "@babel/cli": "^7.13.14",
+        "@babel/core": "^7.13.14",
+        "@babel/plugin-transform-modules-commonjs": "^7.13.8"
     }
 }
