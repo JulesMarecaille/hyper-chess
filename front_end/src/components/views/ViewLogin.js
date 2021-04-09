@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom';
 import { Loader } from '../navigation';
 import { InfoPanel } from '../navigation';
@@ -16,7 +17,12 @@ class ViewLogin extends React.Component {
             new_account_created: this.props.newAccountCreated
         }
         this.email_input = React.createRef();
+
         this.form = React.createRef();
+    }
+
+    componentDidMount(){
+        document.title = "HyperChess - Login";
     }
 
     tryLogin(){
@@ -111,6 +117,9 @@ class ViewLogin extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - Login</title>
+            </Helmet>
             <div>
                 {form}
             </div>

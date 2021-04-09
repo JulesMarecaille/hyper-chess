@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import PieceImage from '../chess/PieceImage'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar'
@@ -74,6 +75,9 @@ class ViewCollection extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - My collection</title>
+            </Helmet>
             <p>My Collection</p>
             <PerfectScrollbar className="collection-container">
                 {content}

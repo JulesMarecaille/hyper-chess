@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom';
 import { Loader } from '../navigation';
 import { InfoPanel } from '../navigation';
@@ -177,6 +178,9 @@ class ViewResetPassword extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - Reset your password</title>
+            </Helmet>
             <div>
                 {content}
             </div>

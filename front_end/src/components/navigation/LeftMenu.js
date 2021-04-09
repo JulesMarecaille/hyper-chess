@@ -1,16 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 import { MdHome, MdVideogameAsset, MdStore, MdPowerSettingsNew, MdPerson, MdShowChart } from 'react-icons/md';
 import { FaChessBishop } from 'react-icons/fa';
 import { GiLockedChest } from 'react-icons/gi';
 import { BiCoin } from 'react-icons/bi'
 import { ImTrophy } from 'react-icons/im';
+import { HiChevronDoubleLeft } from 'react-icons/hi';
 import '../style.css'
 import { withRouter } from 'react-router-dom';
 
 class LeftMenu extends React.Component {
-    state = {}
-
+    state = {
+    }
 
     isSelected(route, search=''){
         return ((route === this.props.location.pathname && search === this.props.location.search) ? "selected" : "")
@@ -19,42 +21,46 @@ class LeftMenu extends React.Component {
     render() {
         return (
         <React.Fragment>
-            <div className="leftmenu">
+            <div className={`leftmenu ${this.props.collapsedClass}`}>
+                <ReactTooltip className="tooltip" place="right" delayShow="600" effect="solid"/>
                 <div className="menu-title">
-                    Hyper Chess
+                    <img src={process.env.PUBLIC_URL + '/assets/logos/logo_text.svg'}></img>
+                </div>
+                <div className="menu-title collapsed">
+                    <img src={process.env.PUBLIC_URL + '/assets/logos/logo_icon_green.svg'}></img>
                 </div>
                 <div className="content">
-                    <Link to="/home">
-                        <div className={`entry ${this.isSelected("/home")}`}>
+                    <Link to="/home" data-tip="Home">
+                        <div className={`entry ${this.isSelected("/home")}`} >
                             <MdHome className="icon"/>
                             <span className="name">Home</span>
                         </div>
                     </Link>
-                    <Link to="/play">
+                    <Link to="/play" data-tip="Play">
                         <div className={`entry ${this.isSelected("/play")}`}>
                             <MdVideogameAsset className="icon"/>
                             <span className="name">Play</span>
                         </div>
                     </Link>
-                    <Link to="/decks">
+                    <Link to="/decks" data-tip="My decks">
                         <div className={`entry ${this.isSelected("/decks")}`}>
                             <FaChessBishop className="icon"/>
                             <span className="name">My decks</span>
                         </div>
                     </Link>
-                    <Link to="/shop">
+                    <Link to="/shop" data-tip="Shop">
                         <div className={`entry ${this.isSelected("/shop")}`}>
                             <MdStore className="icon"/>
                             <span className="name">Shop</span>
                         </div>
                     </Link>
-                    <Link to="/collection">
+                    <Link to="/collection" data-tip="My collection">
                         <div className={`entry ${this.isSelected("/collection")}`}>
                             <GiLockedChest className="icon"/>
                             <span className="name">My collection</span>
                         </div>
                     </Link>
-                    <Link to="/leaderboard">
+                    <Link to="/leaderboard" data-tip="Leaderboard">
                         <div className={`entry ${this.isSelected("/leaderboard")}`}>
                             <ImTrophy className="icon"/>
                             <span className="name">Leaderboard</span>
@@ -62,7 +68,7 @@ class LeftMenu extends React.Component {
                     </Link>
                 </div>
                 <div className="bottom content">
-                    <Link to={"/profile?id=" + this.props.user.id}>
+                    <Link to={"/profile?id=" + this.props.user.id} data-tip="My profile">
                         <div className={`entry ${this.isSelected("/profile", "?id="+this.props.user.id)}`}>
                             <div>
                                 <div class="main">
@@ -80,9 +86,13 @@ class LeftMenu extends React.Component {
                             </div>
                         </div>
                     </Link>
-                    <div className="entry" onClick={this.props.onLogout}>
+                    <div className="entry" onClick={this.props.onLogout} data-tip="Log out">
                         <MdPowerSettingsNew className="icon"/>
-                        <span className="name">Logout</span>
+                        <span className="name">Log out</span>
+                    </div>
+                    <div className="entry" onClick={this.props.onToggleCollapse} data-tip="Expand menu">
+                        <HiChevronDoubleLeft className="icon rotate"/>
+                        <span className="name">Collapse menu</span>
                     </div>
                 </div>
             </div>

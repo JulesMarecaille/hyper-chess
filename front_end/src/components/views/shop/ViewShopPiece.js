@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import PieceImage from '../../chess/PieceImage'
 import { BiCoin } from 'react-icons/bi'
 import { Loader } from '../../navigation';
@@ -67,9 +68,8 @@ class ViewShopPiece extends React.Component {
             let buy = '';
             if(!this.props.isOwned){
                 buy = (
-                    <div class="purchase-button" onClick={this.handleBuy.bind(this)}>
-                        <div class="text">Purchase</div>
-                        <div class="cost">{this.props.piece.cost}<BiCoin className="icon"/></div>
+                    <div class="button gold purchase-button" onClick={this.handleBuy.bind(this)}>
+                        Purchase ({this.props.piece.cost}<BiCoin className="icon"/>)
                     </div>
                 );
             } else {
@@ -110,6 +110,9 @@ class ViewShopPiece extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - {this.props.piece.label}</title>
+            </Helmet>
             {content}
         </React.Fragment>)
     }

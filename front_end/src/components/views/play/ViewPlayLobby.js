@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import Lobby from './Lobby'
 import { InfoPanel } from '../../navigation'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
@@ -45,7 +46,7 @@ class ViewPlayLobby extends React.Component {
             let increment = time_control[1];
             time_elements.push(
                 <div class="time-container">
-                    <span class="time" onClick={this.handleCreateGame.bind(this, time, increment)}>{time}+{increment}</span>
+                    <span class="button flat dark time" onClick={this.handleCreateGame.bind(this, time, increment)}>{time}+{increment}</span>
                 </div>
             )
         }
@@ -83,7 +84,7 @@ class ViewPlayLobby extends React.Component {
                         <div className="content">
                             {this.drawAvailableTimes()}
                             <div class="button-container">
-                                <button class="button white" onClick={this.closeOverlay.bind(this)}>Cancel</button>
+                                <button class="button light" onClick={this.closeOverlay.bind(this)}>Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -92,6 +93,9 @@ class ViewPlayLobby extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - Lobby</title>
+            </Helmet>
             {overlay}
             <InfoPanel isOpen={this.props.error} type="error" message={this.props.errorMsg} />
             <div className="play-lobby-container view-padding">

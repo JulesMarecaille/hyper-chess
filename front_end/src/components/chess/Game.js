@@ -3,7 +3,6 @@ import {Board} from 'hyperchess_model/lib'
 import Square from './Square'
 import PieceImage from './PieceImage'
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
-import './style.css'
 import { BLACK } from 'hyperchess_model/lib/constants'
 import { socket } from '../../connection/socket';
 

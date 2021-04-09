@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import DeckEntry from './DeckEntry'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar'
@@ -35,9 +36,14 @@ class ViewDecksBrowse extends React.Component {
 
     render(){
         return (
-        <PerfectScrollbar className="browse-decks view-padding">
-            {this.drawAllDecks()}
-        </PerfectScrollbar>);
+            <React.Fragment>
+                <Helmet>
+                    <title>HyperChess - My decks</title>
+                </Helmet>
+                <PerfectScrollbar className="browse-decks view-padding">
+                    {this.drawAllDecks()}
+                </PerfectScrollbar>
+            </React.Fragment>);
     }
 }
 

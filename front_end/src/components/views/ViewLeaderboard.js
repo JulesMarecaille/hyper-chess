@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { Loader } from '../navigation';
 import { Redirect } from 'react-router-dom';
 import { ImTrophy } from 'react-icons/im';
@@ -70,6 +71,9 @@ class ViewLeaderboard extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - Leaderboard</title>
+            </Helmet>
             <p>Leaderboard</p>
             {this.state.redirect}
             <PerfectScrollbar className="leaderboard-container">

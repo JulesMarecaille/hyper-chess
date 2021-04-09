@@ -1,4 +1,4 @@
-import './App.css';
+import './components/style.css'
 import React from 'react'
 import { LeftMenu, Loader } from './components/navigation';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
@@ -26,7 +26,8 @@ class App extends React.Component {
             user: null,
             new_account_created: false,
             token: null,
-            location: ""
+            location: "",
+            collapsed_leftbar: false
         };
     }
 
@@ -88,11 +89,21 @@ class App extends React.Component {
         });
     }
 
+    handleToggleLeftbarCollapsed(){
+        this.setState({
+            collapsed_leftbar: !this.state.collapsed_leftbar
+        })
+    }
+
     render(){
+        let collapsed_class = "";
+        if(this.state.collapsed_leftbar){
+            collapsed_class = "collapsed";
+        }
         let app = (
             <div className="login-container">
                 <div className="left-panel">
-                    <Loader />
+                    <img src={process.env.PUBLIC_URL + '/assets/logos/logo_icon_gradient.svg'}></img>
                 </div>
                 <div className="right-panel">
                     <Switch>
@@ -124,8 +135,11 @@ class App extends React.Component {
             app = (
                 <div>
                     <LeftMenu onLogout={this.handleLogout.bind(this)}
-                              user={this.state.user}/>
-                    <div className="view-container page-centered">
+                              user={this.state.user}
+                              collapsedClass={collapsed_class}
+                              onToggleCollapse={this.handleToggleLeftbarCollapsed.bind(this)}
+                              />
+                    <div className={`view-container ${collapsed_class} page-centered`}>
                         <Switch>
                             <Route exact path='/home' component={ViewHome}></Route>
                             <Route exact path='/play' render={() => (<ViewPlay api={this.state.api}
