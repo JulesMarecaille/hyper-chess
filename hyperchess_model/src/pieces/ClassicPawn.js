@@ -4,7 +4,7 @@ import { cloneDeep } from "lodash"
 import { squaresPassed } from '../utils.js'
 
 class ClassicPawn extends Piece{
-	constructor(color, behavior)
+	constructor(color, behavior = null)
 	{
 		let description = "The classic pawn from the classic game of chess.";
 		if (!behavior){
