@@ -214,7 +214,9 @@ function isThereALegalMoveFromPlayerFromBoard(//stop at the first move encounter
 		const piece = board[square];
 		// If there's a piece on this square and this piece belongs to the player
 		if (piece && piece.color === color){
-			if (getLegalMovesFromPieceFromBoard(board, square, kings_positions, opponent_last_move, check_king_safety)){
+			let moves;
+			moves = getLegalMovesFromPieceFromBoard(board, square, kings_positions, opponent_last_move, check_king_safety)
+			if (moves && moves[0]){
 				return true;
 			}
 		}
