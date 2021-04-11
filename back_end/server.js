@@ -40,6 +40,9 @@ function errorHandler (err, req, res, next) {
     res.status(500).send('Error!')
 }
 
+app.use(logErrors)
+app.use(errorHandler)
+
 connection.authenticate().then(() => {
     console.log('Connection has been established successfully.');
     // Initialize entities
@@ -59,17 +62,9 @@ connection.authenticate().then(() => {
             // Import the routes
             require("./src/routes")(app, connection)
 
-            app.use(logErrors)
-            app.use(errorHandler)
-
-            // Start the API
-            app.listen(port, () => {
-                console.log("We are live on " + port);
-            })
-
-            // Start the socket server
-            server.listen(5838, () => {
-                console.log("We are live on " + 5838);
+            // Start the server
+            server.listen(8080, () => {
+                console.log("We are live on " + 8080);
             })
         })
         .catch((err) => {
