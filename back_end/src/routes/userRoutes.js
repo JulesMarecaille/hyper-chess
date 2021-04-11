@@ -21,7 +21,7 @@ module.exports = (app, connection) => {
     const { User } = require("../entities")(connection)
 
     // Get all users
-    app.get("/users", (req, res) => {
+    app.get("/users", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             User.findAll().then((users) => {
                 sendOkResponse(res, users)
@@ -36,7 +36,7 @@ module.exports = (app, connection) => {
     });
 
     // Get leaderboard (top 100 users + current user position)
-    app.get("/users/leaderboard", (req, res) => {
+    app.get("/users/leaderboard", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             User.findAll({order: [['elo', 'DESC']], limit: 100}).then((users) => {
                 sendOkResponse(res, users)
@@ -51,7 +51,7 @@ module.exports = (app, connection) => {
     });
 
     // Get specific user
-    app.get("/users/:id", (req, res) => {
+    app.get("/users/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((auth_user) => {
             User.scope('defaultScope').findOne({where: {id: req.params.id}}).then((user) => {
                 sendOkResponse(res, user);
@@ -66,7 +66,7 @@ module.exports = (app, connection) => {
     });
 
     // Get specific user profile
-    app.get("/users/:id/profile", (req, res) => {
+    app.get("/users/:id/profile", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((auth_user) => {
             User.scope('defaultScope', 'gameResults').findOne({where: {id: req.params.id}}).then((user) => {
                 user = user.toJSON()
@@ -88,7 +88,7 @@ module.exports = (app, connection) => {
     });
 
     // Login
-    app.post("/login", (req, res) => {
+    app.post("/login", (req, res, next) => {
         User.scope("logging").findOne({attributes: ['password'], where: {"email": req.body.email}}).then((found_user) => {
             bcrypt.compare(req.body.password, found_user.password, (erro, result) => {
                 if (result) {
@@ -110,7 +110,7 @@ module.exports = (app, connection) => {
     });
 
     // Update user
-    app.put("/users/:id", (req, res) => {
+    app.put("/users/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             req.body.id = req.params.id;
             user.update(req.body).then((user) => {
@@ -126,7 +126,7 @@ module.exports = (app, connection) => {
     });
 
     // Create a new user
-    app.post("/users", (req, res) => {
+    app.post("/users", (req, res, next) => {
         User.findOne({
             where: {
                 [Op.or]: [
@@ -164,7 +164,7 @@ module.exports = (app, connection) => {
         });
     });
 
-    app.post("/users/reset_password", (req, res) => {
+    app.post("/users/reset_password", (req, res, next) => {
         User.scope("logging").findOne({where : {email: req.body.email}}).then(async (user) => {
             if (user) {
                 user.password = "reset";
@@ -176,18 +176,18 @@ module.exports = (app, connection) => {
                     sendOkResponse(res, {email: user.email});
                 })
                 .catch((err) => {
-                    res.status(500).send();
+                    next(err)
                 });
             } else {
                 res.status(204).send();
             }
         })
         .catch((err) => {
-            res.status(500).send();
+            next(err)
         });
     });
 
-    app.post("/users/new_password", (req, res) => {
+    app.post("/users/new_password", (req, res, next) => {
         User.scope("logging").findOne({where: {email: req.body.email}}).then((found_user) => {
             if (found_user) {
                 bcrypt.compare(req.body.reset_token, found_user.reset_token, (erro, result) => {
@@ -199,7 +199,7 @@ module.exports = (app, connection) => {
                             sendOkResponse(res, {email: found_user.email});
                         })
                         .catch((err) => {
-                            res.status(500).send();
+                            next(err)
                         });
                     } else {
                         res.status(500).send("Password incorrect.");
@@ -210,7 +210,7 @@ module.exports = (app, connection) => {
             }
         })
         .catch((err) => {
-            res.status(500).send();
+            next(err)
         });
     });
 }

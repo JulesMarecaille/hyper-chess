@@ -7,7 +7,7 @@ module.exports = (app, connection) => {
     const { Deck } = require("../entities")(connection)
 
     // Get all decks
-    app.get("/decks", (req, res) => {
+    app.get("/decks", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Deck.findAll().then((decks) => {
                 sendOkResponse(res, decks)
@@ -22,7 +22,7 @@ module.exports = (app, connection) => {
     });
 
     // Get specific deck
-    app.get("/decks/:id", (req, res) => {
+    app.get("/decks/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((deck) => {
                 sendOkResponse(res, deck);
@@ -37,7 +37,7 @@ module.exports = (app, connection) => {
     });
 
     // Get all decks from user
-    app.get("/decks/user/:id", (req, res) => {
+    app.get("/decks/user/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Deck.findAll({where: {UserId: req.params.id}}).then((decks) => {
                 sendOkResponse(res, decks);
@@ -52,7 +52,7 @@ module.exports = (app, connection) => {
     });
 
     // Get selected decks from user
-    app.get("/decks/user/:id/selected", (req, res) => {
+    app.get("/decks/user/:id/selected", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Deck.findAll({where: {
                 UserId: req.params.id,
@@ -86,7 +86,7 @@ module.exports = (app, connection) => {
     })
 
     // Update deck
-    app.put("/decks/:id", (req, res) => {
+    app.put("/decks/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
                 if (found_deck.UserId == user.id){
@@ -135,7 +135,7 @@ module.exports = (app, connection) => {
     });
 
     // Create deck
-    app.post("/decks", (req, res) => {
+    app.post("/decks", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             req.body.UserId = user.id;
             if(user.Decks.length <= 9){
@@ -155,7 +155,7 @@ module.exports = (app, connection) => {
     });
 
     // Delete deck
-    app.delete("/decks/:id", (req, res) => {
+    app.delete("/decks/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
                 if (found_deck.UserId == user.id && user.Decks.length > 1 && !found_deck.selected_as_white && !found_deck.selected_as_black){
