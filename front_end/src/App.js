@@ -16,19 +16,20 @@ import {
 } from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
-
+import config from './config';
 
 class App extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            api: new HyperChessAPI(process.env.API_SERVER_URL, ""),
+            api: new HyperChessAPI(config.api_url, ""),
             user: null,
             new_account_created: false,
             token: null,
             location: "",
             collapsed_leftbar: false
         };
+        console.log(config.api_url)
     }
 
     componentDidMount(){

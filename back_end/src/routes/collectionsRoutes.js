@@ -5,7 +5,7 @@ module.exports = (app, connection) => {
     const { Collection } = require("../entities")(connection)
 
     // Get collection from user
-    app.get("/collections/user/:id", (req, res) => {
+    app.get("/collections/user/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Collection.findOne({where: {UserId: req.params.id}}).then((collection) => {
                 delete collection.dataValues.id;
@@ -15,16 +15,16 @@ module.exports = (app, connection) => {
                 sendOkResponse(res, collection);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
     // Update collection
-    app.put("/collections/:id", (req, res) => {
+    app.put("/collections/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Collection.findOne({where: {id: req.params.id}}).then((found_collection) => {
                 if (found_collection.UserId == user.id){
@@ -33,23 +33,23 @@ module.exports = (app, connection) => {
                         sendOkResponse(res, collection);
                     })
                     .catch((err) => {
-                        res.status(500).send(err);
+                        next(err)
                     });
                 } else {
                     res.status(401).send();
                 }
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
     //Buy piece
-    app.get("/collections/unlock/:piece", (req, res) => {
+    app.get("/collections/unlock/:piece", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Collection.findOne({where: {UserId: user.id}}).then((collection) => {
                 let cost = new PIECE_MAPPING[req.params.piece](null).cost;
@@ -67,11 +67,11 @@ module.exports = (app, connection) => {
 
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 }

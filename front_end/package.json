@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cd node_modules/hyperchess_model && npm run build && cd ../.. && react-scripts build",
+    "build": "cd node_modules/hyperchess_model && npm install && npm run build && cd ../.. && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

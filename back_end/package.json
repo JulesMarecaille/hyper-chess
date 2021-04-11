@@ -4,24 +4,31 @@
     "private": true,
     "description": "chess but more, The API.",
     "author": "Jules Marécaille & Octave Boutrolle",
+    "engines": {
+        "node": ">=14"
+    },
+    "main": "server.js",
     "scripts": {
-      "start": "cd node_modules/hyperchess_model && npm run build && cd ../.. && node server.js"
+        "start": "cd node_modules/hyperchess_model && npm install && npm run build && cd ../.. && node server.js"
     },
     "dependencies": {
+        "@babel/cli": "^7.13.14",
+        "@babel/core": "^7.13.14",
+        "@babel/plugin-transform-modules-commonjs": "^7.13.8",
         "bcrypt-nodejs": "^0.0.3",
         "body-parser": "^1.19.0",
         "cors": "^2.8.5",
         "express": "^4.17.1",
         "generate-key": "^0.0.6",
+        "hyperchess_model": "file:../hyperchess_model",
         "jsonwebtoken": "^8.5.1",
+        "morgan": "^1.10.0",
+        "morgan-json": "^1.1.0",
         "nodemailer": "^6.5.0",
         "pg": "^8.5.1",
         "pg-hstore": "^2.3.3",
         "sequelize": "^6.5.0",
         "socket.io": "^4.0.0",
-        "hyperchess_model": "file:../hyperchess_model",
-        "@babel/cli": "^7.13.14",
-        "@babel/core": "^7.13.14",
-        "@babel/plugin-transform-modules-commonjs": "^7.13.8"
+        "winston": "^3.3.3"
     }
 }

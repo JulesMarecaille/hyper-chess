@@ -1,5 +1,6 @@
 const { WHITE, BLACK, swapColor } = require("hyperchess_model/constants");
 const { Board, Deck } = require("hyperchess_model");
+const logger = require("../logging/logger")
 const TICK = 1000;
 
 class GameState {
@@ -46,6 +47,8 @@ class GameState {
             this.decks[random_color] = user_decks[random_color];
             this.users_decks[random_color] = user_decks;
             this.creator = user;
+
+            logger.info("Player " + user.name + " created a game offer.")
         }
     }
 
@@ -77,6 +80,7 @@ class GameState {
             this.winner = null;
             reason = "The game was canceled."
         }
+        logger.info("Game over between "+ this.players[WHITE].name + " and " + this.players[BLACK].name + " (" + reason + ")")
         this.game_over_callback(this.game_id, this.winner, time_remaining, reason, this.players, elo_differences, this.time, this.increment, this.nb_half_moves);
     }
 
@@ -125,6 +129,7 @@ class GameState {
         this.board_object = new Board(Deck.buildFromPayload(this.decks[WHITE]), Deck.buildFromPayload(this.decks[BLACK]));
         this.starting_game_clock = new Clock(60000, 0, this.gameOver.bind(this), null, "");
         this.starting_game_clock.start();
+        logger.info("Starting game between "+ this.players[WHITE].name + " and " + this.players[BLACK].name)
         return { players: this.players, decks: this.decks, time_remaining: time_remaining};
     }
 
@@ -133,9 +138,6 @@ class GameState {
     }
 
     canUserReconnect(user_id){
-        console.log(user_id);
-        console.log(!!this.disconnection_clock);
-        console.log(this.players)
         if(this.disconnection_clock && (this.players[BLACK].id == user_id || this.players[WHITE].id == user_id)){
             return true;
         }

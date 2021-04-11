@@ -7,52 +7,52 @@ module.exports = (app, connection) => {
     const { Deck } = require("../entities")(connection)
 
     // Get all decks
-    app.get("/decks", (req, res) => {
+    app.get("/decks", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Deck.findAll().then((decks) => {
                 sendOkResponse(res, decks)
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
     // Get specific deck
-    app.get("/decks/:id", (req, res) => {
+    app.get("/decks/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((deck) => {
                 sendOkResponse(res, deck);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
     // Get all decks from user
-    app.get("/decks/user/:id", (req, res) => {
+    app.get("/decks/user/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Deck.findAll({where: {UserId: req.params.id}}).then((decks) => {
                 sendOkResponse(res, decks);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
     // Get selected decks from user
-    app.get("/decks/user/:id/selected", (req, res) => {
+    app.get("/decks/user/:id/selected", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Deck.findAll({where: {
                 UserId: req.params.id,
@@ -72,21 +72,21 @@ module.exports = (app, connection) => {
                     payload[WHITE] = decks[1];
                     payload[BLACK] = decks[0];
                 } else {
-                    res.status(500).send(err);
+                    next(err)
                 }
                 sendOkResponse(res, payload);
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     })
 
     // Update deck
-    app.put("/decks/:id", (req, res) => {
+    app.put("/decks/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
                 if (found_deck.UserId == user.id){
@@ -116,7 +116,7 @@ module.exports = (app, connection) => {
                             sendOkResponse(res, deck);
                         })
                         .catch((err) => {
-                            res.status(500).send(err);
+                            next(err)
                         });
                     } else {
                         res.status(401).send();
@@ -126,16 +126,16 @@ module.exports = (app, connection) => {
                 }
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
     // Create deck
-    app.post("/decks", (req, res) => {
+    app.post("/decks", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             req.body.UserId = user.id;
             if(user.Decks.length <= 9){
@@ -143,19 +143,19 @@ module.exports = (app, connection) => {
                     sendOkResponse(res, deck);
                 })
                 .catch((err) => {
-                    res.status(500).send(err);
+                    next(err)
                 });
             } else {
                 res.status(401).send("You already have 9 decks");
             }
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
     // Delete deck
-    app.delete("/decks/:id", (req, res) => {
+    app.delete("/decks/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"], ["defaultScope", "decks"]).then((user) => {
             Deck.findOne({where: {id: req.params.id}}).then((found_deck) => {
                 if (found_deck.UserId == user.id && user.Decks.length > 1 && !found_deck.selected_as_white && !found_deck.selected_as_black){
@@ -163,18 +163,18 @@ module.exports = (app, connection) => {
                         sendOkResponse(res, deck);
                     })
                     .catch((err) => {
-                        res.status(500).send(err);
+                        next(err)
                     });
                 } else {
                     res.status(401).send();
                 }
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     })
 }
