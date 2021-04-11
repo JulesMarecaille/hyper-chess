@@ -1,6 +1,7 @@
 const { checkAuth, sendOkResponse } = require("../utils.js")
 const { Op } = require("sequelize");
 const { WHITE, BLACK } = require("hyperchess_model/constants")
+const { PIECE_MAPPING } = require("hyperchess_model/pieces")
 const { getAllowedPosition } = require("hyperchess_model")
 
 module.exports = (app, connection) => {
