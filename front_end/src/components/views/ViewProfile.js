@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { Loader } from '../navigation';
@@ -78,6 +79,10 @@ class ViewProfile extends React.Component {
 
     render() {
         let content = <Loader/>;
+        let user_name = "Profile";
+        if(this.state.user){
+            user_name = this.state.user.name;
+        }
         if(!this.state.is_loading){
             content=(
                 <div>
@@ -98,6 +103,9 @@ class ViewProfile extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - {user_name}</title>
+            </Helmet>
             <PerfectScrollbar className="profile-container view-padding">
                 <div class="profile-column">
                     {content}

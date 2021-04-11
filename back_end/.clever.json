@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "app_id": "app_ce00d870-cb10-47dd-bd36-973b0c021b24",
+      "org_id": "orga_d084db75-a203-4991-8512-44bb2b920566",
+      "deploy_url": "https://push-par-clevercloud-customers.services.clever-cloud.com/app_ce00d870-cb10-47dd-bd36-973b0c021b24.git",
+      "name": "hyper-chess-server",
+      "alias": "hyper-chess-server"
+    }
+  ]
+}

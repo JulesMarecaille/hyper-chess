@@ -1,4 +1,4 @@
-import './App.css';
+import './components/style.css'
 import React from 'react'
 import { LeftMenu, Loader } from './components/navigation';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
@@ -16,18 +16,20 @@ import {
 } from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
-
+import config from './config';
 
 class App extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            api: new HyperChessAPI("http://localhost:5000/", ""),
+            api: new HyperChessAPI(config.api_url, ""),
             user: null,
             new_account_created: false,
             token: null,
-            location: ""
+            location: "",
+            collapsed_leftbar: false
         };
+        console.log(config.api_url)
     }
 
     componentDidMount(){
@@ -88,11 +90,21 @@ class App extends React.Component {
         });
     }
 
+    handleToggleLeftbarCollapsed(){
+        this.setState({
+            collapsed_leftbar: !this.state.collapsed_leftbar
+        })
+    }
+
     render(){
+        let collapsed_class = "";
+        if(this.state.collapsed_leftbar){
+            collapsed_class = "collapsed";
+        }
         let app = (
             <div className="login-container">
                 <div className="left-panel">
-                    <Loader />
+                    <img src={process.env.PUBLIC_URL + '/assets/logos/logo_icon_gradient.svg'}></img>
                 </div>
                 <div className="right-panel">
                     <Switch>
@@ -124,8 +136,11 @@ class App extends React.Component {
             app = (
                 <div>
                     <LeftMenu onLogout={this.handleLogout.bind(this)}
-                              user={this.state.user}/>
-                    <div className="view-container page-centered">
+                              user={this.state.user}
+                              collapsedClass={collapsed_class}
+                              onToggleCollapse={this.handleToggleLeftbarCollapsed.bind(this)}
+                              />
+                    <div className={`view-container ${collapsed_class} page-centered`}>
                         <Switch>
                             <Route exact path='/home' component={ViewHome}></Route>
                             <Route exact path='/play' render={() => (<ViewPlay api={this.state.api}

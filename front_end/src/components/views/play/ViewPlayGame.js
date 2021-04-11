@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import ReactTooltip from 'react-tooltip';
 import { Game, Clock } from '../../chess'
 import { Loader } from '../../navigation'
@@ -252,14 +253,14 @@ class ViewPlayGame extends React.Component {
         }
         let rematch_button = ''
         if(this.state.can_offer_rematch && this.state.elo_differences && !this.state.opponent_disconnected){
-            rematch_button = <button class="button" onClick={this.handleOfferRematch.bind(this)}>Offer rematch</button>
+            rematch_button = <button class="button light" onClick={this.handleOfferRematch.bind(this)}>Offer rematch</button>
         }
 
         let actions = '';
         if(!this.state.opponent_offer_rematch){
             actions = (
                 <div class="button-container">
-                    <button class="button" onClick={this.props.onExitGame}>Back to Lobby</button>
+                    <button class="button light" onClick={this.props.onExitGame}>Back to Lobby</button>
                     {rematch_button}
                 </div>
             )
@@ -267,7 +268,7 @@ class ViewPlayGame extends React.Component {
             actions = (
                 <div class="button-container">
                     <button class="button" onClick={this.handleAcceptRematch.bind(this)}>Accept</button>
-                    <button class="button" onClick={this.handleDeclineRematch.bind(this)}>Decline</button>
+                    <button class="button light" onClick={this.handleDeclineRematch.bind(this)}>Decline</button>
                 </div>
             )
         }
@@ -291,7 +292,7 @@ class ViewPlayGame extends React.Component {
                 <div className="content">
                     <Loader size="medium"/>
                     <div class="button-container">
-                        <button class="button" onClick={this.props.onExitGame}>Cancel</button>
+                        <button class="button light" onClick={this.props.onExitGame}>Cancel</button>
                     </div>
                 </div>
             </div>
@@ -340,8 +341,8 @@ class ViewPlayGame extends React.Component {
                         <div className="info">Are you sure you want to resign?</div>
                         <div class="actions">
                             <ReactTooltip place="bottom" delayShow="600" effect="solid"/>
-                            <div className="action green" onClick={this.resign.bind(this)} data-tip="Resign"><MdCheck/></div>
-                            <div className="action red" onClick={this.toggleResign.bind(this)} data-tip="Cancel"><MdClose/></div>
+                            <div className="action button flat dark green" onClick={this.resign.bind(this)} data-tip="Resign"><MdCheck/></div>
+                            <div className="action button flat dark red" onClick={this.toggleResign.bind(this)} data-tip="Cancel"><MdClose/></div>
                         </div>
                     </div>
                 );
@@ -349,8 +350,8 @@ class ViewPlayGame extends React.Component {
                 actions = (
                     <div class="actions">
                         <ReactTooltip place="bottom" delayShow="600" effect="solid"/>
-                        <div className="action" onClick={this.toggleResign.bind(this)} data-tip="Resign"><MdFlag/></div>
-                        <div className="action" onClick={this.proposeDraw.bind(this)} data-tip="Offer draw"><FaRegHandshake/></div>
+                        <div className="action button flat dark" onClick={this.toggleResign.bind(this)} data-tip="Resign"><MdFlag/></div>
+                        <div className="action button flat dark" onClick={this.proposeDraw.bind(this)} data-tip="Offer draw"><FaRegHandshake/></div>
                     </div>
                 );
             }
@@ -363,8 +364,8 @@ class ViewPlayGame extends React.Component {
                         <div className="info">Opponent offered a draw.</div>
                         <div class="actions">
                             <ReactTooltip place="bottom" delayShow="600" effect="solid"/>
-                            <div className="action green" onClick={this.acceptDrawOffer.bind(this)} data-tip="Accept draw"><MdCheck/></div>
-                            <div className="action red" onClick={this.rejectDrawOffer.bind(this)} data-tip="Refuse draw"><MdClose/></div>
+                            <div className="action button flat dark  green" onClick={this.acceptDrawOffer.bind(this)} data-tip="Accept draw"><MdCheck/></div>
+                            <div className="action button flat dark  red" onClick={this.rejectDrawOffer.bind(this)} data-tip="Refuse draw"><MdClose/></div>
                         </div>
                     </div>
                 );
@@ -466,6 +467,9 @@ class ViewPlayGame extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - Play</title>
+            </Helmet>
             <div>
                 {overlay}
                 {game}

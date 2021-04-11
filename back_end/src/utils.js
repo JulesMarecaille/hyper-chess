@@ -4,7 +4,7 @@ const config = require("../config.js");
 const nodemailer = require("nodemailer");
 
 function _getFrontEndURL(){
-    return "http://localhost:3000";
+    return config.front_end_url;
 }
 
 exports.sendOkResponse = (res, object) => {
@@ -188,7 +188,7 @@ const transporter = nodemailer.createTransport({
 
 function _sendMail(to, subject, html) {
     const mailOptions = {
-        from: "Hyper Chess <contact@hyper-chess.com>",
+        from: "HyperChess <contact@hyper-chess.com>",
         to,
         subject,
         html,
@@ -224,7 +224,7 @@ exports.sendForgotPasswordEmail = (to, reset_password_code) => {
                 	</div>\
                 	<p style="margin-block-end: 0">Sincerly,</p>\
                 	<p style="margin-block-start: 10px;font-size: 15px;\
-                     font-weight: 600;color:#1a73e8;">The Hyper Chess Team</p>\
+                     font-weight: 600;color:#1a73e8;">The HyperChess Team</p>\
                 	<p style="font-size:13px;color:#aaaaaa;width:100%;\
                     text-align: center;margin-top:40px;">\
                      If you did not request that e-mail, ignore it.</p>\
@@ -237,13 +237,13 @@ exports.sendForgotPasswordEmail = (to, reset_password_code) => {
 exports.sendNewAccountEmail = (to) => {
     const link = encodeURI(_getFrontEndURL() + "/login?email=" + to);
     const newAccountEmail = {
-        subject: "Welcome to Hyper Chess!",
+        subject: "Welcome to HyperChess!",
         html: '<body style="color:#424242;font-family:\'Lato\',\'LatoRTL\',sans-serif;\
                 background-color:#f9f9f9; display:flex; align-items: center">\
                     <div style="margin:40px auto;border-radius: 8px;border: 1.1px solid rgba(0,0,0,0.12);\
                      background-color:#fff;padding:40px 40px 10px 40px;height:auto; min-width: 450px">\
                     <h2 style="color:#1a73e8;">Hello,</h2>\
-                    <p>Your Hyper Chess account has been created.</p>\
+                    <p>Your HyperChess account has been created.</p>\
                     <p>You can log in and start to play right now!</p>\
                     <div style="margin: 60px 0; width: 100%; text-align: center;">\
                     	<a style="background-color:#1a73e8; border:none; color:#fff; padding: 12px;\
@@ -254,7 +254,7 @@ exports.sendNewAccountEmail = (to) => {
                     </div>\
                     <p style="margin-block-end: 0">Sincerly,</p>\
                     <p style="margin-block-start: 10px;font-size: 15px;\
-                     font-weight: 600;color:#1a73e8;">The Hyper Chess Team</p>\
+                     font-weight: 600;color:#1a73e8;">The HyperChess Team</p>\
                     </div>\
                 </body>',
     };

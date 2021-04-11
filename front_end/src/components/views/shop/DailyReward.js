@@ -39,13 +39,13 @@ class DailyReward extends React.Component {
         }
         if(Date.parse(this.state.last_daily_coins_collected) < new Date().setHours(0, 0, 0, 0) && !this.state.collected){
             return (
-                <div class="daily-reward active" onClick={this.collectReward.bind(this)}>
+                <div class="button gold daily-reward" onClick={this.collectReward.bind(this)}>
                     <span>+50 <BiCoin class="icon"/></span>
                 </div>
             )
         }
         return (
-            <div class="daily-reward inactive">
+            <div class="button disabled flat daily-reward">
                 <span>Come back tomorrow for more!</span>
             </div>
         )

@@ -1,11 +1,11 @@
 import io from 'socket.io-client'
+import config from '../config'
 
-const URL = 'http://localhost:5001/'
 var socket = null;
 
 function initSocket(token){
     if(!socket){
-        socket = io(URL, { query: {"token": token}})
+        socket = io(config.socket_url, { query: {"token": token}})
     }
 }
 

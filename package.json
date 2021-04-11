@@ -1,0 +1,8 @@
+ {
+    "name": "hyper-chess-api",
+    "engines" : { "node" : ">=14" },
+    "main": "./back_end/server.js",
+    "scripts": {
+      "start": "cd back_end && npm ci && npm run start"
+    }
+}

@@ -1,6 +1,4 @@
 import React from 'react'
-import 'simplebar';
-import 'simplebar/dist/simplebar.css';
 import { ImContrast } from 'react-icons/im'
 import { MdTimer, MdShowChart } from 'react-icons/md'
 import { Loader } from '../../navigation'

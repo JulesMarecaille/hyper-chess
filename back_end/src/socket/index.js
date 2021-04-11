@@ -2,6 +2,7 @@ const socketio = require('socket.io');
 const lobbyManager = require('./lobbyManager')
 const { checkAuthNoDatabase } = require('../utils')
 const cors = require("cors");
+const logger = require("../logging/logger")
 
 module.exports = (server, connection) => {
     const io = socketio(server, {
@@ -15,6 +16,7 @@ module.exports = (server, connection) => {
             lobbyManager.connection(io, socket, connection, user_id)
         }).catch((err) => {
             socket.emit('status' , "Couldn't authenticate the token.");
+            logger.error("Couldn't connect socket :", err)
             socket.disconnect();
         });
     });

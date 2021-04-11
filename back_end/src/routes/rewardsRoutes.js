@@ -5,26 +5,26 @@ module.exports = (app, connection) => {
     const { Rewards } = require("../entities")(connection)
 
     // Get rewards from user
-    app.get("/rewards/user/:id", (req, res) => {
+    app.get("/rewards/user/:id", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             if(user.id === req.params.id){
                 Rewards.findOne({where: {UserId: req.params.id}}).then((rewards) => {
                     sendOkResponse(res, rewards);
                 })
                 .catch((err) => {
-                    res.status(500).send(err);
+                    next(err)
                 });
             } else {
                 res.status(401).send();
             }
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 
     // Get rewards from user
-    app.get("/rewards/collect_daily_reward", (req, res) => {
+    app.get("/rewards/collect_daily_reward", (req, res, next) => {
         checkAuth(connection, req.headers["x-access-token"]).then((user) => {
             Rewards.findOne({where: {UserId: user.id}}).then((rewards) => {
                 if(rewards.last_daily_coins_collected < new Date().setHours(0, 0, 0, 0)){
@@ -39,11 +39,11 @@ module.exports = (app, connection) => {
                 }
             })
             .catch((err) => {
-                res.status(500).send(err);
+                next(err)
             });
         })
         .catch((err) => {
-            res.status(500).send(err);
+            next(err)
         });
     });
 }

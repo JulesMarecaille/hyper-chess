@@ -1,19 +1,63 @@
 body{
-    --app-background-color: #343a40;
-    --menu-background-color: #212529;
-    --menu-color: #f8f9fa;
-    --menu-border-color: #ced4da;
-    --menu-entry-selected-color: #3a86ff;
-    --menu-entry-hover-background-color: #343a40;
-    --navigation-green: #43aa8b;
-    --navigation-red: #f94144;
-    --entry-selected: #1d3557;
-    --gold: #FAA613;
-    --silver: #F6F4F3;
-    --copper: #C8553D;
-    --color-coins: #FAA613;
-    --color-typo: #ced4da;
-    --color-value: #e76f51;
+    /*****************************************************************
+    * COLORS
+    *****************************************************************/
+    /*
+    https://coolors.co/2edcc7-f8f5f2-ff206e-ff9e1f-d2b69d-7e583a-101319-5f7195-202531
+    */
+    /* Website */
+    --color-primary-light: #292E3D;
+    --color-primary-main: #202531;
+    --color-primary-dark: #101218;
+
+    --color-secondary-light: #96EDE3;
+    --color-secondary-main: #2EDCC7;
+    --color-secondary-dark: #188C7E;
+
+    --color-text-primary: #F8F5F2;
+    --color-text-dark: var(--color-primary-dark);
+    --color-text-secondary: ;
+    --color-text-hint: #AAABBC;
+    --color-text-disabled: ;
+
+    --color-dark-border: rgba(0, 0, 0, 0.3);
+    --color-light-border: rgba(255, 255, 255, 0.3);
+
+    /* Chessboard */
+    --color-dark-square: #8C6240;
+    --color-light-square: #D8C0AB;
+    --color-dark-square-selected: ;
+    --color-light-square-selected: ;
+    --color-dark-square-premove: ;
+    --color-light-square-premove: ;
+    --color-dark-square-lastmove: ;
+    --color-light-square-lastmove: ;
+
+    /* Game logic */
+    --color-coins: #FF950A;
+    --color-value: #FF206E;
+    --color-positive: var(--color-secondary-main);
+    --color-negative: #f94144;
+    --color-neutral: #5F7195;
+    --color-gold-medal: #FAA613;
+    --color-silver-medal: #F6F4F3;
+    --color-copper-medal: #C8553D;
+
+    /* Loader */
+    --color-loader-1: var(--color-secondary-main);
+    --color-loader-2: var(--color-value);
+    --color-loader-3: var(--color-coins);
+    --color-loader-4: var(--color-neutral);
+
+    /* Basic colors */
+    --color-white: white;
+    --color-black: black;
+
+    /*****************************************************************
+    * SIZES
+    *****************************************************************/
+    --size-leftbar-expanded: 200px;
+    --size-leftbar-collapsed: 50px;
 }
 
 a {
@@ -35,7 +79,7 @@ td,th{
 
 label {
     display: block;
-    color: #909090;
+    color: #a4a4a4;
     font-weight: 400;
     font-size: 10px;
     text-transform: uppercase;
@@ -47,13 +91,12 @@ label {
 input {
     padding: 8px 0;
     font-size: 14px;
-    font-weight: 500;
-    font-family: lato,sans-serif;
+    font-weight: 400;
     border: 0;
-    border-bottom: 1px solid #cecece;
+    border-bottom: 1px solid var(--color-light-border);
     display: block;
     width: 100%;
-    color: #424242;
+    color: var(--color-text-primary);
     transition: all .25s ease;
     -webkit-transition: all .25s ease;
     font-family: inherit;
@@ -77,13 +120,139 @@ textarea:focus, input:focus{
     user-select: none;
 }
 
+.tooltip{
+    background-color: var(--color-primary-dark)
+}
+
 .coins{
     color: var(--color-coins);
 }
 
 .green{
-    color: var(--navigation-green);
+    color: var(--color-positive);
 }
+
+.searchbar-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 8px;
+}
+
+.searchbar-container .searchbar{
+    border: 1px solid var(--color-dark-border);
+    border-radius: 16px;
+    color: var(--color-text-primary);
+    padding: 4px 16px;
+    background-color: var(--color-primary-dark);
+    width: auto;
+    min-width: 100px;
+    font-weight: 200;
+}
+
+.view-container {
+  background-color: var(--color-primary-main);
+  min-height: 100vh;
+  margin-left: var(--size-leftbar-expanded);
+  font-size: calc(10px + 2vmin);
+  color: var(--color-text-primary);
+  z-index: 900;
+  position: relative;
+  overflow: auto;
+  /*transition: 0.3s ease;*/
+}
+
+.view-container.collapsed{
+    margin-left: var(--size-leftbar-collapsed);
+}
+
+.center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-link{
+    font-size: 11px;
+    color: var(--color-secondary-main);
+}
+
+/**********************************************************
+* BUTTONS
+**********************************************************/
+
+.button{
+    color: var(--color-text-primary);
+    background-color: var(--color-secondary-dark);
+    border-radius: 3px;
+    border: 0;
+    width: auto;
+    font-size: 10px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    padding: 12px 16px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 2px 2px 0 rgb(0, 0, 0, 0.25);
+    outline: none;
+}
+
+.button:hover{
+    background-color: var(--color-primary-dark);
+}
+
+.button.flat{
+    box-shadow: none;
+}
+
+.button.dark{
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-primary);
+}
+
+.button.dark:hover{
+    background-color: var(--color-secondary-dark);
+}
+
+.button.dark.red:hover{
+    background-color: var(--color-text-primary);
+}
+
+.button.dark.green:hover{
+    background-color: var(--color-text-primary);
+    color: var(--color-secondary-dark) !important;
+}
+
+.button.light{
+    background-color: var(--color-text-primary);
+    color: var(--color-text-dark);
+}
+
+.button.light:hover{
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-primary);
+}
+
+.button.gold{
+    color: var(--color-coins);
+    background-color: var(--color-primary-dark)
+}
+
+.button.gold:hover{
+    background-color: var(--color-coins);
+    color: var(--color-text-primary);
+}
+
+.button.disabled{
+    cursor: default;
+    color: var(--color-text-primary);
+    background-color: var(--color-neutral);
+}
+
 
 /**********************************************************
 * GLOBAL VIEW
@@ -98,29 +267,113 @@ textarea:focus, input:focus{
 .view-padding{
     padding-top: 26px;
 }
+
+/********************************************************
+* LOGIN PAGES
+*********************************************************/
+.login-container {
+    font-size: calc(10px + 2vmin);
+    min-height: 100vh;
+    color: var(--color-text-primary);
+}
+
+.login-container .left-panel{
+    background-color: var(--color-primary-dark);
+    width: 60%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-container .left-panel *{
+    height: 90vh;
+    opacity: 0.1;
+}
+
+.login-container .right-panel{
+    box-shadow: 0 0 15px rgb(0 0 0 / 50%);
+    -webkit-box-shadow: 0 0 15px rgb(0 0 0 / 50%);
+    position: absolute;
+    width: 40%;
+    height:100vh;
+    z-index: 3000;
+    right:0;
+    top:0;
+    background: var(--color-primary-main);
+}
+
+.login-container .right-panel .center{
+    height: 100vh;
+}
+
+.form-container {
+    padding: 50px;
+}
+
+.form-container .form-title {
+    position: relative;
+}
+
+.form-container .form-title .page-title{
+    display: block;
+}
+
+.form-container .form-title .alt-title{
+    position: relative;
+}
+
+.input-container{
+    display: block;
+    position: relative;
+    padding: 0;
+    margin: 30px 0;
+}
+
+.form-buttons{
+    text-align: right
+}
+
 /**********************************************************
 * LEFT MENU
 ***********************************************************/
 
 .leftmenu{
-    background-color: var(--menu-background-color);
-    color: var(--menu-color);
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-primary);
     height: 100vh;
-    width: 200px;
+    width: var(--size-leftbar-expanded);
     z-index: 1000;
-    /*border-right: 1.1px solid var(--menu-border-color);*/
     position: fixed;
+    /*transition: 0.3s ease;*/
+    box-shadow: inset 0 0 12px rgb(0 0 0 / 50%);
+    -webkit-box-shadow: inset 0 0 12px rgb(0 0 0 / 50%);
+}
+
+.leftmenu .tooltip{
+    display: none;
+}
+
+.leftmenu .menu-title.collapsed{
+    display: none;
 }
 
 .leftmenu .menu-title{
     height: 48px;
-    padding: 2px 0px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 2px 12px;
+    border-bottom: 1px solid var(--color-light-border);
+    color: var(--color-secondary-main);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5em;
     overflow: hidden;
+    white-space: nowrap;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .leftmenu .content{
@@ -149,24 +402,28 @@ textarea:focus, input:focus{
     align-items: center;
     cursor: pointer;
     white-space: nowrap;
+    transition: 0.3s ease;
 }
 
 .leftmenu .content .entry:hover{
-    background-color: var(--menu-entry-hover-background-color);
+    background-color: var(--color-primary-main);
 }
 
 .leftmenu .content .entry.selected{
-    background-color: var(--menu-entry-hover-background-color);
-    color: var(--menu-entry-selected-color);
+    background-color: var(--color-primary-main);
+    color: var(--color-secondary-main);
 }
 
 .leftmenu .content .entry .name{
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .leftmenu .content .entry .icon{
     font-size: 18px;
     margin: 0 12px;
+    transition: 0.3s ease;
 }
 
 .leftmenu .content .entry .main{
@@ -190,6 +447,191 @@ textarea:focus, input:focus{
     font-size: 16px;
 }
 
+.leftmenu .content .entry .icon.rotate{
+    transform: rotate(0deg);
+    transition: 0.75s ease;
+}
+
+.leftmenu.collapsed{
+    width: var(--size-leftbar-collapsed);
+}
+
+.leftmenu.collapsed .tooltip{
+    display: unset;
+}
+
+.leftmenu.collapsed .menu-title{
+    display: none;
+}
+
+.leftmenu.collapsed .menu-title.collapsed{
+    display: flex;
+}
+
+.leftmenu.collapsed .content .entry *{
+    margin: auto;
+}
+
+.leftmenu.collapsed .content .entry .name{
+    display: none;
+}
+
+.leftmenu.collapsed .content .entry .sub{
+    padding-left: 0;
+
+}
+
+.leftmenu.collapsed .content .entry .sub .icon{
+    margin: 0;
+}
+
+.leftmenu.collapsed .content .entry .icon.rotate{
+    transform: rotate(180deg);
+    color: var(--color-value);
+}
+
+/**************************************************
+* CHESSBOARD
+***************************************************/
+
+.chess-board {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.chess-board th.outer{
+    padding-right: .5em;
+    font-size: 0.5em;
+}
+.chess-board td {
+    /*border: 1px solid #f1faee;*/
+    width: 2em;
+    height: 2em;
+    position: relative;
+}
+
+
+
+.chess-board td.clickable{
+    cursor: grab;
+}
+.chess-board td.light {
+    background: var(--color-light-square);
+}
+.chess-board td.light.selected{
+    background: var(--color-light-square-selected);
+}
+.chess-board td.dark {
+    background: var(--color-dark-square);
+}
+.chess-board td.dark.selected{
+    background: var(--color-dark-square-selected);
+}
+.chess-board td.light.last-move{
+    background: var(--color-light-square-lastmove);
+}
+.chess-board td.light.premove{
+    background-color: var(--color-light-square-premove);
+}
+.chess-board td.dark.last-move{
+    background: var(--color-dark-square-lastmove);
+}
+.chess-board td.dark.premove{
+    background-color: var(--color-dark-square-premove);
+}
+
+.chess-board .marker-container{
+    height: 100%;
+    width: 100%;
+    position:absolute;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    top:0;
+    left:0;
+    pointer-events: none;
+}
+
+.chess-board .check.marker-container{
+    z-index: 50;
+}
+
+.chess-board .option.marker-container{
+    z-index: 200;
+}
+
+.chess-board .option-marker{
+    width: 0.8em;
+    height: 0.8em;
+    border-radius: 50%;
+    background: black;
+    opacity: 0.35;
+    margin: auto;
+}
+
+.chess-board .check-marker{
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    background: red;
+    opacity: 0.8;
+    margin: auto;
+    filter: blur(0.5rem);
+}
+
+.chess-board td:hover .option-marker{
+    opacity: 0.7;
+}
+
+.chess-board .piece-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    z-index: 130;
+    position: relative;
+    margin: auto;
+}
+
+.chess-board .piece-container .piece {
+    width: 1.8em;
+    height: 1.8em;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.chess-board .piece-container .piece:active {
+    cursor: grabbing;
+}
+
+/**************************************************
+* GAME
+***************************************************/
+.chess-board-container .player-info{
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 12px 0;
+    height: 36px;
+}
+
+.chess-board-container .name-elo{
+    margin-left: 16px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+}
+
+.chess-board-container .name-elo .name{
+    font-weight: 600;
+    font-size: 0.7em;
+}
+
+.chess-board-container .name-elo .elo{
+    margin-left: 0.3em;
+    font-weight: 100;
+    font-size: 0.6em;
+}
+
 /*******************************************************************
 * LOADER
 ********************************************************************/
@@ -202,11 +644,6 @@ textarea:focus, input:focus{
   justify-content: center;
   align-items: center;
   overflow: hidden;
-
-  --color-pawn: #f07167;
-  --color-knight: #00afb9;
-  --color-rook: #fed9b7;
-  --color-queen: #0081a7;
  }
 
  .l-container.small{
@@ -246,28 +683,28 @@ textarea:focus, input:focus{
     position: absolute;
     transform-origin: 50% 100%;
     opacity: 0;
-    color: var(--color-pawn);
+    color: var(--color-loader-1);
     animation: chessFalling 4s 0s linear infinite;
 }
 .chess-loader .knight {
     position: absolute;
     transform-origin: 50% 100%;
     opacity: 0;
-    color: var(--color-knight);
+    color: var(--color-loader-2);
     animation: chessFalling 4s 1s linear infinite;
 }
 .chess-loader .rook {
     position: absolute;
     transform-origin: 50% 100%;
     opacity: 0;
-    color: var(--color-rook);
+    color: var(--color-loader-3);
     animation: chessFalling 4s 2s linear infinite;
 }
 .chess-loader .queen {
     position: absolute;
     transform-origin: 50% 100%;
     opacity: 0;
-    color: var(--color-queen);
+    color: var(--color-loader-4);
     animation: chessFalling 4s 3s linear infinite;
 }
 
@@ -282,7 +719,7 @@ textarea:focus, input:focus{
 }
 
 .lobby-container{
-    border: 1px solid black;
+    border: 1px solid var(--color-dark-border);
     width: 400px;
     height: 450px !important;
     margin: 0;
@@ -290,7 +727,7 @@ textarea:focus, input:focus{
     overflow: auto;
     border-radius: 2px;
     position: relative;
-    background-color: var(--app-background-color);
+    background-color: var(--color-primary-main);
 }
 
 .lobby-container .lobby{
@@ -323,7 +760,7 @@ textarea:focus, input:focus{
 }
 
 .lobby-container .lobby tr{
-    border-bottom: 1px solid rgba(0,0,0,0.12);
+    border-bottom: 1px solid var(--color-dark-border);
 }
 
 .lobby-container .lobby .icon{
@@ -332,7 +769,8 @@ textarea:focus, input:focus{
 }
 
 .lobby-container .lobby .header{
-    background-color: var(--menu-background-color);
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-primary);
     font-size: 16px;
     overflow: hidden;
     height: 36px;
@@ -341,15 +779,17 @@ textarea:focus, input:focus{
 }
 
 .lobby-container .lobby .entry{
-    background-color: var(--app-background-color);
+    background-color: var(--color-primary-main);
     height: 32px;
     font-size: 14px;
     font-weight: 200;
     cursor: pointer;
+    transition: 0.3s ease
 }
 
 .lobby-container .lobby .entry:hover{
-    background-color: white;
+    background-color: var(--color-secondary-dark);
+    color: var(--color-text-primary);
 }
 
 .available-times{
@@ -370,18 +810,9 @@ textarea:focus, input:focus{
 
 .available-times .time-container .time{
     width: 64px;
-    border: 1px solid black;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: 0.3s ease;
+    margin: 0;
+    padding: 4px;
     font-size: 18px;
-    display: block;
-    text-align: center;
-}
-
-.available-times .time-container .time:hover{
-    color: #fff;
-    background-color: var(--menu-background-color);
 }
 
 .lobby-actions{
@@ -393,7 +824,7 @@ textarea:focus, input:focus{
 }
 
 .lobby-actions .selected-decks{
-    border: 1px solid black;
+    border: 1px solid var(--color-dark-border);
     border-radius: 5px;
     padding: 4px 12px;
 }
@@ -418,11 +849,11 @@ textarea:focus, input:focus{
 }
 
 .lobby-actions .selected-decks .entry .deck-color.white{
-    background-color: #fff;
+    background-color: var(--color-white);
 }
 
 .lobby-actions .selected-decks .entry .deck-color.black{
-    background-color: #000;
+    background-color: var(--color-black);
 }
 
 /*******************************************************
@@ -444,10 +875,10 @@ textarea:focus, input:focus{
 .overlay .box{
     width: 400px;
     min-height: 100px;
-    background-color: #fff;
+    background-color: var(--color-primary-main);
     border-radius: 15px;
     display: block;
-    color: var(--menu-background-color);
+    color: var(--color-text-primary);
     position: relative;
     overflow: hidden;
 }
@@ -461,26 +892,26 @@ textarea:focus, input:focus{
     justify-content: center;
     width: 100%;
     padding: 12px 0;
-    color: white;
+    color: var(--color-white);
     font-weight: 500;
     text-align: center;
 }
 
 .overlay .box .title.grey{
-    background-color: #333;
+    background-color: var(--color-neutral);
 }
 
 .overlay .box .title.white{
-    background-color: #fff;
-    color: #000;
+    background-color: var(--color-white);
+    color: var(--color-black);
 }
 
 .overlay .box .title.green{
-    background-color: var(--navigation-green);
+    background-color: var(--color-secondary-dark);
 }
 
 .overlay .box .title.red{
-    background-color: var(--navigation-red);
+    background-color: var(--color-negative);
 }
 
 .overlay .box .title span{
@@ -532,10 +963,10 @@ textarea:focus, input:focus{
 }
 
 .overlay-options-selection .box{
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 15px;
     display: grid;
-    color: var(--menu-background-color);
+    color: var(--color-primary-dark);
     position: relative;
     overflow: hidden;
 }
@@ -549,7 +980,6 @@ textarea:focus, input:focus{
 }
 
 .overlay-options-selection .box .content{
-
     width: 100%;
 }
 
@@ -588,7 +1018,7 @@ textarea:focus, input:focus{
     position: absolute;
     top: 0;
     left: 0;
-    background-color: var(--navigation-red);
+    background-color: var(--color-negative);
     width: 100%;
     padding-left: 12px;
     display: flex;
@@ -597,7 +1027,7 @@ textarea:focus, input:focus{
     height: 28px;
     overflow:hidden;
     transition: 0.25s;
-    color: #fff;
+    color: var(--color-text-primary);
 }
 
 .info-panel.open{
@@ -609,11 +1039,15 @@ textarea:focus, input:focus{
 }
 
 .info-panel.error{
-    background-color: var(--navigation-red);
+    background-color: var(--color-negative);
 }
 
 .info-panel.success{
-    background-color: var(--navigation-green);
+    background-color: var(--color-positive);
+}
+
+.info-panel.neutral{
+    background-color: var(--color-neutral);
 }
 
 .info-panel .message{
@@ -628,7 +1062,7 @@ textarea:focus, input:focus{
 }
 
 .info-panel .close:hover{
-    color: #000;
+    color: var(--color-text-dark);
 }
 
 /************************************************
@@ -636,10 +1070,10 @@ textarea:focus, input:focus{
 *************************************************/
 
 .collection-container{
-    background-color: var(--app-background-color);
+    background-color: var(--color-primary-main);
     height: 450px !important;
     border-radius: 5px;
-    border: 1px solid black;
+    border: 1px solid var(--color-dark-border);
     width: 350px;
     overflow: auto;
     position: relative;
@@ -659,12 +1093,12 @@ textarea:focus, input:focus{
 }
 
 .collection-container .entry{
-    background-color: var(--app-background-color);
+    background-color: var(--color-primary-main);
     max-height: 36px;
     font-size: 14px;
     font-weight: 200;
     padding: 4px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid var(--color-light-border);
     overflow: hidden;
     transition: 0.5s;
     -webkit-transition: 0.5s;
@@ -673,7 +1107,7 @@ textarea:focus, input:focus{
 }
 
 .collection-container .entry:hover{
-    color: var(--menu-background-color);
+    color: var(--color-primary-dark);
     background-color: white;
     max-height: 150px;
 }
@@ -780,18 +1214,18 @@ textarea:focus, input:focus{
 }
 
 .clock-container.white{
-    background-color: #fff;
-    color: #000;
+    background-color: var(--color-white);
+    color: var(--color-black);
 }
 
 .clock-container.black{
-    background-color: #000;
-    color: #fff;
+    background-color: var(--color-black);
+    color: var(--color-white);
 }
 
 .clock-container.stopped{
-    background-color: #888 !important;
-    color: #000 !important;
+    background-color: var(--color-neutral) !important;
+    color: var(--color-black) !important;
 }
 
 .clock-container *{
@@ -840,17 +1274,17 @@ textarea:focus, input:focus{
 }
 
 .update .difference.positive{
-    color: var(--navigation-green);
+    color: var(--color-positive);
 }
 
 .update .difference.negative{
-    color: var(--navigation-red);
+    color: var(--color-negative);
 }
 
 .update .limit{
     font-style: italic;
     font-size: 12px;
-    color: #a4a4a4;
+    color: var(--color-text-hint);
 }
 
 .icon-coin{
@@ -864,7 +1298,7 @@ textarea:focus, input:focus{
     text-align: center;
     font-style: italic;
     font-size: 12px;
-    color: #a4a4a4;
+    color: var(--color-text-hint);
     padding-top: 8px;
 }
 
@@ -884,7 +1318,7 @@ textarea:focus, input:focus{
 
 .profile-column .infos{
     width: 100%;
-    border: 1px solid #fff;
+    border: 1px solid var(--color-light-border);
     padding: 10px 16px;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -899,7 +1333,7 @@ textarea:focus, input:focus{
     font-size: 16px
 }
 .profile-column .rating{
-    color: var(--navigation-green);
+    color: var(--color-positive);
 }
 
 .profile-column .tertiary{
@@ -922,7 +1356,7 @@ textarea:focus, input:focus{
     align-items: center;
     padding: 10px 16px;
     font-size: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid var(--color-light-border);
 }
 
 .profile-column .game-results .entry .players{
@@ -943,11 +1377,11 @@ textarea:focus, input:focus{
 }
 
 .profile-column .game-results .entry .players .color.white{
-    background-color: #fff;
+    background-color: var(--color-white);
 }
 
 .profile-column .game-results .entry .players .color.black{
-    background-color: #000;
+    background-color: var(--color-black);
 }
 
 .profile-column .game-results .entry .players .name{
@@ -969,23 +1403,21 @@ textarea:focus, input:focus{
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
     font-size:12px;
     font-weight: 200;
     margin-right: 16px;
-    color: white
 }
 
 .self-result.draw{
-    background-color: #888;
+    background-color: var(--color-neutral);
 }
 
 .self-result.win{
-    background-color: var(--navigation-green);
+    background-color: var(--color-secondary-dark);
 }
 
 .self-result.lose{
-    background-color: var(--navigation-red);
+    background-color: var(--color-negative);
 }
 
 /**************************************************
@@ -993,7 +1425,7 @@ textarea:focus, input:focus{
 **************************************************/
 
 .leaderboard-container{
-    border: 1px solid black;
+    border: 1px solid var(--color-dark-border);
     width: 400px;
     height: 450px !important;
     margin: 0;
@@ -1001,7 +1433,7 @@ textarea:focus, input:focus{
     overflow: auto;
     border-radius: 2px;
     position: relative;
-    background-color: var(--app-background-color);
+    background-color: var(--color-primary-main);
 }
 
 .leaderboard-container .info-container{
@@ -1026,7 +1458,8 @@ textarea:focus, input:focus{
 }
 
 .leaderboard-container .header{
-    background-color: var(--menu-background-color);
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-primary);
     font-size: 16px;
     overflow: hidden;
     height: 36px;
@@ -1035,7 +1468,7 @@ textarea:focus, input:focus{
 }
 
 .leaderboard-container .entry{
-    background-color: var(--menu-background-color);
+    background-color: var(--color-primary-dark);
     font-size: 16px;
     overflow: hidden;
     height: 36px;
@@ -1045,20 +1478,22 @@ textarea:focus, input:focus{
 }
 
 .leaderboard-container .entry{
-    background-color: var(--app-background-color);
+    background-color: var(--color-primary-main);
     height: 32px;
     font-size: 14px;
     font-weight: 200;
     cursor: pointer;
+    transition: 0.3s ease;
 }
 
 .leaderboard-container .entry.self{
-    /*background-color: var(--entry-selected);*/
-    color: #e76f51;
+    color: var(--color-secondary-main) !important;
+    font-weight: 400;
 }
 
 .leaderboard-container .entry:hover{
-    background-color: white;
+    background-color: var(--color-secondary-dark);
+    color: var(--color-text-primary) !important;
 }
 
 .leaderboard-container .leaderboard th {
@@ -1070,25 +1505,25 @@ textarea:focus, input:focus{
 }
 
 .leaderboard-container .leaderboard tr{
-    border-bottom: 1px solid rgba(0,0,0,0.12);
+    border-bottom: 1px solid var(--color-dark-border);
 }
 
 .leaderboard-container .leaderboard td.special-rank1 {
-    color: var(--gold);
+    color: var(--color-gold-medal);
     font-size: 20px;
     width: 60px;
     text-align: center;
 }
 
 .leaderboard-container .leaderboard td.special-rank2 {
-    color: var(--silver);
+    color: var(--color-silver-medal);
     font-size: 16px;
     width: 60px;
     text-align: center;
 }
 
 .leaderboard-container .leaderboard td.special-rank3 {
-    color: var(--copper);
+    color: var(--color-copper-medal);
     font-size: 14px;
     width: 60px;
     text-align: center;
@@ -1111,7 +1546,7 @@ textarea:focus, input:focus{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .actions-container .info{
@@ -1119,23 +1554,18 @@ textarea:focus, input:focus{
 }
 
 .actions-container .actions .action{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 8px;
-    border-radius: 3px;
-    border: 1px solid black;
+    padding: 4px;
     margin: 4px 8px;
-    cursor: pointer;
-    background-color: var(--menu-background-color)
+    font-size: 16px;
+    width: 38px;
 }
 
 .actions-container .actions .action.red{
-    color: var(--navigation-red);
+    color: var(--color-negative);
 }
 
 .actions-container .actions .action.green{
-    color: var(--navigation-green);
+    color: var(--color-positive);
 }
 
 /**************************************************
@@ -1154,18 +1584,14 @@ textarea:focus, input:focus{
 }
 
 .daily-reward{
-    height: 42px;
-    border-radius: 5px;
-    border: 1px solid black;
     min-width: 100px;
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* padding: 0 12px; */
     font-size: 18px;
-    transition: 0.25s;
-    background-color: var(--menu-background-color);
-    margin: 12px;
+}
+
+.daily-reward.disabled{
+    font-size: 12px;
+    text-transform: none;
 }
 
 .daily-reward span{
@@ -1176,24 +1602,6 @@ textarea:focus, input:focus{
 .daily-reward span .icon{
     margin-left: 6px;
     padding-top: 3px;
-}
-
-.daily-reward.active{
-    color: var(--color-coins);
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.daily-reward.active:hover{
-    color: #fff !important;
-    background-color: var(--color-coins);
-    cursor: pointer;
-}
-
-.daily-reward.inactive{
-    font-style: italic;
-    color: #a4a4a4;
-    font-size: 12px;
 }
 
 /**************************************************
@@ -1222,20 +1630,19 @@ textarea:focus, input:focus{
     font-weight:1200 ;
     margin: 8px;
     cursor: pointer;
-
+    transition: 0.3s ease;
 }
 
 .browse-decks .add-deck:hover{
-    border: 4px dashed #fff;
-    color: #fff;
-    transition: 0.3s ease;
+    border: 4px dashed var(--color-secondary-main);
+    color: var(--color-secondary-main);
 }
 
 .deck-entry{
     width:460px;
     min-height: 120px;
-    border: 0.5px solid black;
-    background: var(--menu-background-color);
+    border: 0.5px solid var(--color-dark-border);
+    background: var(--color-primary-dark);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1247,8 +1654,8 @@ textarea:focus, input:focus{
 }
 
 .deck-entry.selectable:hover{
-    color: var(--menu-background-color) !important;
-    background-color: #fff;
+    color: var(--color-text-primary-hover) !important;
+    background-color: var(--color-secondary-dark);
     cursor: pointer;
 }
 
@@ -1287,7 +1694,7 @@ textarea:focus, input:focus{
 }
 
 .deck-entry .info .value.over{
-    color: var(--navigation-red) !important;
+    color: var(--color-negative) !important;
 }
 
 .deck-entry .info .max-value{
@@ -1315,13 +1722,19 @@ textarea:focus, input:focus{
 }
 
 .deck-entry.content input.name{
-    color: var(--color-typo);
+    color: var(--color-text-primary);
     transition: 0.3s ease;
+    font-weight: 500;
+}
+
+.deck-entry.content input.name:focus{
+    color: var(--color-text-primary-hover);
+    background-color: var(--color-primary-main);
 }
 
 .deck-entry .content input.name:hover{
-    color: #fff;
-    background-color: var(--app-background-color);
+    color: var(--color-text-primary-hover);
+    background-color: var(--color-primary-main);
 }
 
 .edition-container{
@@ -1339,9 +1752,9 @@ textarea:focus, input:focus{
     width: 164px;
     padding: 8px 12px;
     margin-right: 8px;
-    border: 1px solid black;
+    border: 1px solid var(--color-dark-border);
     border-radius: 5px;
-    background-color: var(--menu-background-color);
+    background-color: var(--color-primary-dark);
     align-self: stretch;
     display: flex;
     align-items: center;
@@ -1367,6 +1780,7 @@ textarea:focus, input:focus{
 .edition-container .edition .info-box .piece-info .name{
     font-size: 22px;
     font-weight: 600;
+    color: var(--color-secondary-main);
 }
 
 .edition-container .edition .info-box .piece-info .description{
@@ -1409,7 +1823,7 @@ textarea:focus, input:focus{
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-right: 1px solid black;
+    border-right: 1px solid var(--color-dark-border);;
     min-width: 230px;
 }
 
@@ -1427,7 +1841,9 @@ textarea:focus, input:focus{
 }
 
 .shop-browse-container .pieces-container .piece-entry{
-    border: 1px solid black;
+    border: 1px solid var(--color-dark-border);
+    background-color: var(--color-primary-main);
+    color: var(--color-text-primary);
     border-radius: 5px;
     padding: 8px;
     font-size: 14px;
@@ -1443,8 +1859,8 @@ textarea:focus, input:focus{
 }
 
 .shop-browse-container .pieces-container .piece-entry:hover{
-    background-color: #fff;
-    color: #000 !important;
+    background-color: var(--color-secondary-dark) !important;
+    /*color: var(--color-secondary-main) !important;*/
     cursor: pointer;
 }
 
@@ -1498,12 +1914,13 @@ textarea:focus, input:focus{
     font-style: italic;
     font-weight: 200;
     padding: 4px 8px;
+    color: var(--color-text-hint);
 }
 
 .shop-browse-container .filters-container {
     margin-top: 16px;
     padding-top: 8px;
-    border-top: 1px solid black;
+    border-top: 1px solid var(--color-dark-border);;
     width: 100%;
 }
 .shop-browse-container .filters-container > *{
@@ -1514,25 +1931,6 @@ textarea:focus, input:focus{
     font-weight: 200;
     font-size: 16px;
     padding-bottom: 8px;
-}
-
-.searchbar-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 16px 8px;
-}
-
-.searchbar-container .searchbar{
-    border: 1px solid black;
-    border-radius: 16px;
-
-    color: var(--color-typo);
-    padding: 4px 16px;
-    background-color: var(--menu-background-color);
-    width: auto;
-    min-width: 100px;
-    font-weight: 200;
 }
 
 .position-filters {
@@ -1555,12 +1953,12 @@ textarea:focus, input:focus{
     cursor: pointer;
     transition: 0.3s ease;
     padding: 0 4px;
-    color: var(--menu-entry-selected-color);
+    color: var(--color-secondary-main);
 }
 
 .position-filters .position.unselected{
     opacity: 0.3;
-    color: var(--color-typo);
+    color: var(--color-text-primary);
 }
 
 .owned-filters{
@@ -1583,14 +1981,14 @@ textarea:focus, input:focus{
 .owned-filters .filter{
     cursor: pointer;
     transition: 0.3s ease;
-    color: var(--menu-entry-selected-color);
+    color: var(--color-secondary-main);
     display: flex;
     align-items: center;
 }
 
 .owned-filters .filter.unselected{
     opacity: 0.3;
-    color: var(--color-typo);
+    color: var(--color-text-primary);
 }
 
 .owned-filters .filter .icon{
@@ -1623,7 +2021,7 @@ textarea:focus, input:focus{
     grid-template-columns: 2fr 1fr;
     grid-column-gap: 16px;
     padding: 32px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--color-dark-border);;
 }
 
 .shop-piece-container .main .piece{
@@ -1678,38 +2076,13 @@ textarea:focus, input:focus{
 }
 
 .shop-piece-container .main .purchase-button{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    padding: 4px 8px;
-    border: 1px solid black;
-    border-radius: 5px;
-    width: 116px;
-    background-color: var(--menu-background-color);
-    transition: 0.3s ease;
+    font-size: 18px;
+    text-transform: none;
+    vertical-align: middle;
 }
 
-.shop-piece-container .main .purchase-button:hover{
-    color: #000 !important;
-    background-color: #fff;
-    cursor: pointer;
-}
 
-.shop-piece-container .main .purchase-button .text{
-    font-size: 20px;
-}
-
-.shop-piece-container .main .cost{
-    color: var(--color-coins);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 16px;
-}
-
-.shop-piece-container .main .cost .icon{
+.shop-piece-container .main .purchase-button .icon{
     margin-left: 4px;
     padding-top: 1px;
 }
@@ -1718,6 +2091,7 @@ textarea:focus, input:focus{
     font-style: italic;
     font-weight: 200;
     font-size: 32px;
+    color: var(--color-text-hint);
 }
 
 .shop-piece-container .sub{

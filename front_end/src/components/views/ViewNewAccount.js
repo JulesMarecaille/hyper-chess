@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom';
 import { Loader, InfoPanel } from '../navigation';
 import { validateEmail, validateUsername, validatePassword } from './login';
@@ -124,6 +125,9 @@ class ViewNewAccount extends React.Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>HyperChess - Sign Up</title>
+            </Helmet>
             <div>
                 {form}
             </div>
