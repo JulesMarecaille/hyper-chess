@@ -148,7 +148,7 @@ module.exports = (app, connection) => {
                 const rewards = createDefaultRewards(connection, new_user.id);
                 new_user.save().then(async (new_user) => {
                     delete new_user.password;
-                    sendOkResponse(res, new_user);
+                    sendOkResponse(res, new_user.id);
                     await collection.save();
                     await deck.save();
                     await rewards.save();
