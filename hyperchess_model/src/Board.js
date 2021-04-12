@@ -196,8 +196,6 @@ function getLegalMovesFromPieceFromBoard(
 		};
 		// Check if this move put our king in danger
 		if (check_king_safety){
-
-
 			if (!isMoveStillLegalFromBoard(board, kings_positions, move, opponent_last_move, piece)){
 				continue ;
 			}
