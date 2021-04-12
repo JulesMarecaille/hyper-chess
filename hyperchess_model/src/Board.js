@@ -19,16 +19,14 @@ class Board {
 
 	isMoveLegal(move){
 		if(move.player_color == this.color_to_move){
-			for(let legal_move of this.getLegalMovesFromPlayer(this.color_to_move)){
-				if(move.player_color === legal_move.player_color &&
-				   move.to === legal_move.to &&
-			   	   move.from === legal_move.from){
-					   return true
-				}
-			}
+			return isMoveLegalFromBoard(this.board, this.kings_positions, move, this.getLastMove(), this.board[move.from]);
 		}
-		return false
+		return false;
 	}
+
+	isThereALegalMoveFromPlayer(color) {
+		   return isThereALegalMoveFromPlayerFromBoard(this.board, color, this.kings_positions, this.getLastMove(), true)
+	   }
 
 	getLegalMovesFromPiece(square){
 		return getLegalMovesFromPieceFromBoard(this.board, square, this.kings_positions, this.getLastMove(), true)
@@ -70,12 +68,10 @@ class Board {
 		}
 		// Check if this move captures a piece
 		let is_capture = (!!this.board[move.to]);
-
 		// Move the piece
 		this.board = this.board[move.from].move(move, this.board, this.getLastMove());
 		this.updateHistory(move);
 		this.updateKingPosition();
-
 		// Change turn
 		this.color_to_move = swapColor(this.color_to_move);
 		let is_check = this.is_check[this.color_to_move];
@@ -102,8 +98,10 @@ class Board {
 	}
 
 	updateHasGameEnded(){
-		let is_checkmate = this.isCheckmate(this.color_to_move);
-		let is_stalemate = this.isStalemate(this.color_to_move);
+		let is_check = this.isCheck(this.color_to_move);
+		let is_there_a_legal_move = this.isThereALegalMoveFromPlayer(this.color_to_move);
+		let is_checkmate = !is_there_a_legal_move && is_check;
+		let is_stalemate = !is_there_a_legal_move && !is_check;
 		if (is_checkmate || is_stalemate){
 			this.game_over = true
 			if (is_checkmate){
@@ -116,16 +114,8 @@ class Board {
 	}
 
 	isCheck(color){
-		let opponent_moves = this.getLegalMovesFromPlayer(swapColor(color))
-		return opponent_moves.map(x => x.to).includes(this.kings_positions[color]);
-	}
-
-	isCheckmate(color){
-		return (!(this.getLegalMovesFromPlayer(color).length > 0) && this.isCheck(color));
-	}
-
-	isStalemate(color){
-		return (!(this.getLegalMovesFromPlayer(color).length > 0) && !this.isCheck(color));
+		let opponent_last_move = this.getLastMove();
+		return isCheckFromBoard(this.board, color, this.kings_positions, opponent_last_move);
 	}
 
 	getLastMove(){
@@ -141,6 +131,52 @@ class Board {
 	}
 }
 
+function isCheckFromBoard(
+	board,
+	color,
+	kings_positions,
+	opponent_last_move){
+	let opponent_color = swapColor(color);
+	for (let square = 0; square < 128; square++) {
+		const piece = board[square]
+		// If there's a piece on this square and this piece belongs to the player
+		if (piece && piece.color === opponent_color){
+			let piece_moves = piece.getLegalSquares(board, square, opponent_last_move);
+			if (piece_moves.includes(kings_positions[color])) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+function isMoveStillLegalFromBoard(board, kings_positions, move, opponent_last_move, piece){
+	let tmp_board = cloneDeep(board)
+	let tmp_kings_positions = cloneDeep(kings_positions)
+	tmp_board = tmp_board[move.from].move(move, tmp_board, opponent_last_move);
+	// The king can escape
+	if (piece.is_king){
+		tmp_kings_positions[piece.color] = move.to;
+	}
+	// See if our opponent can capture our king after our move
+	// The opponent can capture our king regardless of his king safety
+	if (isCheckFromBoard(tmp_board, piece.color, tmp_kings_positions, move)) {
+			return false;
+	}
+	return true;
+}
+
+function isMoveLegalFromBoard(board, kings_positions, move, opponent_last_move, piece) {
+	if (!board[move.from]){
+		return false;
+	}
+	let legal_moves =  getLegalMovesFromPieceFromBoard(board, move.from, kings_positions, opponent_last_move, true);
+	if (!legal_moves.map(x => x.to).includes(move.to)){
+		return false;
+	}
+	return isMoveStillLegalFromBoard(board, kings_positions, move, opponent_last_move, piece);
+}
+
 function getLegalMovesFromPieceFromBoard(
 	board,
 	square,
@@ -152,35 +188,41 @@ function getLegalMovesFromPieceFromBoard(
 	let candidate_squares = piece.getLegalSquares(board, square, opponent_last_move);
 	let legal_moves = []
 	for (let candidate_square of candidate_squares){
-		// Check if this move put our king in danger
-		if (check_king_safety){
-			// Simulate the piece move
-			let move = {
-				'to': candidate_square,
-				'from': square,
-				'player_color': piece.color
-			};
-			let tmp_board = cloneDeep(board)
-			let tmp_kings_positions = cloneDeep(kings_positions)
-			tmp_board = tmp_board[square].move(move, tmp_board, opponent_last_move);
-			// The king can escape
-			if (piece.is_king){
-				tmp_kings_positions[piece.color] = candidate_square;
-			}
-			// See if our opponent can capture our king after our move
-			// The opponent can capture our king regardless of his king safety
-			let opponent_moves = getLegalMovesFromPlayerFromBoard(tmp_board, swapColor(piece.color), tmp_kings_positions, move, false);
-			if (opponent_moves.map(x => x.to).includes(tmp_kings_positions[piece.color])){
-				continue;
-			}
-		}
-		legal_moves.push({
+		// Simulate the piece move
+		let move = {
 			'to': candidate_square,
 			'from': square,
 			'player_color': piece.color
-		});
+		};
+		// Check if this move put our king in danger
+		if (check_king_safety){
+			if (!isMoveStillLegalFromBoard(board, kings_positions, move, opponent_last_move, piece)){
+				continue ;
+			}
+		}
+		legal_moves.push(move);
 	}
 	return legal_moves;
+}
+
+function isThereALegalMoveFromPlayerFromBoard(//stop at the first move encounter
+	board,
+	color,
+	kings_positions,
+	opponent_last_move,
+	check_king_safety=true){
+	for (let square = 0; square < 128; square++) {
+		const piece = board[square];
+		// If there's a piece on this square and this piece belongs to the player
+		if (piece && piece.color === color){
+			let moves;
+			moves = getLegalMovesFromPieceFromBoard(board, square, kings_positions, opponent_last_move, check_king_safety)
+			if (moves && moves.length > 0){
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 function getLegalMovesFromPlayerFromBoard(
@@ -191,9 +233,9 @@ function getLegalMovesFromPlayerFromBoard(
 	check_king_safety=true){
 	let all_legal_moves = [];
 	for (let square = 0; square < 128; square++) {
-		const piece = board[square]
+		const piece = board[square];
 		// If there's a piece on this square and this piece belongs to the player
-		if (piece && piece.color === color){
+		if (piece && piece.color === color) {
 			let piece_moves = getLegalMovesFromPieceFromBoard(board, square, kings_positions, opponent_last_move, check_king_safety)
 			all_legal_moves = all_legal_moves.concat(piece_moves);
 		}
