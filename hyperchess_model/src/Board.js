@@ -87,21 +87,21 @@ class Board {
 		this.history.push(move)
 	}
 
-	updateKingPosition(){//too long +-200ms
+	updateKingPosition(){
 		for(let square = 0; square < 128; square++){
 			let piece = this.board[square];
 			if(piece && piece.is_king){
 				this.kings_positions[piece.color] = square;
-				this.is_check[piece.color] = this.isCheck(piece.color);//too long
+				this.is_check[piece.color] = this.isCheck(piece.color);
 			}
 		}
 	}
 
 	updateHasGameEnded(){
 		let is_check = this.isCheck(this.color_to_move);
-		let is_there_a_legal_move = this.isThereALegalMoveFromPlayer(this.color_to_move); //this.getLegalMovesFromPlayer(this.color_to_move);//too long 35-145ms
-		let is_checkmate = this.isCheckmate(is_there_a_legal_move, is_check);
-		let is_stalemate = this.isStalemate(is_there_a_legal_move, is_check);
+		let is_there_a_legal_move = this.isThereALegalMoveFromPlayer(this.color_to_move);
+		let is_checkmate = !is_there_a_legal_move && is_check;
+		let is_stalemate = !is_there_a_legal_move && !is_check;
 		if (is_checkmate || is_stalemate){
 			this.game_over = true
 			if (is_checkmate){
@@ -116,14 +116,6 @@ class Board {
 	isCheck(color){
 		let opponent_last_move = this.getLastMove();
 		return isCheckFromBoard(this.board, color, this.kings_positions, opponent_last_move);
-	}
-
-	isCheckmate(is_there_legal_moves, is_check){
-		return (!is_there_legal_moves && is_check);
-	}
-
-	isStalemate(is_there_legal_moves, is_check){
-		return (!is_there_legal_moves && !is_check);
 	}
 
 	getLastMove(){
@@ -158,7 +150,7 @@ function isCheckFromBoard(
 	return false;
 }
 
-function isMoveLegalFromBoard(board, kings_positions, move, opponent_last_move, piece) {
+function isMoveStillLegalFromBoard(board, kings_positions, move, opponent_last_move, piece){
 	let tmp_board = cloneDeep(board)
 	let tmp_kings_positions = cloneDeep(kings_positions)
 	tmp_board = tmp_board[move.from].move(move, tmp_board, opponent_last_move);
@@ -172,6 +164,17 @@ function isMoveLegalFromBoard(board, kings_positions, move, opponent_last_move, 
 			return false;
 	}
 	return true;
+}
+
+function isMoveLegalFromBoard(board, kings_positions, move, opponent_last_move, piece) {
+	if (!board[move.from]){
+		return false;
+	}
+	let legal_moves =  getLegalMovesFromPieceFromBoard(board, move.from, kings_positions, opponent_last_move, true);
+	if (!legal_moves.map(x => x.to).includes(move.to)){
+		return false;
+	}
+	return isMoveStillLegalFromBoard(board, kings_positions, move, opponent_last_move, piece);
 }
 
 function getLegalMovesFromPieceFromBoard(
@@ -195,7 +198,7 @@ function getLegalMovesFromPieceFromBoard(
 		if (check_king_safety){
 
 
-			if (!isMoveLegalFromBoard(board, kings_positions, move, opponent_last_move, piece)){
+			if (!isMoveStillLegalFromBoard(board, kings_positions, move, opponent_last_move, piece)){
 				continue ;
 			}
 		}
@@ -216,7 +219,7 @@ function isThereALegalMoveFromPlayerFromBoard(//stop at the first move encounter
 		if (piece && piece.color === color){
 			let moves;
 			moves = getLegalMovesFromPieceFromBoard(board, square, kings_positions, opponent_last_move, check_king_safety)
-			if (moves && moves[0]){
+			if (moves && moves.length > 0){
 				return true;
 			}
 		}
