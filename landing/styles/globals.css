@@ -55,6 +55,10 @@ p {
     font-weight: 200;
 }
 
+.button.mobile{
+    display: none;
+}
+
 /**********************************************************
 * BUTTONS
 **********************************************************/
@@ -225,6 +229,7 @@ p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .section .content .button{
@@ -236,4 +241,22 @@ p {
     position: absolute;
     bottom: -4px;
     pointer-events: none;
+}
+
+@media (max-width: 640px){
+    .header{
+        height: 4em;
+        background-color: var(--color-primary-dark);
+        box-shadow: 0 1px 5px rgb(0 0 0 / 40%);
+    }
+
+    .header .buttons-container .button{
+        display: none;
+    }
+
+    .header .button.mobile{
+        display: block;
+        font-size: 12px;
+        padding: 8px 12px;
+    }
 }

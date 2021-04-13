@@ -52,10 +52,13 @@ class DailyReward extends React.Component {
     }
 
     render() {
+        let title="";
+        if(this.props.hasTitle){
+            let title = <span class="title">Daily Reward</span>;
+        }
         return (
         <React.Fragment>
             <div class="daily-reward-container">
-            <span class="title">Daily Reward</span>
             {this.drawDailyReward()}
             </div>
         </React.Fragment>)

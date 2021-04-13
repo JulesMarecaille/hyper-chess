@@ -1,6 +1,6 @@
 import React from 'react'
 import { Square } from '../../chess'
-// import '../../chess/ui/style.css'
+import ReactTooltip from 'react-tooltip';
 import { PIECE_MAPPING} from 'hyperchess_model/lib/pieces'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
@@ -69,6 +69,7 @@ class DeckEntry extends React.Component {
                                    (this.props.valid_piece_positions && this.props.valid_piece_positions.includes(square));
                 row.push(
                     <Square square={square}
+                            key={square}
                             color={square_color}
                             piece={piece}
                             isSelected={selected_square === square}
@@ -86,21 +87,26 @@ class DeckEntry extends React.Component {
     }
 
     drawChooseMainDeck() {
+        if(this.props.is_deck_selected){
+            return "";
+        }
         let pawn_white = "/assets/pieces/ClassicPawnWhite.svg";
         let pawn_black = "/assets/pieces/ClassicPawnBlack.svg";
-        let filterWhite = this.props.deck.selected_as_white ? "" : "unselected";
-        let filterBlack = this.props.deck.selected_as_black ? "" : "unselected";
+        let filter_white = this.props.deck.selected_as_white ? "" : "unselected";
+        let filter_black = this.props.deck.selected_as_black ? "" : "unselected";
+        let tooltip_white = this.props.deck.selected_as_white ? "This is the deck you will use as white" : "Use this deck as white"
+        let tooltip_black = this.props.deck.selected_as_black ? "This is the deck you will use as black" : "Use this deck as black"
         return(
         <div className="select-color">
-            <img alt="" className={filterWhite} onClick={this.handleSelectColor.bind(this, WHITE, this.props.deck)} src={`${process.env.PUBLIC_URL}${pawn_white}`}/>
-            <img alt="" className={filterBlack} onClick={this.handleSelectColor.bind(this, BLACK, this.props.deck)} src={`${process.env.PUBLIC_URL}${pawn_black}`}/>
+            <ReactTooltip className="tooltip" place="top" delayShow="600" effect="solid"/>
+            <img data-tip={tooltip_white} alt="" className={filter_white} onClick={this.handleSelectColor.bind(this, WHITE, this.props.deck)} src={`${process.env.PUBLIC_URL}${pawn_white}`}/>
+            <img data-tip={tooltip_black} alt="" className={filter_black} onClick={this.handleSelectColor.bind(this, BLACK, this.props.deck)} src={`${process.env.PUBLIC_URL}${pawn_black}`}/>
         </div>);
     }
 
-    drawDeckInfo() {
-        let select_color = ""
+    drawDeckValue() {
         if(!this.props.is_deck_selected){
-            select_color = this.drawChooseMainDeck()
+            return "";
         }
         let value = 0;
         for (let k in this.deck.pieces){
@@ -113,27 +119,28 @@ class DeckEntry extends React.Component {
         }
         let value_class = value > 40 ? "value over" : "value";
         return (
-            <div className="info">
-                {select_color}
-                <div class="value-container">
-                    <span className={value_class}>{value}</span><span class="max-value">/40</span>
-                </div>
+            <div class="value-container" data-tip="The cost of your deck is the sum of its piece's cost">
+                <ReactTooltip className="tooltip" place="top" delayShow="600" effect="solid"/>
+                <span  className={value_class}>{value}</span><span class="max-value">/40</span>
             </div>
         );
     }
 
     drawContent(){
-        let deck_name = <div className="name">{this.deck.name}</div>
-        if(this.props.is_deck_selected){
-            deck_name = <input className="name" type="text" value={this.deck.name} maxlength="30" onChange={this.handleNameTyped.bind(this)}></input>
-        }
         return(
-            <div onClick={this.handleClick.bind(this)} className="content">
-                {deck_name}
+            <div className="content">
                 <table className="chess-board">
                     {this.drawChessBoard()}
                 </table>
             </div>);
+    }
+
+    drawDeckName(){
+        let deck_name = <div className="name">{this.deck.name}</div>
+        if(this.props.is_deck_selected){
+            deck_name = <input className="name" type="text" value={this.deck.name} maxlength="30" onChange={this.handleNameTyped.bind(this)}></input>
+        }
+        return deck_name;
     }
 
     render(){
@@ -144,8 +151,16 @@ class DeckEntry extends React.Component {
         return (
         <React.Fragment>
             <div className={entry_class}>
-                {this.drawContent()}
-                {this.drawDeckInfo()}
+                <div class="top-infos">
+                    {this.drawChooseMainDeck()}
+                    {this.drawDeckValue()}
+                </div>
+                <div class="infos" onClick={this.handleClick.bind(this)}>
+                    {this.drawDeckName()}
+                    <div class="content-container">
+                        {this.drawContent()}
+                    </div>
+                </div>
             </div>
         </React.Fragment>);
     }

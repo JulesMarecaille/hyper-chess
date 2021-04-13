@@ -25,7 +25,8 @@ class ViewDecksBrowse extends React.Component {
                                onClick={this.props.onDeckSelected.bind(this, deck)}
                                onSelectColor={this.props.onSelectColor}
                                is_deck_selected={false}
-                               can_pieces_be_selected={false}/>
+                               can_pieces_be_selected={false}
+                               key={deck.id}/>
                 );
             } else {
                 all_decks.push(this.drawCreateDeck())
