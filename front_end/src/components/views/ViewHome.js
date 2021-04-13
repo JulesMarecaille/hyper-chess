@@ -1,6 +1,8 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet'
 import DailyReward from './rewards/DailyReward';
+import PlayStats from './play/PlayStats';
 import { BiCoin } from 'react-icons/bi'
 import { MdShowChart } from 'react-icons/md';
 
@@ -43,9 +45,16 @@ class ViewHome extends React.Component {
                 </div>
 
                 <div class="box">
-                    <div class="title">Welcome, {this.props.user.name}!</div>
+                    <div class="title">Play</div>
                     <div class="content">
-
+                        <PlayStats/>
+                        <div class="button-container">
+                            <Link to="/play" data-tip="Play">
+                                <div className="button flat">
+                                    Play
+                                </div>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

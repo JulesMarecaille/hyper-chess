@@ -1,6 +1,7 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import Lobby from './Lobby'
+import PlayStats from './PlayStats'
 import { InfoPanel } from '../../navigation'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 
@@ -56,7 +57,7 @@ class ViewPlayLobby extends React.Component {
     drawSelectedDeck(){
         return (
             <div class="selected-decks">
-                <div class="title">Using decks :</div>
+                <div class="title">Current decks:</div>
                 <div class="entry">
                     <div class="deck-color white"></div>
                     <div>{this.props.decks[WHITE].name}</div>
@@ -101,6 +102,7 @@ class ViewPlayLobby extends React.Component {
             <div className="play-lobby-container view-padding">
                 <div class="lobby-actions">
                     {this.drawSelectedDeck()}
+                    <PlayStats/>
                     <button class="button" onClick={this.openOverlay.bind(this)}>Create Game</button>
                 </div>
                 <Lobby user={this.props.user}

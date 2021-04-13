@@ -2442,6 +2442,18 @@ textarea:focus, input:focus{
     padding-top: 1px;
 }
 
+.home-container .box .content .button-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-container .box .content .button-container .button{
+    margin: 0;
+    width: 64px;
+}
+
 @media(max-width: 640px){
     .home-container{
         align-items: center;
@@ -2453,4 +2465,18 @@ textarea:focus, input:focus{
         width: 90%;
         min-height: unset;
     }
+}
+
+/**************************************************************
+* PLAY STATS
+***************************************************************/
+.play-stats{
+    font-size: 14px;
+    font-weight: 200;
+    padding: 8px;
+}
+
+.play-stats .value{
+    font-weight: 400;
+    color: var(--color-secondary-main);
 }

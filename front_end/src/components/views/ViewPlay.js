@@ -1,7 +1,7 @@
 import React from 'react'
 import { ViewPlayLobby, ViewPlayGame } from './play'
 import { Loader } from '../navigation'
-import { socket, initSocket } from '../../connection/socket'
+import { socket } from '../../connection/socket'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -23,7 +23,6 @@ class ViewPlay extends React.Component {
     }
 
     componentDidMount(){
-        initSocket(this.props.api.token)
         socket.on("joinError", (error_msg) => {
             this.setState({
                 game_id: null,
