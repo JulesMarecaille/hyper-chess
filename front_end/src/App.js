@@ -16,6 +16,7 @@ import {
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
 import config from './config';
+import { initSocket } from './connection/socket'
 
 class App extends React.Component {
     constructor(props){
@@ -28,7 +29,6 @@ class App extends React.Component {
             location: "",
             collapsed_leftbar: false
         };
-        console.log(config.api_url)
     }
 
     componentDidMount(){
@@ -36,6 +36,7 @@ class App extends React.Component {
         const user = cookies.get('HyperChessUser');
         const token = cookies.get('HyperChessToken');
         if (user && token){
+            initSocket(token)
             this.setState({
                 user: user,
                 token: token
@@ -45,6 +46,7 @@ class App extends React.Component {
     }
 
     handleLogin(user, token){
+        initSocket(token)
         this.setState({
             user: user,
             token: token
