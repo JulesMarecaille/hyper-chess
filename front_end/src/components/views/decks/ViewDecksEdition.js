@@ -2,6 +2,8 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import DeckEntry from './DeckEntry'
 import { Square } from '../../chess'
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 import { WHITE, BLACK, ALLOWED_POS, ALLOWED } from 'hyperchess_model/lib/constants'
 import { getAllowedPosition } from 'hyperchess_model/lib'
@@ -188,24 +190,26 @@ class ViewDecksEdition extends React.Component {
             delete_button = <div class="button light" onClick={this.openOverlay.bind(this)}>Delete</div>
         }
         return (
-            <div class="edition-container view-padding">
+            <div className="edition-container view-padding">
                 <Helmet>
                     <title>HyperChess - Deck {this.props.deck.name}</title>
                 </Helmet>
                 {this.drawOverlay()}
                 <div className="edition">
-                    {this.drawChessBoardOfCollection()}
+                    <div class="pieces">
+                        {this.drawChessBoardOfCollection()}
+                        <DeckEntry
+                            deck={this.props.deck}
+                            user={this.props.user}
+                            is_deck_selected={true}
+                            selected_piece={this.state.selected_piece}
+                            can_pieces_be_selected={!this.state.selected_piece}
+                            valid_piece_positions={this.state.valid_piece_positions}
+                            onUpdateDeck={this.handleUpdateDeck.bind(this)}
+                        />
+                    </div>
                     {this.drawPieceInfo()}
                 </div>
-                <DeckEntry
-                          deck={this.props.deck}
-                          user={this.props.user}
-                          is_deck_selected={true}
-                          selected_piece={this.state.selected_piece}
-                          can_pieces_be_selected={!this.state.selected_piece}
-                          valid_piece_positions={this.state.valid_piece_positions}
-                          onUpdateDeck={this.handleUpdateDeck.bind(this)}
-                          />
                 <div className="actions">
                     {this.drawSaveOption()}
                     {delete_button}

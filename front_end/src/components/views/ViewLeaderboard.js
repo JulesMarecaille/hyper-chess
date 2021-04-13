@@ -55,7 +55,7 @@ class ViewLeaderboard extends React.Component {
         }
         //
         return (
-            <tr className={`entry ${is_self}`} onClick={this.redirectToProfile.bind(this, user.id)}>
+            <tr className={`entry ${is_self}`} onClick={this.redirectToProfile.bind(this, user.id)} key={user.id}>
                 <td className="rank">{rank}</td>
                 <td className="name">{user.name}</td>
                 <td className="elo">{user.elo}</td>
@@ -74,7 +74,6 @@ class ViewLeaderboard extends React.Component {
             <Helmet>
                 <title>HyperChess - Leaderboard</title>
             </Helmet>
-            <p>Leaderboard</p>
             {this.state.redirect}
             <PerfectScrollbar className="leaderboard-container">
                 <table className="leaderboard">

@@ -24,14 +24,17 @@ body{
     --color-light-border: rgba(255, 255, 255, 0.3);
 
     /* Chessboard */
-    --color-dark-square: #8C6240;
-    --color-light-square: #D8C0AB;
-    --color-dark-square-selected: ;
-    --color-light-square-selected: ;
-    --color-dark-square-premove: ;
-    --color-light-square-premove: ;
-    --color-dark-square-lastmove: ;
-    --color-light-square-lastmove: ;
+    /*
+    https://coolors.co/f8f5f2-1e7b99-e88d67-155166-55bbdd-ff707a-ff3341
+    */
+    --color-dark-square: #1E7B99;
+    --color-light-square: #F8F5F2;
+    --color-dark-square-selected: #E88D67;
+    --color-light-square-selected: #E88D67;
+    --color-dark-square-premove: #FF3341;
+    --color-light-square-premove: #FF707A;
+    --color-dark-square-lastmove: #155166;
+    --color-light-square-lastmove: #55BBDD;
 
     /* Game logic */
     --color-coins: #FF950A;
@@ -54,10 +57,22 @@ body{
     --color-black: black;
 
     /*****************************************************************
+    * FONTS
+    *****************************************************************/
+
+
+    /*****************************************************************
     * SIZES
     *****************************************************************/
     --size-leftbar-expanded: 200px;
     --size-leftbar-collapsed: 50px;
+    --size-view-padding-top: 26px;
+}
+
+@media (max-width: 640px){
+    body{
+        --size-view-padding-top: 4px;
+    }
 }
 
 a {
@@ -166,6 +181,14 @@ textarea:focus, input:focus{
     margin-left: var(--size-leftbar-collapsed);
 }
 
+@media (max-width: 640px){
+    .view-container{
+        margin-left: 0;
+        height: calc(100vh - var(--size-leftbar-collapsed));
+        min-height: inherit;
+    }
+}
+
 .center{
     display: flex;
     align-items: center;
@@ -261,11 +284,10 @@ textarea:focus, input:focus{
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
 }
 
 .view-padding{
-    padding-top: 26px;
+    padding-top: var(--size-view-padding-top);
 }
 
 /********************************************************
@@ -337,6 +359,16 @@ textarea:focus, input:focus{
     text-align: right
 }
 
+@media (max-width: 640px){
+    .login-container .right-panel{
+        width: 100%;
+    }
+
+    .login-container .left-panel{
+        display: none;
+    }
+}
+
 /**********************************************************
 * LEFT MENU
 ***********************************************************/
@@ -346,7 +378,6 @@ textarea:focus, input:focus{
     color: var(--color-text-primary);
     height: 100vh;
     width: var(--size-leftbar-expanded);
-    z-index: 1000;
     position: fixed;
     /*transition: 0.3s ease;*/
     box-shadow: inset 0 0 12px rgb(0 0 0 / 50%);
@@ -488,6 +519,59 @@ textarea:focus, input:focus{
 .leftmenu.collapsed .content .entry .icon.rotate{
     transform: rotate(180deg);
     color: var(--color-value);
+}
+
+@media (max-width: 640px){
+    .leftmenu{
+        height: var(--size-leftbar-collapsed);
+        width: 100%;
+        bottom: 0;
+        z-index: 3000;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .leftmenu .content{
+        display: inline-flex;
+        position: relative;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0;
+        height: 100%;
+    }
+
+    .leftmenu .content.bottom{
+        position: relative;
+        width: auto;
+        bottom: auto;
+        padding: 0;
+    }
+
+    .leftmenu .menu-title{
+        display: none;
+    }
+
+    .leftmenu .content .entry{
+        width: auto;
+        height: 100%;
+        padding: 0;
+    }
+
+    .leftmenu .content a{
+        height: 100%;
+    }
+
+    .leftmenu .content .entry .name{
+        display: none;
+    }
+
+    .leftmenu .content .entry .sub{
+        display: none;
+    }
+
+    .leftmenu .content .collapse-entry{
+        display: none;
+    }
 }
 
 /**************************************************
@@ -794,18 +878,18 @@ textarea:focus, input:focus{
 
 .available-times{
     font-weight: 300;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
-    padding: 20px;
-    padding-bottom: 12px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
 }
 
 .available-times .time-container{
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 10px;
 }
 
 .available-times .time-container .time{
@@ -821,10 +905,11 @@ textarea:focus, input:focus{
     flex-direction: column;
     font-size: 16px;
     font-weight: 400;
+    min-width: 140px;
 }
 
 .lobby-actions .selected-decks{
-    border: 1px solid var(--color-dark-border);
+    /*border: 1px solid var(--color-dark-border);*/
     border-radius: 5px;
     padding: 4px 12px;
 }
@@ -854,6 +939,32 @@ textarea:focus, input:focus{
 
 .lobby-actions .selected-decks .entry .deck-color.black{
     background-color: var(--color-black);
+}
+
+@media (max-width: 640px){
+    .play-lobby-container{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .lobby-actions{
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 8px;
+        flex: 0 1 auto;
+    }
+
+    .lobby-container{
+        width: 100%;
+        box-sizing: border-box;
+        border:none;
+        flex: 1 1 auto;
+        height: unset;
+    }
 }
 
 /*******************************************************
@@ -934,6 +1045,12 @@ textarea:focus, input:focus{
     justify-content: center;
     width: 100%;
     padding-top: 8px;
+}
+
+@media (max-width: 640px){
+    .overlay .box{
+        width: 90%;
+    }
 }
 
 /*******************************************************
@@ -1043,7 +1160,7 @@ textarea:focus, input:focus{
 }
 
 .info-panel.success{
-    background-color: var(--color-positive);
+    background-color: var(--color-secondary-dark);
 }
 
 .info-panel.neutral{
@@ -1307,9 +1424,10 @@ textarea:focus, input:focus{
 ****************************************************/
 .profile-container{
     width:100%;
-    align-items: center;
     display: flex;
     justify-content: center;
+    height: 100vh !important;
+    box-sizing: border-box;
 }
 
 .profile-column{
@@ -1322,6 +1440,7 @@ textarea:focus, input:focus{
     padding: 10px 16px;
     border-radius: 5px;
     margin-bottom: 10px;
+    box-sizing: border-box;
 }
 
 .profile-column .infos .main{
@@ -1345,10 +1464,12 @@ textarea:focus, input:focus{
     padding: 10px 20px;
     max-height: 450px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .profile-column .title{
     font-size: 18px;
+    padding-left: 16px;
 }
 
 .profile-column .game-results .entry{
@@ -1398,7 +1519,7 @@ textarea:focus, input:focus{
 
 .self-result{
     height: 20px;
-    width: 36px;
+    min-width: 36px;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -1420,6 +1541,25 @@ textarea:focus, input:focus{
     background-color: var(--color-negative);
 }
 
+@media (max-width: 640px){
+    .profile-column{
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .profile-column .infos{
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+    }
+
+    .profile-column .game-results{
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
 /**************************************************
 * LEADERBOARD
 **************************************************/
@@ -1427,7 +1567,7 @@ textarea:focus, input:focus{
 .leaderboard-container{
     border: 1px solid var(--color-dark-border);
     width: 400px;
-    height: 450px !important;
+    min-height: 450px;
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -1529,6 +1669,31 @@ textarea:focus, input:focus{
     text-align: center;
 }
 
+@media (max-width: 640px){
+    .leaderboard-container{
+        width: 100%;
+        min-height: 100%;
+        border: none;
+    }
+}
+
+
+/********************************************************
+* PLAY GAME
+*********************************************************/
+.play-game-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 640px){
+    .play-game-container{
+        justify-content: center;
+    }
+}
 /********************************************************
 * GAME ACTIONS
 *********************************************************/
@@ -1605,10 +1770,11 @@ textarea:focus, input:focus{
 }
 
 /**************************************************
-* DECK
+* DECK BROWSE
 ***************************************************/
 .browse-decks{
-    height:100%;
+    height:100vh !important;
+    box-sizing: border-box;
     width: 100%;
     display: flex;
     align-items: center;
@@ -1618,7 +1784,7 @@ textarea:focus, input:focus{
 }
 
 .browse-decks .add-deck{
-    width:460px;
+    width:362px;
     min-height: 120px;
     display: flex;
     align-items: center;
@@ -1639,8 +1805,7 @@ textarea:focus, input:focus{
 }
 
 .deck-entry{
-    width:460px;
-    min-height: 120px;
+    width:362px;
     border: 0.5px solid var(--color-dark-border);
     background: var(--color-primary-dark);
     display: flex;
@@ -1659,106 +1824,137 @@ textarea:focus, input:focus{
     cursor: pointer;
 }
 
-.deck-entry .info{
-    align-items: center;
-    display: flex;
+.deck-entry .infos{
     height: 100%;
-    width: 72px;
+    width: 100%;
 }
 
-.deck-entry .info .select-color{
+.deck-entry .content-container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.deck-entry .select-color{
+    display: flex;
+    align-items: center;
+    height: 2.2rem;
+    padding-top: 4px;
+}
+
+.deck-entry .top-infos{
     position: absolute;
     top: 0px;
-    right: 0px;
-    display: flex;
-    align-items: center;
+    right: 12px;
 }
 
-.deck-entry .info .select-color img{
-    width: 45px;
-    height: 45px;
+.deck-entry .select-color img{
+    width: auto;
+    height: 100%;
 }
 
-.deck-entry .info .select-color .unselected{
+.deck-entry .select-color .unselected{
     opacity: 0.2;
 }
 
-.deck-entry .info .value-container{
-
+.deck-entry .value-container{
+    display: flex;
+    align-items: center;
 }
 
-.deck-entry .info .value{
+.deck-entry .value{
     font-size: 32px;
     font-weight: 600;
     color: var(--color-value);
 }
 
-.deck-entry .info .value.over{
+.deck-entry .value.over{
     color: var(--color-negative) !important;
 }
 
-.deck-entry .info .max-value{
+.deck-entry .max-value{
     font-size: 16px;
     font-weight: 400;
-}
-
-.deck-entry .content{
-    height: 100%;
-    display: inline;
-    justify-content: flex-start;
-    align-items: center;
 }
 
 .deck-entry.selectable:hover .content .chess-board{
     box-shadow: 0px 0px  0px 2px rgba(0,0,0,1);
 }
 
-.deck-entry .content .name{
+.deck-entry .name{
     font-size: 20px;
     padding-bottom: 4px;
     padding-top: 0;
     border-bottom: none;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
-.deck-entry.content input.name{
+.deck-entry input.name{
     color: var(--color-text-primary);
     transition: 0.3s ease;
     font-weight: 500;
+    width: 80%;
 }
 
-.deck-entry.content input.name:focus{
+.deck-entry input.name:focus{
     color: var(--color-text-primary-hover);
     background-color: var(--color-primary-main);
 }
 
-.deck-entry .content input.name:hover{
+.deck-entry input.name:hover{
     color: var(--color-text-primary-hover);
     background-color: var(--color-primary-main);
 }
+
+@media (max-width: 640px){
+    .deck-entry{
+        width: 90%;
+    }
+
+    .browse-decks .add-deck{
+        width: 90%;
+    }
+}
+
+/**************************************************
+* DECK EDITION
+***************************************************/
 
 .edition-container{
-
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 }
 
 .edition-container .edition{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2px;
+    padding: 4px 8px;
+    grid-template-columns: 2fr 1fr;
+    grid-column-gap: 16px;
+}
+
+.edition-container .edition .pieces{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .edition-container .edition .info-box{
-    width: 164px;
+    max-width: 10em;
     padding: 8px 12px;
-    margin-right: 8px;
+    min-height: 100%;
     border: 1px solid var(--color-dark-border);
     border-radius: 5px;
     background-color: var(--color-primary-dark);
-    align-self: stretch;
     display: flex;
     align-items: center;
     justify-content: center;
+    align-self: stretch;
 }
 
 .edition-container .edition .info-box .info{
@@ -1786,6 +1982,7 @@ textarea:focus, input:focus{
 .edition-container .edition .info-box .piece-info .description{
     font-size: 14px;
     font-weight: 200;
+    padding: 4px 0;
 }
 
 .edition-container .edition .info-box .piece-info .value{
@@ -1808,6 +2005,26 @@ textarea:focus, input:focus{
     font-weight: 200;
 }
 
+@media (max-width: 640px){
+    .edition-container .edition{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .edition-container .edition .pieces{
+        width: 100%;
+    }
+
+    .edition-container .edition .info-box{
+        min-height: 120px;
+        max-width: 90%;
+        width: 90%;
+        align-self: center;
+    }
+}
+
 /************************************************************************
 * SHOP BROWSE
 *************************************************************************/
@@ -1828,16 +2045,13 @@ textarea:focus, input:focus{
 }
 
 .shop-browse-container .pieces-container{
-    /* display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 16px;
-    grid-row-gap: 16px; */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-content: flex-start;
-    height: calc(100% - 26px) !important;
+    height: 100vh;
+    box-sizing: border-box;
 }
 
 .shop-browse-container .pieces-container .piece-entry{
@@ -2004,6 +2218,26 @@ textarea:focus, input:focus{
     display: none;
 }
 
+@media (max-width: 640px){
+    .shop-browse-container{
+        display: flex;
+        flex-direction: column;
+        width: 100%
+    }
+
+    .shop-browse-container .left-panel{
+        border-bottom: 1px solid var(--color-dark-border);;
+    }
+
+    .shop-browse-container .filters-container {
+        display: none;
+    }
+
+    .shop-browse-container .pieces-container{
+        justify-content: center;
+    }
+}
+
 /************************************************************************
 * SHOP PIECE
 *************************************************************************/
@@ -2017,10 +2251,10 @@ textarea:focus, input:focus{
 }
 
 .shop-piece-container .main{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-column-gap: 16px;
-    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 16px;
     border-bottom: 1px solid var(--color-dark-border);;
 }
 
@@ -2030,6 +2264,10 @@ textarea:focus, input:focus{
     position: relative;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.shop-piece-container .image{
+    flex-grow: 1;
 }
 
 .shop-piece-container .main .piece.black{
@@ -2044,16 +2282,11 @@ textarea:focus, input:focus{
     display: block;
 }
 
-.shop-piece-container .infos{
-    display: flex;
-    align-items: center;
+.shop-piece-container .name-positions{
+    flex-grow: 1;
 }
 
-.shop-piece-container .infos .name-positions{
-    margin-left: 32px;
-}
-
-.shop-piece-container .infos .position{
+.shop-piece-container .position{
     padding: 0 8px;
     font-size: 24px
 }
@@ -2073,6 +2306,7 @@ textarea:focus, input:focus{
 .shop-piece-container .main .purchase{
     display: flex;
     align-items: center;
+    flex-grow: 2;
 }
 
 .shop-piece-container .main .purchase-button{
@@ -2106,4 +2340,117 @@ textarea:focus, input:focus{
 .shop-piece-container .bottom{
     justify-self: flex-end;
     padding: 16px;
+}
+
+@media (max-width: 640px){
+    .shop-piece-container .main{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 8px;
+        border-bottom: 1px solid var(--color-dark-border);
+    }
+
+    .shop-piece-container .name-positions{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .shop-piece-container .main .piece{
+        height: 96px;
+        width: 96px;
+    }
+
+    .shop-piece-container .main .name{
+        font-size: 32px;
+        text-align: center
+    }
+
+    .shop-piece-container .main .owned{
+        font-size: 24px;
+    }
+}
+
+/************************************************************************
+* HOME
+*************************************************************************/
+
+.home-container{
+    height: 100vh;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.home-container .background{
+  content: "";
+  opacity: 0.025;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+}
+
+.home-container .box{
+    /* border: 1px solid black; */
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.5);
+    background-color: var(--color-primary-main);
+    border-radius: 5px;
+    padding: 8px;
+    margin: 8px;
+    min-width: 20%;
+    min-height: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.home-container .box .title{
+    flex: 0 1 auto;
+}
+
+.home-container .box .content{
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.home-container .content.centered{
+    align-items: center;
+}
+
+.home-container .box .content .sub{
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 200;
+}
+
+.home-container .box .content .sub .icon{
+    margin: 0 4px;
+    padding-top: 1px;
+}
+
+@media(max-width: 640px){
+    .home-container{
+        align-items: center;
+        flex-direction: column;
+        justify-content: start;
+    }
+
+    .home-container .box{
+        width: 90%;
+        min-height: unset;
+    }
 }

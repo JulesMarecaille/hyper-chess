@@ -4,7 +4,6 @@ import ViewHome from './ViewHome'
 import ViewShop from './ViewShop'
 import ViewLogin from './ViewLogin'
 import ViewNewAccount from './ViewNewAccount'
-import ViewCollection from './ViewCollection'
 import ViewProfile from './ViewProfile'
 import ViewLeaderboard from './ViewLeaderboard'
 import ViewResetPassword from './ViewResetPassword'
@@ -16,7 +15,6 @@ export {
     ViewShop,
     ViewLogin,
     ViewNewAccount,
-    ViewCollection,
     ViewProfile,
     ViewLeaderboard,
     ViewResetPassword

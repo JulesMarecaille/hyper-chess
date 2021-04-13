@@ -11,7 +11,6 @@ class Lobby extends React.Component {
         super(props);
         this.state = {
             gameoffers: [],
-            is_loading: false
         }
         this.reload_games_interval = null;
     }
@@ -21,7 +20,6 @@ class Lobby extends React.Component {
         socket.on("receiveGameOffers", (data) => {
             this.setState({
                 gameoffers: data,
-                is_loading: false
             });
         });
         this.getGameOffers();
@@ -34,9 +32,6 @@ class Lobby extends React.Component {
     }
 
     getGameOffers(){
-        this.setState({
-            is_loading: true
-        })
         socket.emit("requestGameOffers", this.props.user.id)
     }
 
@@ -48,7 +43,7 @@ class Lobby extends React.Component {
         let lobby = [];
         for(let gameoffer of this.state.gameoffers){
             let row = (
-                <tr class="entry" onClick={this.handleAcceptGameOffer.bind(this, gameoffer.id)}>
+                <tr class="entry" onClick={this.handleAcceptGameOffer.bind(this, gameoffer.id)} key={gameoffer.id}>
                     <td class="icon"><ImContrast/></td>
                     <td class="player-name">{gameoffer.user.name}</td>
                     <td class="player-elo">{gameoffer.user.elo}</td>
@@ -62,9 +57,7 @@ class Lobby extends React.Component {
 
     render() {
         let info = "";
-        if(this.state.is_loading) {
-            info = <Loader />
-        } else if (this.state.gameoffers.length === 0){
+        if (this.state.gameoffers.length === 0){
             info = (
                 <div>
                     <div class="info">There's currently no game offers.</div>

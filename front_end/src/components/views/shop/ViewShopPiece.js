@@ -67,11 +67,19 @@ class ViewShopPiece extends React.Component {
         if(!this.state.is_loading){
             let buy = '';
             if(!this.props.isOwned){
-                buy = (
-                    <div class="button gold purchase-button" onClick={this.handleBuy.bind(this)}>
-                        Purchase ({this.props.piece.cost}<BiCoin className="icon"/>)
-                    </div>
-                );
+                if(this.props.user.coins < this.props.piece.cost){
+                    buy = (
+                        <div class="button disabled flat purchase-button">
+                            Purchase ({this.props.piece.cost}<BiCoin className="icon"/>)
+                        </div>
+                    );
+                } else {
+                    buy = (
+                        <div class="button gold purchase-button" onClick={this.handleBuy.bind(this)}>
+                            Purchase ({this.props.piece.cost}<BiCoin className="icon"/>)
+                        </div>
+                    );
+                }
             } else {
                 buy = <div class="owned">Owned</div>
             }
@@ -79,19 +87,17 @@ class ViewShopPiece extends React.Component {
             content = (
                 <div class="shop-piece-container">
                     <div class="main">
-                        <div class="infos">
-                            <div class="image">
-                                <div class="piece white">
-                                    <PieceImage piece={this.props.piece}/>
-                                </div>
-                                <div class="piece black">
-                                    <PieceImage piece={new PIECE_MAPPING[this.props.piece.name](BLACK)}/>
-                                </div>
+                        <div class="image">
+                            <div class="piece white">
+                                <PieceImage piece={this.props.piece}/>
                             </div>
-                            <div class="name-positions">
-                                <div class="name">{this.props.piece.label}<span class="value">({this.props.piece.value})</span></div>
-                                <div class="positions">{this.drawPositions()}</div>
+                            <div class="piece black">
+                                <PieceImage piece={new PIECE_MAPPING[this.props.piece.name](BLACK)}/>
                             </div>
+                        </div>
+                        <div class="name-positions">
+                            <div class="name">{this.props.piece.label}<span class="value">({this.props.piece.value})</span></div>
+                            <div class="positions">{this.drawPositions()}</div>
                         </div>
                         <div class="purchase">
                             {buy}

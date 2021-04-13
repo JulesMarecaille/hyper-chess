@@ -10,7 +10,6 @@ import {
     ViewLogin,
     ViewNewAccount,
     ViewResetPassword,
-    ViewCollection,
     ViewProfile,
     ViewLeaderboard
 } from './components/views';
@@ -142,7 +141,11 @@ class App extends React.Component {
                               />
                     <div className={`view-container ${collapsed_class} page-centered`}>
                         <Switch>
-                            <Route exact path='/home' component={ViewHome}></Route>
+                            <Route exact path='/home' render={() => (<ViewHome api={this.state.api}
+                                                                               user={this.state.user}
+                                                                               onUpdateUser={this.handleUpdateUser.bind(this)}
+                                                                     />
+                                                              )}></Route>
                             <Route exact path='/play' render={() => (<ViewPlay api={this.state.api}
                                                                                user={this.state.user}
                                                                                token={this.state.token}
@@ -158,10 +161,6 @@ class App extends React.Component {
                                                                                     search={props.location.search}
                                                                                     onUpdateUser={this.handleUpdateUser.bind(this)}
                                                                      />
-                                                                    )}></Route>
-                            <Route exact path='/collection' render={() => (<ViewCollection api={this.state.api}
-                                                                                           user={this.state.user}
-                                                                            />
                                                                     )}></Route>
                             <Route exact path='/leaderboard' render={() => (<ViewLeaderboard api={this.state.api}
                                                                                              user={this.state.user}

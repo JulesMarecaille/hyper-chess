@@ -54,12 +54,6 @@ class LeftMenu extends React.Component {
                             <span className="name">Shop</span>
                         </div>
                     </Link>
-                    <Link to="/collection" data-tip="My collection">
-                        <div className={`entry ${this.isSelected("/collection")}`}>
-                            <GiLockedChest className="icon"/>
-                            <span className="name">My collection</span>
-                        </div>
-                    </Link>
                     <Link to="/leaderboard" data-tip="Leaderboard">
                         <div className={`entry ${this.isSelected("/leaderboard")}`}>
                             <ImTrophy className="icon"/>
@@ -90,7 +84,7 @@ class LeftMenu extends React.Component {
                         <MdPowerSettingsNew className="icon"/>
                         <span className="name">Log out</span>
                     </div>
-                    <div className="entry" onClick={this.props.onToggleCollapse} data-tip="Expand menu">
+                    <div className="entry collapse-entry" onClick={this.props.onToggleCollapse} data-tip="Expand menu">
                         <HiChevronDoubleLeft className="icon rotate"/>
                         <span className="name">Collapse menu</span>
                     </div>
