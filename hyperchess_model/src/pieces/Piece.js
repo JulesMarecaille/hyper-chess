@@ -37,6 +37,8 @@ class Piece{
 		this.allowed = allowed;
     	this.color = color;
 		this.moved = false;
+		this.mark = null;
+		this.mark_pos = -1;
 		this.description = description;
 		this.set_name = "No set";
 		this.display_number = null;
@@ -82,7 +84,7 @@ class Piece{
 		if ((this.behavior[index] && this.isOnBoard(target_pos))){
 			if ((this.isAlly(board, target_pos) && this.canAttackAlly(index) && this.isEdible(board, target_pos) && !this.isKing(board, target_pos))
 				|| (this.isEnemy(board, target_pos) && this.canAttack(index) && this.isEdible(board, target_pos))
-				|| (this.isEmpty(board, target_pos) && this.canMove(index)))
+				|| (this.isEmpty(board, target_pos) && this.canMove(index) && !(this.is_king && this.isDeadly(board, target_pos))))
 			{
 				if (this.canSeeThrough(index) || this.isInSight(board, pos, target_pos)){
 					return (target_pos);
@@ -126,6 +128,13 @@ class Piece{
 		return board[target_pos].can_be_eaten;
 	}
 
+	isDeadly(board, target_pos){
+		if (board[target_pos]){
+			return board[target_pos].is_mark;
+		}
+		return false;
+	}
+
 	isRockable(board, target_pos, pos){
 		return (false);
 	}
@@ -148,15 +157,18 @@ class Piece{
 	}
 
 	isEmpty(board, target_pos){
-		return board[target_pos] ? false : true;
+		if (board[target_pos] && !board[target_pos].is_mark){
+			return false;
+		}
+		return true;
 	}
 
 	isAlly(board, target_pos){
-		return (board[target_pos] && board[target_pos].color === this.color);
+		return (board[target_pos] && board[target_pos].color === this.color && !board[target_pos].is_mark);
 	}
 
 	isEnemy(board, target_pos){
-		return (board[target_pos] && board[target_pos].color !== this.color);
+		return (board[target_pos] && board[target_pos].color !== this.color && !board[target_pos].is_mark);
 	}
 
 
@@ -176,7 +188,7 @@ class Piece{
 		let min = Math.min(pos, target_pos) + 16;
 		let max = Math.max(pos, target_pos);
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
 			min += 16;
@@ -188,7 +200,7 @@ class Piece{
 		let min = Math.min(pos, target_pos) + 1;
 		let max = Math.max(pos, target_pos);
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
 			min += 1;
@@ -207,7 +219,7 @@ class Piece{
 		}
 		min += increment;
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
 			min += increment;
@@ -217,6 +229,9 @@ class Piece{
 
 	move(move, board, last_move){
 		this.moved = true;
+		if (board[move.to] && board[move.to].is_mark){
+			board = board[move.to].onStepOn(move, board);
+		}
 		board[move.to] = board[move.from];
 		board[move.from] = null;
 		if (move.action){
