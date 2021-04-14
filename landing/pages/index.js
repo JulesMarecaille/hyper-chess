@@ -31,6 +31,7 @@ export default function Home() {
                 <div className="buttons-container">
                     <a className="button light" href={process.env.URL_FRONT_END + '/login'}>Log In</a>
                     <a className="button" href={process.env.URL_FRONT_END + '/signup'}>Sign Up for free</a>
+                    <a className="button mobile" href={process.env.URL_FRONT_END + '/login'}>Play</a>
                 </div>
             </div>
             <PerfectScrollbar className="container"

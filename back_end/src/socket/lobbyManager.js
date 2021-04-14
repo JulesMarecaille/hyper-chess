@@ -27,6 +27,7 @@ function connection(sio, socket, sequelize_connection, user_id) {
         game_socket.on("acceptRematch", onAcceptRematch);
         game_socket.on("declineRematch", onDeclineRematch);
         game_socket.on("tryToReconnect", onTryToReconnect);
+        game_socket.on("requestStats", onRequestStats)
     } catch (e) {
         logger
     }
@@ -204,6 +205,18 @@ function onTryToReconnect(data){
         }
     } catch (e){
         logger.error("onTryToReconnect failed :" + e)
+    }
+}
+
+function onRequestStats(){
+    try{
+        let result = {
+            nb_online_players: Object.keys(sockets_in_session).length,
+            nb_games: Object.keys(games_state).length
+        }
+        this.emit("receiveStats", result)
+    } catch (e){
+        logger.error("onRequestStats failed :" + e)
     }
 }
 

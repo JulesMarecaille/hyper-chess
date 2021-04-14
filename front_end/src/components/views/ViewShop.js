@@ -55,6 +55,7 @@ class ViewShop extends React.Component {
             content = (
                 <ViewShopPiece api={this.props.api}
                                piece={this.state.selected_piece}
+                               user={this.props.user}
                                isOwned={this.state.collection[this.state.selected_piece.name]}
                                onPieceBought={this.handlePieceBought.bind(this)}
                                onReturn={this.handlePieceSelected.bind(this)}/>

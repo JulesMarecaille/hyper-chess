@@ -325,6 +325,7 @@ class Game extends React.Component {
                             isCheck={is_check}
                             isDraggable={is_draggable}
                             isPremove={is_premove}
+                            key={square}
                     />);
             }
             files.push(<th className="outer unselectable">{files_label[i]}</th>)

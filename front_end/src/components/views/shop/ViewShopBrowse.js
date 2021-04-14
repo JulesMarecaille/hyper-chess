@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import DailyReward from './DailyReward'
+import DailyReward from '../rewards/DailyReward'
 import PieceImage from '../../chess/PieceImage'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -81,7 +81,7 @@ class ViewShopBrowse extends React.Component {
                 cost = <div class="owned">Owned</div>
             }
             all_pieces.push(
-                <div class="piece-entry" onClick={this.props.onSelectedPiece.bind(this, piece_white)}>
+                <div class="piece-entry" onClick={this.props.onSelectedPiece.bind(this, piece_white)} key={piece_white.name}>
                     <div class="piece white"><PieceImage piece={piece_white}/></div>
                     <div class="piece black"><PieceImage piece={piece_black}/></div>
                     <div class="name">{piece_white.label}<span class="value">({piece_white.value})</span></div>
@@ -151,7 +151,8 @@ class ViewShopBrowse extends React.Component {
                 <div class="left-panel view-padding">
                     <DailyReward api={this.props.api}
                                  user={this.props.user}
-                                 onUpdateUser={this.props.onUpdateUser}/>
+                                 onUpdateUser={this.props.onUpdateUser}
+                                 hasTitle={true}/>
                     {this.drawFilters()}
                 </div>
                 <PerfectScrollbar className="pieces-container view-padding">

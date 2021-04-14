@@ -470,8 +470,8 @@ class ViewPlayGame extends React.Component {
             <Helmet>
                 <title>HyperChess - Play</title>
             </Helmet>
-            <div>
-                {overlay}
+            {overlay}
+            <div class="play-game-container">
                 {game}
             </div>
         </React.Fragment>);

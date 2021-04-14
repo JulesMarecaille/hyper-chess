@@ -56,7 +56,7 @@ class ViewProfile extends React.Component {
                 }
             }
             game_results.push(
-                <div className="entry">
+                <div className="entry" key={game_result.id}>
                     {self_result}
                     <div class="players">
                         <div className="player">

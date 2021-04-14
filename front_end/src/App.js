@@ -10,13 +10,13 @@ import {
     ViewLogin,
     ViewNewAccount,
     ViewResetPassword,
-    ViewCollection,
     ViewProfile,
     ViewLeaderboard
 } from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
 import config from './config';
+import { initSocket } from './connection/socket'
 
 class App extends React.Component {
     constructor(props){
@@ -29,7 +29,6 @@ class App extends React.Component {
             location: "",
             collapsed_leftbar: false
         };
-        console.log(config.api_url)
     }
 
     componentDidMount(){
@@ -37,6 +36,7 @@ class App extends React.Component {
         const user = cookies.get('HyperChessUser');
         const token = cookies.get('HyperChessToken');
         if (user && token){
+            initSocket(token)
             this.setState({
                 user: user,
                 token: token
@@ -46,6 +46,7 @@ class App extends React.Component {
     }
 
     handleLogin(user, token){
+        initSocket(token)
         this.setState({
             user: user,
             token: token
@@ -142,7 +143,11 @@ class App extends React.Component {
                               />
                     <div className={`view-container ${collapsed_class} page-centered`}>
                         <Switch>
-                            <Route exact path='/home' component={ViewHome}></Route>
+                            <Route exact path='/home' render={() => (<ViewHome api={this.state.api}
+                                                                               user={this.state.user}
+                                                                               onUpdateUser={this.handleUpdateUser.bind(this)}
+                                                                     />
+                                                              )}></Route>
                             <Route exact path='/play' render={() => (<ViewPlay api={this.state.api}
                                                                                user={this.state.user}
                                                                                token={this.state.token}
@@ -158,10 +163,6 @@ class App extends React.Component {
                                                                                     search={props.location.search}
                                                                                     onUpdateUser={this.handleUpdateUser.bind(this)}
                                                                      />
-                                                                    )}></Route>
-                            <Route exact path='/collection' render={() => (<ViewCollection api={this.state.api}
-                                                                                           user={this.state.user}
-                                                                            />
                                                                     )}></Route>
                             <Route exact path='/leaderboard' render={() => (<ViewLeaderboard api={this.state.api}
                                                                                              user={this.state.user}
