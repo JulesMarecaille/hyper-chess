@@ -1,6 +1,5 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import DailyReward from '../rewards/DailyReward'
 import PieceImage from '../../chess/PieceImage'
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -142,6 +141,10 @@ class ViewShopBrowse extends React.Component {
     }
 
     render() {
+        let all_pieces = '';
+        if(this.props.collection){
+            all_pieces = this.drawAllPieces();
+        }
         return (
         <React.Fragment>
             <Helmet>
@@ -149,14 +152,10 @@ class ViewShopBrowse extends React.Component {
             </Helmet>
             <div className="shop-browse-container">
                 <div class="left-panel view-padding">
-                    <DailyReward api={this.props.api}
-                                 user={this.props.user}
-                                 onUpdateUser={this.props.onUpdateUser}
-                                 hasTitle={true}/>
                     {this.drawFilters()}
                 </div>
                 <PerfectScrollbar className="pieces-container view-padding">
-                    {this.drawAllPieces()}
+                    {all_pieces}
                 </PerfectScrollbar>
             </div>
         </React.Fragment>)

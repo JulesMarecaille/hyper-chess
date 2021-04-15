@@ -122,6 +122,13 @@ class Board {
 		return this.history.slice(-1)[0];
 	}
 
+	getEvents(){
+		let events = {};
+		events[WHITE] = {"PlayGame" : 1}
+		events[BLACK] = {"PlayGame" : 1}
+		return events;
+	}
+
 	static buildFromHistory(deck_white, deck_black, history){
 		let new_board = new Board(deck_white, deck_black);
 		for(let move of history){

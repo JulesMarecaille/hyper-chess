@@ -526,7 +526,6 @@ textarea:focus, input:focus{
         height: var(--size-leftbar-collapsed);
         width: 100%;
         bottom: 0;
-        z-index: 3000;
         display: flex;
         justify-content: space-between;
     }
@@ -984,7 +983,7 @@ textarea:focus, input:focus{
 }
 
 .overlay .box{
-    width: 400px;
+    width: 450px;
     min-height: 100px;
     background-color: var(--color-primary-main);
     border-radius: 15px;
@@ -1370,7 +1369,9 @@ textarea:focus, input:focus{
 ***************************************************/
 .update {
     width: 100%;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding-top: 8px;
 }
 
@@ -1398,16 +1399,39 @@ textarea:focus, input:focus{
     color: var(--color-negative);
 }
 
-.update .limit{
+.update .entry{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin: 4px 0;
+}
+
+.update .entry .name{
+    font-weight: 200;
+    font-size: 15px;
+}
+
+.update .entry .value{
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--color-coins);
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    background-color: var(--color-primary-dark);
+    padding: 2px 6px;
+}
+
+.update .entry .limit{
     font-style: italic;
     font-size: 12px;
     color: var(--color-text-hint);
 }
 
-.icon-coin{
-    color: var(--color-coins);
-    padding-top: 2px;
+.update .entry .value .icon{
     margin-left: 4px;
+    margin-top: 2px;
 }
 
 .overlay .rematch-infos{
@@ -1757,6 +1781,7 @@ textarea:focus, input:focus{
 .daily-reward.disabled{
     font-size: 12px;
     text-transform: none;
+    font-weight: 200;
 }
 
 .daily-reward span{
@@ -2132,9 +2157,6 @@ textarea:focus, input:focus{
 }
 
 .shop-browse-container .filters-container {
-    margin-top: 16px;
-    padding-top: 8px;
-    border-top: 1px solid var(--color-dark-border);;
     width: 100%;
 }
 .shop-browse-container .filters-container > *{
@@ -2226,10 +2248,6 @@ textarea:focus, input:focus{
     }
 
     .shop-browse-container .left-panel{
-        border-bottom: 1px solid var(--color-dark-border);;
-    }
-
-    .shop-browse-container .filters-container {
         display: none;
     }
 
@@ -2378,7 +2396,7 @@ textarea:focus, input:focus{
 *************************************************************************/
 
 .home-container{
-    height: 100vh;
+    height: 100vh !important;
     box-sizing: border-box;
     width: 100%;
     position: relative;
@@ -2479,4 +2497,219 @@ textarea:focus, input:focus{
 .play-stats .value{
     font-weight: 400;
     color: var(--color-secondary-main);
+}
+
+/****************************************************************
+*  PROGRESS BAR
+*****************************************************************/
+
+.progress-bar-container{
+    width: 100%;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0px;
+}
+
+.progress-bar-container .label{
+    z-index: 2;
+    font-size: 10px;
+}
+
+.progress-bar-container .filler{
+    background-color: var(--color-secondary-dark);
+    border-radius: 5px;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+}
+
+/****************************************************************
+*  MISSIONS
+*****************************************************************/
+
+.missions-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.missions-container .mission{
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.missions-container .title{
+    font-size: 14px;
+    font-weight: 200;
+    width: 100%;
+    display: flex;
+    align-items: end;
+}
+
+.missions-container .title .reward{
+    font-size: 12px;
+    margin-right: 6px;
+    background-color: var(--color-primary-dark);
+    color: var(--color-coins);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    padding: 2px 6px;
+    font-weight: 400;
+}
+
+.missions-container .title .reward .icon{
+    margin-left: 4px;
+    padding-top: 1px;
+}
+
+.missions-container .new-mission{
+    font-size: 16px;
+    border: 2px dashed;
+    display: flex;
+    align-items: center;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    justify-content: center;
+    margin: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    padding: 14px;
+}
+
+.missions-container .new-mission:hover{
+    border-color: var(--color-secondary-main);
+    color: var(--color-secondary-main);
+}
+
+.missions-container  .no-mission{
+    font-size: 12px;
+    text-transform: none;
+    font-weight: 200;
+    width: fit-content;
+}
+
+/****************************************************************
+*  REWARDS
+*****************************************************************/
+
+.rewards-container{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-column-gap: 16px;
+    height: 100%;
+}
+
+.rewards-container .left-panel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid var(--color-dark-border);;
+    min-width: 230px;
+}
+
+.rewards-container .left-panel .section-title{
+    margin: 8px 12px;
+    align-self: flex-start;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.rewards-container .achievements-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.rewards-container .achievements-container .achievement{
+    width: 128px;
+    height: 60px;
+    padding: 20px 8px 8px 16px;
+    margin: 8px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow:hidden;
+    border: 1px solid var(--color-dark-border);
+}
+
+.rewards-container .achievements-container .achievement .title{
+    text-align: center;
+    font-size: 14px;
+    font-weight: 200;
+}
+
+.rewards-container .achievements-container .achievement .next-reward{
+    font-size: 12px;
+    margin-right: 6px;
+    background-color: var(--color-primary-dark);
+    color: var(--color-coins);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0px 0px 12px 0;
+    padding: 2px 6px;
+    position: absolute;
+    top: 0;
+    left: 0px;
+}
+
+.rewards-container .achievements-container .achievement .next-reward .icon{
+    margin-left: 4px;
+    padding-top: 1px;
+}
+
+.rewards-container .achievements-container .achievement .level{
+    position: absolute;
+    top:0;
+    right:0;
+    border-radius: 0 0 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 6px;
+    background-color: var(--color-secondary-dark);
+}
+
+.rewards-container .achievements-container .achievement .level .icon{
+    font-size: 12px;
+}
+
+.rewards-container .achievements-container .achievement .level .icon.unselected{
+    opacity: 0.3;
+}
+
+@media (max-width: 640px){
+    .rewards-container{
+        display: flex;
+        flex-direction: column;
+        width: 100%
+    }
+
+    .rewards-container .left-panel{
+        display: none;
+    }
+
+    .rewards-container .achievements-container{
+        display: flex;
+        justify-content: center;
+    }
 }

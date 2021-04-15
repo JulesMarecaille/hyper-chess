@@ -6,20 +6,8 @@ class DailyReward extends React.Component {
     constructor(props){
         super(props)
         this.state={
-            loading: true,
-            last_daily_coins_collected: null,
             collected: false
         }
-    }
-
-    componentWillMount(){
-        this.props.api.getUserRewards(this.props.user.id).then((rewards) => {
-            this.setState({
-                last_daily_coins_collected: rewards.last_daily_coins_collected,
-                loading: false
-            })
-        }).catch((err) => {
-        });
     }
 
     collectReward(){
@@ -32,12 +20,13 @@ class DailyReward extends React.Component {
     }
 
     drawDailyReward(){
-        if(this.state.loading){
+        if(!this.props.rewards){
             return (
                 <Loader size="small"/>
             );
         }
-        if(Date.parse(this.state.last_daily_coins_collected) < new Date().setHours(0, 0, 0, 0) && !this.state.collected){
+        if((!this.props.rewards.last_daily_coins_collected || Date.parse(this.props.rewards.last_daily_coins_collected) < new Date().setHours(0, 0, 0, 0))
+            && !this.state.collected){
             return (
                 <div class="button gold daily-reward" onClick={this.collectReward.bind(this)}>
                     <span>+50 <BiCoin class="icon"/></span>
