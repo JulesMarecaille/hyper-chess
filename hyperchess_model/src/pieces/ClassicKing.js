@@ -5,15 +5,16 @@ function isSquareChecked(board, square, color, last_move){
 	let index = 0;
 	let list = [];
 
-	while (index < 128)
-	{
-		if (board[index] && board[index].color !== color && board[index])
-		{
+	while (index < 128){
+		if (board[index] && board[index].color !== color && board[index]){
 			list = board[index].getLegalSquares(board, index, last_move, 0);
 			if (list.includes(square))
 				return (true);
 		}
 		index++;
+	}
+	if (board[square] && board[square].is_mark){
+		return true;
 	}
 	return false;
 }
