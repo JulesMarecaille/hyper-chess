@@ -38,7 +38,7 @@ class Piece{
     	this.color = color;
 		this.moved = false;
 		this.mark = null;
-		this.mark_pos = -1;
+		this.link_pos = -1;
 		this.description = description;
 		this.set_name = "No set";
 		this.display_number = null;
@@ -227,10 +227,22 @@ class Piece{
 		return true;
 	}
 
+	onStepOn(move, board){
+		return board;
+	}
+
+	die(square, board){
+		board[square] = null;
+		return board;
+	}
+
 	move(move, board, last_move){
 		this.moved = true;
-		if (board[move.to] && board[move.to].is_mark){
+		if (board[move.to]){
 			board = board[move.to].onStepOn(move, board);
+			if (board[move.to]){//si la pièce est toujours la
+				board = board[move.to].die(move.to, board);
+			}
 		}
 		board[move.to] = board[move.from];
 		board[move.from] = null;
