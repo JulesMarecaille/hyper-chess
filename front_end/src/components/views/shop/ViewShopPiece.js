@@ -6,6 +6,7 @@ import { Loader } from '../../navigation';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
+import Square from '../../chess/Square.js'
 
 class ViewShopPiece extends React.Component {
     constructor(props){
@@ -62,6 +63,46 @@ class ViewShopPiece extends React.Component {
         return positions;
     }
 
+    isTarget(behavior, i, j){
+        let len = 16;
+        let square = ((i + 4) * len) + j + 4;
+        return behavior[square];
+    }
+
+    drawBehavior(piece){
+        let chessboard = [];
+        let files = [];
+        for (let i = 0; i < 7; i += 1) {
+            let row = [];
+            for (let j = 0; j < 7; j += 1) {
+                let square = ((i * 7) + j)
+                let square_color = "dark"
+                if ((i + j) % 2 === 0){
+                    square_color = "light"
+                }
+                let piece_now = square === 24 ? piece : null;
+                let is_an_option = this.isTarget(piece.behavior, i, j);//put ti true to make orange, if behavior trad true
+                row.push(
+                    <Square square={square}
+                            color={square_color}
+                            piece={piece_now}
+                            onClick={null}
+                            isSelected={false}
+                            isAnOption={is_an_option}
+                            isClickable={false}
+                            isCheck={false}
+                            isDraggable={false}
+                            isPremove={false}
+                            key={square}
+                    />);
+            }
+            chessboard.push(<tr>{row}</tr>);
+        }
+        chessboard.push(<tr>{files}</tr>);
+        chessboard = [<tbody>{chessboard}</tbody>]
+        return (<div className="chessboard-container"><table className="chess-board">{chessboard}</table></div>);
+    }
+
     render() {
         let content = <Loader/>
         if(!this.state.is_loading){
@@ -104,8 +145,13 @@ class ViewShopPiece extends React.Component {
                         </div>
                     </div>
                     <div class="sub">
-                        <div class="description">
-                            {this.props.piece.description}
+                        <div class="detail-container">
+                            <div class="description">
+                                {this.props.piece.description}
+                            </div>
+                            <div class="show-behavior">
+                                {this.drawBehavior(this.props.piece)}
+                            </div>
                         </div>
                     </div>
                     <div class="bottom">
