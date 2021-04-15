@@ -11,7 +11,8 @@ import {
     ViewNewAccount,
     ViewResetPassword,
     ViewProfile,
-    ViewLeaderboard
+    ViewLeaderboard,
+    ViewRewards
 } from './components/views';
 import HyperChessAPI from './connection/HyperChessAPI.js';
 import Cookies from 'universal-cookie';
@@ -164,6 +165,11 @@ class App extends React.Component {
                                                                                     onUpdateUser={this.handleUpdateUser.bind(this)}
                                                                      />
                                                                     )}></Route>
+                            <Route exact path='/missions' render={() => (<ViewRewards api={this.state.api}
+                                                                                      user={this.state.user}
+                                                                                      onUpdateUser={this.handleUpdateUser.bind(this)}
+                                                                     />
+                                                              )}></Route>
                             <Route exact path='/leaderboard' render={() => (<ViewLeaderboard api={this.state.api}
                                                                                              user={this.state.user}
                                                                             />

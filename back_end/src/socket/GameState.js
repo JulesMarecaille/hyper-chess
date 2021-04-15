@@ -81,7 +81,18 @@ class GameState {
             reason = "The game was canceled."
         }
         logger.info("Game over between "+ this.players[WHITE].name + " and " + this.players[BLACK].name + " (" + reason + ")")
-        this.game_over_callback(this.game_id, this.winner, time_remaining, reason, this.players, elo_differences, this.time, this.increment, this.nb_half_moves);
+        this.game_over_callback(
+            this.game_id,
+            this.winner,
+            time_remaining,
+            reason,
+            this.players,
+            elo_differences,
+            this.time,
+            this.increment,
+            this.nb_half_moves,
+            this.board_object.getEvents()
+        );
     }
 
     resign(socket_id){

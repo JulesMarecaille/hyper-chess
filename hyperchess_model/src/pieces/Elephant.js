@@ -23,13 +23,24 @@ class Elephant extends Piece{
 		super(color, behavior, 'Elephant', 'Elephant', 5, description, ALLOWED.ROOK, 1000);
 	}
 
-    move(move, board, last_move){
+    move(move, board, last_move, game_events){
+		this.moved = true;
+		let nb_captures = !this.isEmpty(board, move.to) ? 1 : 0
+		if (board[move.to]){
+			board = board[move.to].deleteElementFromMove(move, board);
+			if (board[move.to]){//si la pièce est toujours la
+				board = board[move.to].deleteElementFromSquare(move.to, board);
+			}
+		}
         squaresPassed(move).forEach((square, i) => {
             if (board[square] && board[square].can_be_eaten){
                 board[square] = null;
+				nb_captures += 1;
             }
         });
-        return super.move(move, board, last_move);
+		board[move.to] = board[move.from];
+		board[move.from] = null;
+        return this.getMoveResult(board, nb_captures, game_events);
     }
 }
 

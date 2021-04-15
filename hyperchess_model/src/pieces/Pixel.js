@@ -45,9 +45,10 @@ export class PixelPawn extends ClassicPawn{
 
     deleteElementFromSquare(square, board){return deleteElementFromSquarePixel(square, board, this.linked_square, this);}
 
-    move(move, board, last_move){
-        board = super.move(move, board, last_move);
-        return putMark(move, board, this.linked_square, this.mark, this);
+    move(move, board, last_move, game_events){
+        let move_result = super.move(move, board, last_move, game_events);
+        board = putMark(move, move_result.board, this.linked_square, this.mark, this);
+        return this.getMoveResult(board, move_result.nb_captures, move_result.game_events);
     }
 }
 
@@ -67,9 +68,10 @@ export class PixelRook extends ClassicRook{
 
     deleteElementFromSquare(square, board){return deleteElementFromSquarePixel(square, board, this.linked_square, this);}
 
-    move(move, board, last_move){
-        board = super.move(move, board, last_move);
-        return putMark(move, board, this.linked_square, this.mark, this);
+    move(move, board, last_move, game_events){
+        let move_result = super.move(move, board, last_move, game_events);
+        board = putMark(move, move_result.board, this.linked_square, this.mark, this);
+        return this.getMoveResult(board, move_result.nb_captures, move_result.game_events);
     }
 }
 
@@ -88,9 +90,10 @@ export class PixelKnight extends ClassicKnight{
 
     deleteElementFromSquare(square, board){return deleteElementFromSquarePixel(square, board, this.linked_square, this);}
 
-    move(move, board, last_move){
-        board = super.move(move, board, last_move);
-        return putMark(move, board, this.linked_square, this.mark, this);
+    move(move, board, last_move, game_events){
+        let move_result = super.move(move, board, last_move, game_events);
+        board = putMark(move, move_result.board, this.linked_square, this.mark, this);
+        return this.getMoveResult(board, move_result.nb_captures, move_result.game_events);
     }
 }
 
@@ -109,9 +112,10 @@ export class PixelBishop extends ClassicBishop{
 
     deleteElementFromSquare(square, board){return deleteElementFromSquarePixel(square, board, this.linked_square, this);}
 
-    move(move, board, last_move){
-        board = super.move(move, board, last_move);
-        return putMark(move, board, this.linked_square, this.mark, this);
+    move(move, board, last_move, game_events){
+        let move_result = super.move(move, board, last_move, game_events);
+        board = putMark(move, move_result.board, this.linked_square, this.mark, this);
+        return this.getMoveResult(board, move_result.nb_captures, move_result.game_events);
     }
 }
 
@@ -130,9 +134,10 @@ export class PixelQueen extends ClassicQueen{
 
     deleteElementFromSquare(square, board){return deleteElementFromSquarePixel(square, board, this.linked_square, this);}
 
-    move(move, board, last_move){
-        board = super.move(move, board, last_move);
-        return putMark(move, board, this.linked_square, this.mark, this);
+    move(move, board, last_move, game_events){
+        let move_result = super.move(move, board, last_move, game_events);
+        board = putMark(move, move_result.board, this.linked_square, this.mark, this);
+        return this.getMoveResult(board, move_result.nb_captures, move_result.game_events);
     }
 }
 
@@ -151,9 +156,10 @@ export class PixelKing extends ClassicKing{
 
     deleteElementFromSquare(square, board){return deleteElementFromSquarePixel(square, board, this.linked_square, this);}
 
-    move(move, board, last_move){
-        board = super.move(move, board, last_move);
-        return putMark(move, board, this.linked_square, this.mark, this);
+    move(move, board, last_move, game_events){
+        let move_result = super.move(move, board, last_move, game_events);
+        board = putMark(move, move_result.board, this.linked_square, this.mark, this);
+        return this.getMoveResult(board, move_result.nb_captures, move_result.game_events);
     }
 }
 
