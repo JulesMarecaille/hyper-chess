@@ -20,7 +20,7 @@ class Princess extends Piece{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "Similar to the Empress but with a limited range on the straight lines.";
 		super(color, behavior, 'Princess', 'Princess', 7, description, ALLOWED.ROOK, 250);
-		this.rockable = true;
+		this.can_castel = true;
 	}
 }
 
