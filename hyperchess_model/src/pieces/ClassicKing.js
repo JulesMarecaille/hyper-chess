@@ -1,7 +1,7 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants'
 
-function isSquareChecked(board, square, color, last_move){
+function canNotBeCrossedForCastle(board, square, color, last_move){
 	let index = 0;
 	let list = [];
 
@@ -49,7 +49,7 @@ class ClassicKing extends Piece{
 			if (target_pos < pos){
 				mate = board[target_pos - 2];
 				for (let k = 1; k <  4; k++){
-					if (isSquareChecked(board, pos - k, this.color, last_move)
+					if (canNotBeCrossedForCastle(board, pos - k, this.color, last_move)
 						|| !this.isEmpty(board, pos - k))
 					{
 						return false;
@@ -58,7 +58,7 @@ class ClassicKing extends Piece{
 			} else {
 				mate = board[target_pos + 1];
 				for (let k = 1; k <  3; k++){
-					if (isSquareChecked(board, pos + k, this.color, last_move)
+					if (canNotBeCrossedForCastle(board, pos + k, this.color, last_move)
 						|| !this.isEmpty(board, pos + k))
 					{
 						return false;
@@ -69,7 +69,7 @@ class ClassicKing extends Piece{
 				return false;
 			if (mate.moved || !mate.rockable)
 				return false;
-			if (isSquareChecked(board, pos))
+			if (canNotBeCrossedForCastle(board, pos))
 				return false;
 			return (true);
 		}

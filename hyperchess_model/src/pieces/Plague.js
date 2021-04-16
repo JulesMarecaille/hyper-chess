@@ -29,7 +29,7 @@ class Plague extends ClassicPawn{
         this.description = description;
         this.allowed = allowed;
 		this.value = size;
-        this.cost = 400;
+        this.cost = 750;
 		this.display_number = size;
 		this.image = null;
 		this.is_type_plague = true;
