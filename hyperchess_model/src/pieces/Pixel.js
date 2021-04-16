@@ -34,7 +34,7 @@ export class PixelPawn extends ClassicPawn{
         super(color);
         this.name = "PixelPawn";
         this.image = "/assets/pieces/" + this.name + COLORS_NAME[color] + ".svg";
-        this.cost = 400;
+        this.cost = 750;
         this.label = "Pixel Pawn";
         this.description = "A classic Pawn that leave a deadly mark on its previous position";
         this.mark =  new DeadlyMark();
@@ -56,7 +56,7 @@ export class PixelRook extends ClassicRook{
         super(color);
         this.name = "PixelRook";
         this.image = "/assets/pieces/" + this.name + COLORS_NAME[color] + ".svg";
-        this.cost = 400;
+        this.cost = 750;
         this.label = "Pixel Rook";
         this.description = "A classic Rook that leave a deadly mark on its previous position";
         this.mark =  new DeadlyMark();
@@ -77,7 +77,7 @@ export class PixelKnight extends ClassicKnight{
         super(color);
         this.name = "PixelKnight";
         this.image = "/assets/pieces/" + this.name + COLORS_NAME[color] + ".svg";
-        this.cost = 400;
+        this.cost = 750;
         this.label = "Pixel Knight";
         this.description = "A classic Knight that leave a deadly mark on its previous position";
         this.mark =  new DeadlyMark();
@@ -98,7 +98,7 @@ export class PixelBishop extends ClassicBishop{
         super(color);
         this.name = "PixelBishop";
         this.image = "/assets/pieces/" + this.name + COLORS_NAME[color] + ".svg";
-        this.cost = 400;
+        this.cost = 750;
         this.label = "Pixel Knight";
         this.description = "A classic Bishop that leave a deadly mark on its previous position";
         this.mark =  new DeadlyMark();
@@ -119,7 +119,7 @@ export class PixelQueen extends ClassicQueen{
         super(color);
         this.name = "PixelQueen";
         this.image = "/assets/pieces/" + this.name + COLORS_NAME[color] + ".svg";
-        this.cost = 400;
+        this.cost = 750;
         this.label = "Pixel Queen";
         this.description = "A classic Queen that leave a deadly mark on its previous position";
         this.mark =  new DeadlyMark();
@@ -140,7 +140,7 @@ export class PixelKing extends ClassicKing{
         super(color);
         this.name = "PixelKing";
         this.image = "/assets/pieces/" + this.name + COLORS_NAME[color] + ".svg";
-        this.cost = 400;
+        this.cost = 750;
         this.label = "Pixel King";
         this.description = "A classic King that leave a deadly mark on its previous position";
         this.mark =  new DeadlyMark();
