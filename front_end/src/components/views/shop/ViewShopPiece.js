@@ -65,22 +65,22 @@ class ViewShopPiece extends React.Component {
 
     isTarget(behavior, i, j){
         let len = 16;
-        let square = ((i + 4) * len) + j + 4;
-        return behavior[square];
+        let square = ((i + 3) * len) + j + 3;
+        return (behavior[square] & 1);
     }
 
     drawBehavior(piece){
         let chessboard = [];
         let files = [];
-        for (let i = 0; i < 7; i += 1) {
+        for (let i = 0; i < 9; i += 1) {
             let row = [];
-            for (let j = 0; j < 7; j += 1) {
+            for (let j = 0; j < 9; j += 1) {
                 let square = ((i * 7) + j)
                 let square_color = "dark"
                 if ((i + j) % 2 === 0){
                     square_color = "light"
                 }
-                let piece_now = square === 24 ? piece : null;
+                let piece_now = square === 32 ? piece : null;
                 let is_an_option = this.isTarget(piece.behavior, i, j);//put ti true to make orange, if behavior trad true
                 row.push(
                     <Square square={square}
