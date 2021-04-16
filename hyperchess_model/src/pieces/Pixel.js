@@ -5,7 +5,7 @@ import ClassicKnight from './ClassicKnight.js'
 import ClassicBishop from './ClassicBishop.js'
 import ClassicQueen from './ClassicQueen.js'
 import ClassicKing from './ClassicKing.js'
-import DeadlyMark from './Mark.js'
+import DeadlyMark from '../marks/DeadlyMark.js'
 
 
 function putMark(move, board, linked_square, mark, piece){
