@@ -314,7 +314,7 @@ class Game extends React.Component {
                 let piece = this.state.boardObject.board[square];
                 let is_an_option = (this.state.highlighted_squares.includes(square) || this.state.opponent_highlighted_squares.includes(square));
                 let is_selected = (this.state.selected_square === square
-                    || this.isSelectedByLink(this.state.selected_square, this.state.selected_square_opponent, square)
+                    || this.isSelectedByLink(square)
                     || this.state.selected_square_opponent === square);
                 let is_last_move = (last_move_squares.includes(square))
                 // The square can be clicked if it's a move option or if there's a piece on it
@@ -404,9 +404,9 @@ class Game extends React.Component {
         return options;
     }
 
-    isSelectedByLink(selected_square, selected_square_opponent, square){
-        if ((this.state.boardObject.board[selected_square] && this.state.boardObject.board[selected_square].link_pos === square)
-            || (this.state.boardObject.board[selected_square_opponent] && this.state.boardObject.board[selected_square_opponent].link_pos === square))
+    isSelectedByLink(square){
+        if ((this.state.boardObject.board[this.state.selected_square] && this.state.boardObject.board[this.state.selected_square].linked_square === square)
+            || (this.state.boardObject.board[this.state.selected_square_opponent] && this.state.boardObject.board[this.state.selected_square_opponent].linked_square === square))
         {
             return true;
         }

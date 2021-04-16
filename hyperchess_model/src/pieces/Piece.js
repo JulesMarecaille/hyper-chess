@@ -1,5 +1,5 @@
 import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK} from '../constants'
-import {PIECE_MAPPING} from './index.js'
+import {PIECE_MAPPING, COLORS_NAME} from '../constants'
 
 function reverseBehavior(table){
 	let top = 0;
@@ -33,19 +33,21 @@ class Piece{
 		this.is_pawn = false;
 		this.can_be_eaten = true;
 		this.name = name;
+		this.color = color;
+		this.image = "/assets/pieces/" + name + COLORS_NAME[color] + ".svg";
 		this.label = label;
 		this.allowed = allowed;
-    	this.color = color;
 		this.moved = false;
 		this.mark = null;
-		this.link_pos = -1;
+		this.is_mark = false;
+		this.is_deadly = false;
+		this.linked_square = -1;
 		this.description = description;
 		this.set_name = "No set";
 		this.display_number = null;
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
-		this.image = "Error";
   	}
 
 	makeAction(move, selection){//will return a new, altered move to do according to the selection
@@ -130,7 +132,7 @@ class Piece{
 
 	isDeadly(board, target_pos){
 		if (board[target_pos]){
-			return board[target_pos].is_mark;
+			return board[target_pos].is_deadly;
 		}
 		return false;
 	}
@@ -227,11 +229,11 @@ class Piece{
 		return true;
 	}
 
-	onStepOn(move, board){
+	deleteElementFromMove(move, board){
 		return board;
 	}
 
-	die(square, board){
+	deleteElementFromSquare(square, board){
 		board[square] = null;
 		return board;
 	}
@@ -239,9 +241,9 @@ class Piece{
 	move(move, board, last_move){
 		this.moved = true;
 		if (board[move.to]){
-			board = board[move.to].onStepOn(move, board);
+			board = board[move.to].deleteElementFromMove(move, board);
 			if (board[move.to]){//si la pièce est toujours la
-				board = board[move.to].die(move.to, board);
+				board = board[move.to].deleteElementFromSquare(move.to, board);
 			}
 		}
 		board[move.to] = board[move.from];

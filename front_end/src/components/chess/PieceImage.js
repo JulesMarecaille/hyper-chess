@@ -16,7 +16,12 @@ class PieceImage extends React.Component {
     }
 
     render() {
-        let img = process.env.PUBLIC_URL + '/assets/pieces/' + this.props.piece.name + COLORS_NAME[this.props.piece.color] + '.svg';
+        let img;
+        if (!this.props.piece.image){
+            img = process.env.PUBLIC_URL + '/assets/pieces/' + this.props.piece.name + COLORS_NAME[this.props.piece.color] + '.svg';
+        } else {
+            img = process.env.PUBLIC_URL + this.props.piece.image;
+        }
         if (this.state.error){
             img = process.env.PUBLIC_URL + '/assets/pieces/Error.svg';
         }
