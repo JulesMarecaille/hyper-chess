@@ -24,7 +24,7 @@ class Piece{
 	//
 	constructor(color, behavior, name, label, value, description, allowed, cost){
 		this.value = value;
-		this.rockable = false;
+		this.can_castel = false;
 		this.behavior = behavior;
 		this.behavior_size = 239;
 		this.behavior_offset = (this.behavior_size - 1) / 2;
@@ -92,7 +92,7 @@ class Piece{
 					return (target_pos);
 				}
 			}
-			if (is_rock_check && this.isRockable(board, target_pos, pos, index, last_move)){
+			if (is_rock_check && this.CanCastel(board, target_pos, pos, index, last_move)){
 				return (target_pos);
 			}
 			if (this.checkPassant(board, target_pos, pos, last_move)){
@@ -137,7 +137,7 @@ class Piece{
 		return false;
 	}
 
-	isRockable(board, target_pos, pos){
+	CanCastel(board, target_pos, pos){
 		return (false);
 	}
 

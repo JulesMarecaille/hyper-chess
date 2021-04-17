@@ -62,6 +62,7 @@ export class PixelRook extends ClassicRook{
         this.mark =  new DeadlyMark();
         this.linked_square = -1;
         this.set_name = "Pixel";
+        this.can_castel = false;
     }
 
     deleteElementFromSquare(square, board){return deleteElementFromSquarePixel(square, board, this.linked_square, this);}

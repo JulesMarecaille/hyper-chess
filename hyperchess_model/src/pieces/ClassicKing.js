@@ -42,7 +42,7 @@ class ClassicKing extends Piece{
 		this.set_name = "Classic"
 	}
 
-	isRockable(board, target_pos, pos, index, last_move){
+	CanCastel(board, target_pos, pos, index, last_move){
 		let target = this.behavior[index];
 		if (target & (1 << 4) && !this.moved){
 			let mate;
@@ -67,7 +67,7 @@ class ClassicKing extends Piece{
 			}
 			if (!mate)
 				return false;
-			if (mate.moved || !mate.rockable)
+			if (mate.moved || !mate.can_castel)
 				return false;
 			if (canNotBeCrossedForCastle(board, pos))
 				return false;

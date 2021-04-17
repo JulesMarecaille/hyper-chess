@@ -20,7 +20,7 @@ class Archimage extends Piece{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "A combination of a Classic Knight and a Classic Bishop but with a limited range on the diagonals.";
 		super(color, behavior, 'Archimage', 'Archimage', 7, description, ALLOWED.ROOK | ALLOWED.QUEEN, 250);
-		this.rockable = true;
+		this.can_castel = true;
 	}
 }
 

@@ -252,7 +252,9 @@ class Game extends React.Component {
     // Action
     makeMove(move, time_remaining=null, emit=false){
         let boardResponse;
-        if(this.state.boardObject.color_to_move !== move.player_color){ return; }
+        if(this.state.boardObject.color_to_move !== move.player_color
+            || this.state.boardObject.board[move.from].color !== this.state.boardObject.color_to_move)
+        { return; }
         boardResponse = this.state.boardObject.makeMove(move)
         if (boardResponse.is_check){
             this.check_sound.play()
