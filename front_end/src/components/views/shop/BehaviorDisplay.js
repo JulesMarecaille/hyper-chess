@@ -27,8 +27,8 @@ class BehaviorDisplay extends React.Component {
                 if ((i + j) % 2 === 0){
                     square_color = "light"
                 }
-                let piece_now = this.board[square];//square === this.state.piece_position ? piece : null;
-                let option_marker_color = this.isTarget(piece.behavior, i, j);//put ti true to make orange, if behavior trad true
+                let piece_now = this.board[square];
+                let option_marker_color = this.isTarget(piece.behavior, i, j);
                 let is_an_option = option_marker_color ? true : false;
                 row.push(
                     <Square square={square}
@@ -95,24 +95,24 @@ class BehaviorDisplay extends React.Component {
 
     drawSquareOptionColor(color_option, color){
         return (
-        <Square square={0}
-            color={color}
-            piece={null}
-            onClick={this.voidFunction.bind(this)}
-            isSelected={false}
-            isAnOption={true}
-            dragStart={this.voidFunction.bind(this)}
-            dragging={this.voidFunction.bind(this)}
-            dragEnd={this.voidFunction.bind(this)}
-            dragOver={this.voidFunction.bind(this)}
-            optionMarkerColor={color_option}
-            isClickable={false}
-            isCheck={false}
-            isDraggable={false}
-            isPremove={false}
-            key={0}
-        />
-    );
+            <Square square={0}
+                color={color}
+                piece={null}
+                onClick={this.voidFunction.bind(this)}
+                isSelected={false}
+                isAnOption={true}
+                dragStart={this.voidFunction.bind(this)}
+                dragging={this.voidFunction.bind(this)}
+                dragEnd={this.voidFunction.bind(this)}
+                dragOver={this.voidFunction.bind(this)}
+                optionMarkerColor={color_option}
+                isClickable={false}
+                isCheck={false}
+                isDraggable={false}
+                isPremove={false}
+                key={0}
+            />
+        );
     }
 
     drawLegend(){
