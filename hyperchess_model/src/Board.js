@@ -53,6 +53,17 @@ class Board {
 		this.updateKingPosition();
 	}
 
+	updatePieces(){
+		let square = 0;
+		for (let piece of this.board){
+			if (piece) {
+				piece.updateStatusFromBoard(this.board, square);
+			}
+			square++;
+		}
+		return this.board;
+	}
+
 	getAction(move){
 		return this.board[move.from].getAction(move);
 	}
@@ -70,6 +81,7 @@ class Board {
 		let is_capture = (!!this.board[move.to]);
 		// Move the piece
 		this.board = this.board[move.from].move(move, this.board, this.getLastMove());
+		this.board = this.updatePieces();
 		this.updateHistory(move);
 		this.updateKingPosition();
 		// Change turn

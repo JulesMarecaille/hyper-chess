@@ -26,7 +26,7 @@ class Elephant extends Piece{
     move(move, board, last_move){
         squaresPassed(move).forEach((square, i) => {
             if (board[square] && board[square].can_be_eaten){
-                board[square] = null;
+                board = board[square].deleteElementFromSquare(square, board);
             }
         });
         return super.move(move, board, last_move);

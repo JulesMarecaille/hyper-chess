@@ -125,6 +125,11 @@ module.exports.initCollection = (connection) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
+        },
+        DragonEgg: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         }
     }, {
         defaultScope: {

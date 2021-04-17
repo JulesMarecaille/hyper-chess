@@ -5,7 +5,8 @@ export const MOVE_MASK = {
     MOVE : 1,
     ATTACK : 1 << 1,
     SEE_THROUGH : 1 << 2,
-    ATTACK_ALLY : 1 << 3
+    ATTACK_ALLY : 1 << 3,
+    SPECIAL_MOVE : 1 << 4
 }
 
 export const ALLOWED = {

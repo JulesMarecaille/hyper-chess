@@ -98,8 +98,15 @@ class Piece{
 			if (this.checkPassant(board, target_pos, pos, last_move)){
 				return (target_pos);
 			}
+			if (this.canMoveSpecial(index) && this.isSpecialPossible(board, target_pos, pos)){
+				return (target_pos);
+			}
 		}
 		return -1;
+	}
+
+	updateStatusFromBoard(board, square){
+		return board;
 	}
 
 	checkPassant(board, target_pos, pos, last_move){//to be overwrite by pawn
@@ -126,8 +133,17 @@ class Piece{
 		return target & MOVE_MASK.MOVE;
 	}
 
+	canMoveSpecial(index){
+		let target = this.behavior[index];
+		return target & MOVE_MASK.SPECIAL_MOVE;
+	}
+
 	isEdible(board, target_pos){
 		return board[target_pos].can_be_eaten;
+	}
+
+	isSpecialPossible(board, target_pos, pos){
+		return false;
 	}
 
 	isDeadly(board, target_pos){
