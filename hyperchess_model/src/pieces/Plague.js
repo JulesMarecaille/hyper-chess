@@ -90,7 +90,8 @@ class Plague extends ClassicPawn{
 		if (this.checkPassant(board, move.to, move.from, last_move)){
 			board[last_move.to] = null;
 		}
-		if (move.from % 8 != move.to % 8 && board[move.from].size !== 1){
+		console.log("hey", board.length);
+		if (move.from % Math.sqrt(board.length) != move.to % Math.sqrt(board.length) && board[move.from].size !== 1){
 			size = board[move.from].size;
 			this.actualizePlague(board[move.from], Math.floor(size / 2));
 			the_rest = new Plague(this.color, size - board[move.from].size);

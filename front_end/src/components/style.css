@@ -652,6 +652,22 @@ textarea:focus, input:focus{
     margin: auto;
 }
 
+.chess-board .option-marker.red{
+    background: red;
+}
+
+.chess-board .option-marker.blue{
+    background: blue;
+}
+
+.chess-board .option-marker.green{
+    background: green;
+}
+
+.chess-board .option-marker.black{
+    background: black;
+}
+
 .chess-board .check-marker{
     width: 1.5em;
     height: 1.5em;
@@ -2342,11 +2358,22 @@ textarea:focus, input:focus{
     padding: 16px;
 }
 
-.shop-piece-container .detail-container{
+.shop-piece-container .detail-container .display-behavior{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 16px;
     width: 100%;
+    margin-top: 32px;
+}
+
+.shop-piece-container .detail-container .display-behavior .comment{
+    margin-left: 10px;
+}
+
+.shop-piece-container .detail-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 @media (max-width: 640px){
@@ -2377,12 +2404,6 @@ textarea:focus, input:focus{
 
     .shop-piece-container .main .owned{
         font-size: 24px;
-    }
-
-    .shop-piece-container .detail-container{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
 }
 

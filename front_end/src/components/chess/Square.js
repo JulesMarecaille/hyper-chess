@@ -49,7 +49,11 @@ class Square extends React.Component {
         let check_marker = '';
         // Add option marker if square is a move option
         if (this.props.isAnOption) {
-            option_marker = <div className="option marker-container"><div className="option-marker"></div></div>
+            let option_marker_class = "option-marker";
+            if (this.props.optionMarkerColor){
+                option_marker_class += " " + this.props.optionMarkerColor;
+            }
+            option_marker = <div className="option marker-container"><div className={option_marker_class}></div></div>
         }
         // Add Piece if there's a piece on this square
         if (this.props.piece) {
