@@ -43,18 +43,44 @@ class Square extends React.Component {
             <div className="overlay-number">{number}</div>);
     }
 
-    render() {
+    getQuarterOrHalf(indice, size){
+        if (size === 1){
+            return "";
+        }
+        if (indice === 0){
+            return "half-one";
+        }
+        if (indice === 1){
+            return "half-two";
+        }
+        return "";
+    }
+
+    drawMarker(){
         let option_marker = '';
-        let piece = '';
-        let check_marker = '';
+        let marker = [];
         // Add option marker if square is a move option
         if (this.props.isAnOption) {
             let option_marker_class = "option-marker";
             if (this.props.optionMarkerColor){
+                let options = this.props.optionMarkerColor.split(" ");
+                let k = 0;
+                for (let option of options){
+                    let option_marker_class_color = "option-marker " + option + " " + this.getQuarterOrHalf(k, options.length);
+                    marker.push(<div className="option marker-container"><div className={option_marker_class_color}></div></div>);
+                    k++;
+                }
                 option_marker_class += " " + this.props.optionMarkerColor;
             }
-            option_marker = <div className="option marker-container"><div className={option_marker_class}></div></div>
+            //marker.push(<div className={option_marker_class}></div>);
+            return option_marker = <div className="option marker-container">{marker}</div>;
         }
+    }
+
+    render() {
+        let piece = '';
+        let check_marker = '';
+        let option_marker = this.drawMarker();
         // Add Piece if there's a piece on this square
         if (this.props.piece) {
             piece = <PieceImage piece={this.props.piece}
