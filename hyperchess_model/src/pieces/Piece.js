@@ -61,6 +61,11 @@ class Piece{
 	getDisplayNumber(){
 		return this.display_number;
 	}
+
+	//some pieces can check where they cannot go
+	getLegalCheckSquares(board, square, last_move, is_rock_check = true){
+		return this.getLegalSquares(board, square, last_move, is_rock_check = true);
+	}
 	//pour une BOARD donnée et une case SQUARE donnée, verifie toute les cases atteignables
 	//return une liste de case possible sous forme texte.
 	getLegalSquares(board, square, last_move, is_rock_check = true){
@@ -250,6 +255,9 @@ class Piece{
 	}
 
 	deleteElementFromMove(move, board){
+		if (board[move.to]){//si la pièce est toujours la
+			board = board[move.to].deleteElementFromSquare(move.to, board);
+		}
 		return board;
 	}
 
@@ -262,9 +270,6 @@ class Piece{
 		this.moved = true;
 		if (board[move.to]){
 			board = board[move.to].deleteElementFromMove(move, board);
-			if (board[move.to]){//si la pièce est toujours la
-				board = board[move.to].deleteElementFromSquare(move.to, board);
-			}
 		}
 		board[move.to] = board[move.from];
 		board[move.from] = null;

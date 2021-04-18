@@ -44,7 +44,6 @@ class Board {
 				this.board[square] = new PIECE_MAPPING[piece_name](WHITE);
 			}
 		}
-
 		for (const [square, piece_name] of Object.entries(black_pieces)){
 			if (piece_name){
 				this.board[square] = new PIECE_MAPPING[piece_name](BLACK);
@@ -153,7 +152,7 @@ function isCheckFromBoard(
 		const piece = board[square]
 		// If there's a piece on this square and this piece belongs to the player
 		if (piece && piece.color === opponent_color){
-			let piece_moves = piece.getLegalSquares(board, square, opponent_last_move);
+			let piece_moves = piece.getLegalCheckSquares(board, square, opponent_last_move);
 			if (piece_moves.includes(kings_positions[color])) {
 				return true;
 			}

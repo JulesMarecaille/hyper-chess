@@ -10,6 +10,9 @@ class DeadlyMark extends Mark{
         if (board[move.from]){
             board[move.from].deleteElementFromSquare(move.from, board);
         }
+        if (board[move.to]){
+            board = board[move.to].deleteElementFromSquare(move.to, board);
+        }
         return board;
     }
 }
