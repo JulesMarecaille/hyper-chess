@@ -58,7 +58,7 @@ class Plague extends ClassicPawn{
 
 	checkAvailableSquare(pos, index, board, last_move){
 		let target_pos = this.getTargetPos(index, pos);
-		if ((this.behavior[index] && this.isOnBoard(target_pos))){
+		if ((this.behavior[index] && this.isOnBoard(target_pos, board))){
 			if ((this.isAlly(board, target_pos)
 					&& this.canAttackAlly(index)
 					&& this.isPlague(board, target_pos)
@@ -87,11 +87,11 @@ class Plague extends ClassicPawn{
 		this.moved = true;
 		let the_rest = null;
 		let size;
+		let board_width = Math.sqrt(board.length / 2);
 		if (this.checkPassant(board, move.to, move.from, last_move)){
 			board[last_move.to] = null;
 		}
-		console.log("hey", board.length);
-		if (move.from % Math.sqrt(board.length) != move.to % Math.sqrt(board.length) && board[move.from].size !== 1){
+		if (move.from % board_width !== move.to % board_width && board[move.from].size !== 1){
 			size = board[move.from].size;
 			this.actualizePlague(board[move.from], Math.floor(size / 2));
 			the_rest = new Plague(this.color, size - board[move.from].size);

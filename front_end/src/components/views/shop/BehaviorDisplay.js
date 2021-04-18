@@ -7,9 +7,9 @@ class BehaviorDisplay extends React.Component {
         this.board_len = 7; //modify to rescale
         this.state={
             is_loading: false,
-            piece_position : Math.floor(this.board_len / 2) * this.board_len + Math.floor(this.board_len / 2)
+            piece_position : Math.floor(this.board_len / 2) * this.board_len * 2 + Math.floor(this.board_len / 2)
         }
-        this.board = new Array(this.board_len * this.board_len);
+        this.board = new Array(this.board_len * this.board_len * 2);
         this.board[this.state.piece_position] = this.props.piece;
         this.piece = this.props.piece;
     }
@@ -22,7 +22,7 @@ class BehaviorDisplay extends React.Component {
         for (let i = 0; i < this.board_len; i += 1) {
             let row = [];
             for (let j = 0; j < this.board_len; j += 1) {
-                let square = ((i * this.board_len) + j)
+                let square = ((i * this.board_len * 2) + j)
                 let square_color = "dark"
                 if ((i + j) % 2 === 0){
                     square_color = "light"
@@ -57,7 +57,7 @@ class BehaviorDisplay extends React.Component {
     }
 
     makeMoveAnimation(square){
-        if (this.isTarget(this.piece.behavior, Math.floor(square / this.board_len), square % this.board_len)){
+        if (this.isTarget(this.piece.behavior, Math.floor(square / (this.board_len * 2)), square % this.board_len)){
             let move = {
                 to : square,
                 from : this.state.piece_position
@@ -76,8 +76,8 @@ class BehaviorDisplay extends React.Component {
 
     isTarget(behavior, i, j){
         if (!this.board[this.state.piece_position]) {return null;}
-        let len = 16;
-        let square = ((i + 3 + (4 - Math.floor(this.state.piece_position / this.board_len))) * len) + j + 3 + (4 - this.state.piece_position % this.board_len);
+        let behavior_len = 16;
+        let square = ((i + 3 + (4 - Math.floor(this.state.piece_position / (this.board_len * 2)))) * behavior_len) + j + 3 + (4 - this.state.piece_position % this.board_len);
         let color = null;
         if (behavior[square] & 2){
             color = "red";
