@@ -27,9 +27,10 @@ class DragonEgg extends Piece {
         return distance > 1;
     }
 
-    isSurroundedByAllys(board, square){
-        let board_width = Math.sqrt(board.length);
-        let around_pos = [ square + 1,
+    isSurroundedByPieces(board, square){
+        let board_width = Math.sqrt(board.length / 2);
+        console.log(board_width);
+        let around_squares = [ square + 1,
                             square - 1,
                             square + board_width + 1,
                             square + board_width - 1,
@@ -37,12 +38,14 @@ class DragonEgg extends Piece {
                             square - board_width + 1,
                             square - board_width - 1,
                             square - board_width];
-        for (let target_square of around_pos){
+        console.log(around_squares);
+        for (let target_square of around_squares){
+
             if (square < 0
                 || square >= board.length
                 || this.squareIsNotAdjacent(square, target_square, board_width)
                 || !board[target_square]
-                || !board[target].isAlly(board, target_pos))
+                || (!board[target_square].isAlly(board, target_square) && !board[target_square].isEnemy(board, target_square)))
             {
                 return false;
             }
@@ -51,7 +54,8 @@ class DragonEgg extends Piece {
     }
 
     updateStatusFromBoard(board, square){
-        if (this.isSurroundedByAllys(board, square)){
+        console.log('hello from dragon update');
+        if (this.isSurroundedByPieces(board, square)){
             board[square] = new Dragon(board[square].color);
         }
         return board;
@@ -80,7 +84,7 @@ class Dragon extends Piece {
     }
 
     isSpecialPossible(board, target_pos, pos){
-        let board_width = Math.sqrt(board.length);
+        let board_width = Math.sqrt(board.length / 2);
         if (Math.floor(target_pos / board_width) === Math.floor(pos / board_width)
             && (target_pos % board_width === 0 || target_pos % board_width === board_width - 1))
         {
