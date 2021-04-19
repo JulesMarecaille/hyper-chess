@@ -67,6 +67,16 @@ body{
     --size-leftbar-expanded: 200px;
     --size-leftbar-collapsed: 50px;
     --size-view-padding-top: 26px;
+
+    /*****************************************************************
+    * MARKER COLOR SETUP
+    *****************************************************************/
+
+    --size-marker-color-full: 45%;
+    --size-marker-color-half: calc(var(--size-marker-color-full) / 2);
+    --margin-marker-color: calc(50% - var(--size-marker-color-half));
+    --opacity-marker-color: 1;
+
 }
 
 @media (max-width: 640px){
@@ -652,30 +662,93 @@ textarea:focus, input:focus{
     margin: auto;
 }
 
-.chess-board .option-marker.half-two{
-    margin-right: 9.5px;
-    width: 0.4em;
-    height: 0.8em;
-    border-radius:0px 150px 150px 0px;
+.chess-board .option-marker.whole{
+    width: var(--size-marker-color-full);
+    height: var(--size-marker-color-full);
+    border-radius: 50%;
+    background: black;
+    opacity: var(--opacity-marker-color);
+    margin: auto;
+}
+
+.chess-board .option-marker.quarter-one{
+    margin-left: var(--margin-marker-color);
+    margin-top: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-half);
+    border-radius:150px 0px 0px 0px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.quarter-two{
+    margin-right: var(--margin-marker-color);
+    margin-top: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-half);
+    border-radius:0px 150px 0px 0px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.quarter-three{
+    margin-right: var(--margin-marker-color);
+    margin-bottom: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-half);
+    border-radius:0px 0px 150px 0px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.quarter-four{
+    margin-left: var(--margin-marker-color);
+    margin-bottom: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-half);
+    border-radius:0px 0px 0px 150px;
+    opacity: var(--opacity-marker-color);
 }
 
 .chess-board .option-marker.half-one{
-    margin-left: 9.5px;
-    width: 0.4em;
-    height: 0.8em;
+    margin-left: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-full);
     border-radius:150px 0px 0px 150px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.half-two{
+    margin-right: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-full);
+    border-radius:0px 150px 150px 0px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.half-three{
+    margin-bottom: var(--margin-marker-color);
+    width: var(--size-marker-color-full);
+    height: var(--size-marker-color-half);
+    border-radius:0px 0px 150px 150px;
+    opacity: var(--opacity-marker-color);
 }
 
 .chess-board .option-marker.red{
-    background: red;
+    background: var(--color-value);
 }
 
 .chess-board .option-marker.blue{
-    background: blue;
+    background: #1B2BDB;
 }
 
 .chess-board .option-marker.green{
-    background: green;
+    background: var(--color-secondary-main);
+}
+
+.chess-board .option-marker.yellow{
+    background: var(--color-coins);
+}
+
+.chess-board .option-marker.purple{
+    background: purple;
 }
 
 .chess-board .option-marker.black{

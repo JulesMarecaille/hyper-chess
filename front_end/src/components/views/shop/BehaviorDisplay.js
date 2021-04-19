@@ -84,11 +84,15 @@ class BehaviorDisplay extends React.Component {
         }
         if (behavior[square] & 1){
             if (color){color += " "}
-            color += "blue";
+            color += "green";
         }
         if (behavior[square] & 4){
-            //if (color){color += " "}
-            //color += "green";
+            if (color){color += " "}
+            color += "yellow";
+        }
+        if (behavior[square] & 16){
+            if (color){color += " "}
+            color += "blue";
         }
         return (color);
     }
@@ -118,10 +122,10 @@ class BehaviorDisplay extends React.Component {
     drawLegend(){
         return (
             <div className="chessboard-container"><table className="chess-board">
-                <tr>{this.drawSquareOptionColor("blue", "dark")}<span className="comment">Can move on square</span></tr>
+                <tr>{this.drawSquareOptionColor("green", "dark")}<span className="comment">Can move on square</span></tr>
                 <tr>{this.drawSquareOptionColor("red", "light")}<span className="comment">Can attack on square</span></tr>
-                <tr>{this.drawSquareOptionColor("green", "dark")}<span className="comment">Can jump over on square</span></tr>
-                <tr>{this.drawSquareOptionColor("green", "light")}<span className="comment">Will be special ATTACK</span></tr>
+                <tr>{this.drawSquareOptionColor("yellow", "dark")}<span className="comment">Can jump over on square</span></tr>
+                <tr>{this.drawSquareOptionColor("blue", "light")}<span className="comment">Can do a special action on square</span></tr>
             </table></div>
         );
     }

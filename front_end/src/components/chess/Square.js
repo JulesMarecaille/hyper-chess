@@ -44,22 +44,24 @@ class Square extends React.Component {
     }
 
     getQuarterOrHalf(indice, size){
+        let part = "";
         if (size === 1){
-            return "";
+            return "whole";
         }
-        if (indice === 0){
-            return "half-one";
-        }
-        if (indice === 1){
-            return "half-two";
-        }
-        return "";
+        if (size === 2){ part = "half-"; }
+        if (size === 4){ part = "quarter-"; }
+        if (size === 3 && (indice === 0 || indice === 1)){ part = "quarter-"; }
+        if (size === 3 && (indice === 2)){ part = "half-"; }
+        if (indice === 0){ part += "one"; }
+        if (indice === 1){ part += "two"; }
+        if (indice === 2){ part += "three"; }
+        if (indice === 3){ part += "four"; }
+        return part;
     }
 
     drawMarker(){
         let option_marker = '';
         let marker = [];
-        // Add option marker if square is a move option
         if (this.props.isAnOption) {
             let option_marker_class = "option-marker";
             if (this.props.optionMarkerColor){
@@ -71,8 +73,9 @@ class Square extends React.Component {
                     k++;
                 }
                 option_marker_class += " " + this.props.optionMarkerColor;
+            } else {
+                marker.push(<div className={option_marker_class}></div>);
             }
-            //marker.push(<div className={option_marker_class}></div>);
             return option_marker = <div className="option marker-container">{marker}</div>;
         }
     }
