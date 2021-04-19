@@ -78,17 +78,21 @@ class BehaviorDisplay extends React.Component {
         if (!this.board[this.state.piece_position]) {return null;}
         let behavior_len = 16;
         let square = ((i + 3 + (4 - Math.floor(this.state.piece_position / (this.board_len * 2)))) * behavior_len) + j + 3 + (4 - this.state.piece_position % this.board_len);
-        let color = null;
+        let color = "";
         if (behavior[square] & 2){
-            color = "red";
-            if (behavior[square] & 1){
-                color = "black";
-            }
-        } else if (behavior[square] & 1){
-            color = "blue";
+            color += "red";
+        }
+        if (behavior[square] & 1){
+            if (color){color += " "}
+            color += "green";
         }
         if (behavior[square] & 4){
-            color = "green";
+            if (color){color += " "}
+            color += "yellow";
+        }
+        if (behavior[square] & 16){
+            if (color){color += " "}
+            color += "blue";
         }
         return (color);
     }
@@ -118,10 +122,10 @@ class BehaviorDisplay extends React.Component {
     drawLegend(){
         return (
             <div className="chessboard-container"><table className="chess-board">
-                <tr>{this.drawSquareOptionColor("blue", "dark")}<span className="comment">Can only move</span></tr>
-                <tr>{this.drawSquareOptionColor("red", "light")}<span className="comment">Can only attack</span></tr>
-                <tr>{this.drawSquareOptionColor("black", "dark")}<span className="comment">Can move and attack</span></tr>
-                <tr>{this.drawSquareOptionColor("green", "light")}<span className="comment">Can Jump</span></tr>
+                <tr>{this.drawSquareOptionColor("green", "dark")}<span className="comment">Can move on square</span></tr>
+                <tr>{this.drawSquareOptionColor("red", "light")}<span className="comment">Can attack on square</span></tr>
+                <tr>{this.drawSquareOptionColor("yellow", "dark")}<span className="comment">Can jump over on square</span></tr>
+                <tr>{this.drawSquareOptionColor("blue", "light")}<span className="comment">Can do a special action on square</span></tr>
             </table></div>
         );
     }
