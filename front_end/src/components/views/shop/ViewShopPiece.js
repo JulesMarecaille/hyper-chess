@@ -64,6 +64,12 @@ class ViewShopPiece extends React.Component {
         return positions;
     }
 
+    drawLinkedBehavior(piece){
+        if (piece.linked_piece){
+            return (<BehaviorDisplay piece={piece.linked_piece}/>);
+        }
+    }
+
     render() {
         let content = <Loader/>
         if(!this.state.is_loading){
@@ -110,6 +116,7 @@ class ViewShopPiece extends React.Component {
                                 {this.props.piece.description}
                             </div>
                             <BehaviorDisplay piece={this.props.piece}/>
+                            {this.drawLinkedBehavior(this.props.piece)}
                         </div>
                     </div>
                     <div class="bottom">

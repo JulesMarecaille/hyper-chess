@@ -21,6 +21,7 @@ class DragonEgg extends Piece {
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "A dragon egg that may hatch into a Dragon if surrounded by allys.";
 		super(color, behavior, 'DragonEgg', 'The egg of a dragon', 5, description, ALLOWED.ROOK, 1500);
+        this.linked_piece = new Dragon(color);
     }
 
     isSurroundedByPieces(board, square){
@@ -48,7 +49,7 @@ class DragonEgg extends Piece {
 
     updateStatusFromBoard(board, square){
         if (this.isSurroundedByPieces(board, square)){
-            board[square] = new Dragon(board[square].color);
+            board[square] = this.linked_piece;
         }
         return board;
     }

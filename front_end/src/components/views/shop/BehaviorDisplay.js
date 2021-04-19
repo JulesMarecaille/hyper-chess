@@ -1,5 +1,6 @@
 import React from 'react'
 import Square from '../../chess/Square.js'
+import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 
 class BehaviorDisplay extends React.Component {
     constructor(props){
@@ -131,6 +132,7 @@ class BehaviorDisplay extends React.Component {
     }
 
     render() {
+        if (!this.props.piece) {return ;}
         return (
         <React.Fragment>
             <div className="display-behavior">
