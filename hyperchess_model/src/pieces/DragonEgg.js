@@ -10,17 +10,17 @@ class DragonEgg extends Piece {
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		let description = "A dragon egg that may hatch into a Dragon if surrounded by allys.";
-		super(color, behavior, 'DragonEgg', 'The egg of a dragon', 5, description, ALLOWED.ROOK, 1500);
+		let description = "A dragon egg that may hatch into a Dragon if surrounded.";
+		super(color, behavior, 'DragonEgg', 'Dragon Egg', 5, description, ALLOWED.ROOK, 1500);
         this.linked_piece = new Dragon(color);
     }
 
@@ -63,22 +63,22 @@ class Dragon extends Piece {
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 			16, 16, 16, 16, 16, 16, 1, 0, 1, 16, 16, 16, 16, 16, 16, 16,
-			0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0];
-		let description = "An all mighty dragon, it can throw a line of fire on the board, destroying everything on its way";
-		super(color, behavior, 'Dragon', 'A full grown', 0, description, 0, 10000);
+		let description = "A dragon that can throw a line of fire on the board at maximum range and destroying everything on its way, without moving.";
+		super(color, behavior, 'Dragon', 'Dragon', 0, description, 0, 10000);
     }
 
     isSpecialPossible(board, target_pos, pos){
         let board_width = Math.sqrt(board.length / 2);
-        if (Math.floor(target_pos / board_width) === Math.floor(pos / board_width)
+        if (Math.floor(target_pos / (board_width * 2)) === Math.floor(pos / (board_width * 2))
             && (target_pos % board_width === 0 || target_pos % board_width === board_width - 1))
         {
             return true;

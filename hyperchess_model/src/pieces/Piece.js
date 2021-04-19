@@ -262,7 +262,9 @@ class Piece{
 	}
 
 	deleteElementFromSquare(square, board){
-		board[square] = null;
+		if (this.can_be_eaten){
+			board[square] = null;
+		}
 		return board;
 	}
 
