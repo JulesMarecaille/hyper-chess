@@ -15,6 +15,7 @@ import { PixelPawn, PixelRook, PixelKnight, PixelBishop, PixelQueen, PixelKing} 
 import { PlagueOne, PlagueThree, PlagueFive, PlagueNine } from './Plague'
 import DragonEgg from './DragonEgg'
 import Reaper from './Reaper'
+import GuardianPawn from './GuardianPawn'
 
 export const PIECE_MAPPING = {
     "ClassicBishop": ClassicBishop,
@@ -41,5 +42,6 @@ export const PIECE_MAPPING = {
     "PixelKing": PixelKing,
     "PixelQueen": PixelQueen,
     "DragonEgg": DragonEgg,
-    "Reaper": Reaper
+    "Reaper": Reaper,
+    "GuardianPawn" : GuardianPawn
  }

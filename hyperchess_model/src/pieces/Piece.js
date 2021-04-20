@@ -100,7 +100,7 @@ class Piece{
 			if (is_rock_check && this.CanCastel(board, target_pos, pos, index, last_move)){
 				return (target_pos);
 			}
-			if (this.checkPassant(board, target_pos, pos, last_move)){
+			if (this.checkPassant(board, target_pos, pos, last_move) && this.canAttack(index)){
 				return (target_pos);
 			}
 			if (this.canMoveSpecial(index) && this.isSpecialPossible(board, target_pos, pos)){

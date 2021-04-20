@@ -35,8 +35,8 @@ class DragonEgg extends Piece {
                             square - total_board_width - 1,
                             square - total_board_width];
         for (let target_square of around_squares){
-            if (square < 0
-                || square >= board.length - (total_board_width / 2)
+            if (target_square < 0
+                || target_square >= board.length - (total_board_width / 2)
                 || target_square % total_board_width > total_board_width / 2
                 || !board[target_square]
                 || (!board[target_square].isAlly(board, target_square) && !board[target_square].isEnemy(board, target_square)))
