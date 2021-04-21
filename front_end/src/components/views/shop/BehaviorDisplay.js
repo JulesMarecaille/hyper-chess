@@ -58,7 +58,7 @@ class BehaviorDisplay extends React.Component {
     }
 
     makeMove(square){
-        if (this.isTarget(this.piece.behavior, Math.floor(square / (this.board_len * 2)), square % this.board_len)){
+        if (this.isTarget(this.piece.behavior, Math.floor(square / (this.board_width * 2)), square % this.board_width)){
             let move = {
                 to : square,
                 from : this.state.piece_position
@@ -66,7 +66,7 @@ class BehaviorDisplay extends React.Component {
             this.setState({
                 piece_position :square
             });
-            this.piece.move(move, this.board, move)
+            this.piece.move(move, this.board, move);
         } else if (this.board[square]) {
             this.piece = this.board[square];
             this.setState({
