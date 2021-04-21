@@ -43,14 +43,47 @@ class Square extends React.Component {
             <div className="overlay-number">{number}</div>);
     }
 
-    render() {
+    getMarkerClass(indice, size){
+        let part = "";
+        if (size === 1){
+            return "whole";
+        }
+        if (size === 2){ part = "half-"; }
+        if (size === 4){ part = "quarter-"; }
+        if (size === 3 && (indice === 0 || indice === 1)){ part = "quarter-"; }
+        if (size === 3 && (indice === 2)){ part = "half-"; }
+        if (indice === 0){ part += "one"; }
+        if (indice === 1){ part += "two"; }
+        if (indice === 2){ part += "three"; }
+        if (indice === 3){ part += "four"; }
+        return part;
+    }
+
+    drawMarker(){
         let option_marker = '';
+        let marker = [];
+        if (this.props.isAnOption) {
+            let option_marker_class = "option-marker";
+            if (this.props.optionMarkerColor){
+                let options = this.props.optionMarkerColor.split(" ");
+                let k = 0;
+                for (let option of options){
+                    let option_marker_class_color = option_marker_class + " " + option + " " + this.getMarkerClass(k, options.length);
+                    marker.push(<div className="option marker-container"><div className={option_marker_class_color}></div></div>);
+                    k++;
+                }
+                option_marker_class += " " + this.props.optionMarkerColor;
+            } else {
+                marker.push(<div className={option_marker_class}></div>);
+            }
+            return option_marker = <div className="option marker-container">{marker}</div>;
+        }
+    }
+
+    render() {
         let piece = '';
         let check_marker = '';
-        // Add option marker if square is a move option
-        if (this.props.isAnOption) {
-            option_marker = <div className="option marker-container"><div className="option-marker"></div></div>
-        }
+        let option_marker = this.drawMarker();
         // Add Piece if there's a piece on this square
         if (this.props.piece) {
             piece = <PieceImage piece={this.props.piece}

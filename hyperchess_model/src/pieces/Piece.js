@@ -1,5 +1,5 @@
-import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK} from '../constants'
-import {PIECE_MAPPING, COLORS_NAME} from '../constants'
+import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK, COLORS_NAME } from '../constants'
+import {PIECE_MAPPING} from './index.js'
 
 function reverseBehavior(table){
 	let top = 0;
@@ -83,7 +83,7 @@ class Piece{
 	// return le nom de la case si possible, null sinon
 	checkAvailableSquare(pos, index, board, last_move, is_rock_check){
 		let target_pos = this.getTargetPos(index, pos);
-		if ((this.behavior[index] && this.isOnBoard(target_pos))){
+		if (this.behavior[index] && this.isOnBoard(target_pos, board)){
 			if ((this.isAlly(board, target_pos) && this.canAttackAlly(index) && this.isEdible(board, target_pos) && !this.isKing(board, target_pos))
 				|| (this.isEnemy(board, target_pos) && this.canAttack(index) && this.isEdible(board, target_pos))
 				|| (this.isEmpty(board, target_pos) && this.canMove(index) && !(this.is_king && this.isDeadly(board, target_pos))))
@@ -145,10 +145,11 @@ class Piece{
 		return board[target_pos].is_king;
 	}
 
-	isOnBoard(pos){
+	isOnBoard(pos, board){
+		let board_width = Math.sqrt(board.length / 2);
 		if (pos < 0
-			|| pos > 127
-			|| pos % 16 > 7){
+			|| pos > board.length - board_width
+			|| pos % (board_width * 2) >= board_width){
 			return false;
 		}
 		return true;
@@ -175,11 +176,12 @@ class Piece{
 
 
 	isInSight(board, pos, target_pos){
-		if (pos % 8 === target_pos % 8 && this.isInSightCol(board, pos, target_pos)){
+		let board_width = Math.sqrt(board.length / 2);
+		if (pos % board_width === target_pos % board_width && this.isInSightCol(board, pos, target_pos)){
 			return true;
-		} else if (Math.abs(pos - target_pos) < 8 && this.isInSightLine(board, pos, target_pos)){
+		} else if (Math.abs(pos - target_pos) < board_width && this.isInSightLine(board, pos, target_pos)){
 			return true;
-		} else if (	Math.abs(Math.floor(pos / 16) - Math.floor(target_pos / 16)) == Math.abs(pos % 8 - target_pos % 8)
+		} else if (	Math.abs(Math.floor(pos / (board_width * 2)) - Math.floor(target_pos / (board_width * 2))) == Math.abs(pos % board_width - target_pos % board_width)
 					&& this.isInSightDiag(board, pos, target_pos)){
 			return true;
 		}
@@ -187,13 +189,14 @@ class Piece{
 	}
 
 	isInSightCol(board, pos, target_pos){
-		let min = Math.min(pos, target_pos) + 16;
+		let board_width = Math.sqrt(board.length / 2);
+		let min = Math.min(pos, target_pos) + board_width * 2;
 		let max = Math.max(pos, target_pos);
 		while (min < max){
 			if (board[min] && !board[min].is_mark){
 				return false;
 			}
-			min += 16;
+			min += board_width * 2;
 		}
 		return true;
 	}
@@ -211,13 +214,14 @@ class Piece{
 	}
 
 	isInSightDiag(board, pos, target_pos){
+		let board_width = Math.sqrt(board.length / 2);
 		let min = Math.min(pos, target_pos);
 		let max = Math.max(pos, target_pos);
 		let increment;
-		if (min % 8 > max % 8){
-			increment = 15;
+		if (min % board_width > max % board_width){
+			increment = board_width * 2 - 1;
 		} else {
-			increment = 17;
+			increment = board_width * 2 + 1;
 		}
 		min += increment;
 		while (min < max){

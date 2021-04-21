@@ -67,6 +67,16 @@ body{
     --size-leftbar-expanded: 200px;
     --size-leftbar-collapsed: 50px;
     --size-view-padding-top: 26px;
+
+    /*****************************************************************
+    * MARKER COLOR SETUP
+    *****************************************************************/
+
+    --size-marker-color-full: 45%;
+    --size-marker-color-half: calc(var(--size-marker-color-full) / 2);
+    --margin-marker-color: calc(50% - var(--size-marker-color-half));
+    --opacity-marker-color: 1;
+
 }
 
 @media (max-width: 640px){
@@ -650,6 +660,99 @@ textarea:focus, input:focus{
     background: black;
     opacity: 0.35;
     margin: auto;
+}
+
+.chess-board .option-marker.whole{
+    width: var(--size-marker-color-full);
+    height: var(--size-marker-color-full);
+    border-radius: 50%;
+    background: black;
+    opacity: var(--opacity-marker-color);
+    margin: auto;
+}
+
+.chess-board .option-marker.quarter-one{
+    margin-left: var(--margin-marker-color);
+    margin-top: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-half);
+    border-radius:150px 0px 0px 0px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.quarter-two{
+    margin-right: var(--margin-marker-color);
+    margin-top: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-half);
+    border-radius:0px 150px 0px 0px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.quarter-three{
+    margin-right: var(--margin-marker-color);
+    margin-bottom: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-half);
+    border-radius:0px 0px 150px 0px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.quarter-four{
+    margin-left: var(--margin-marker-color);
+    margin-bottom: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-half);
+    border-radius:0px 0px 0px 150px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.half-one{
+    margin-left: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-full);
+    border-radius:150px 0px 0px 150px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.half-two{
+    margin-right: var(--margin-marker-color);
+    width: var(--size-marker-color-half);
+    height: var(--size-marker-color-full);
+    border-radius:0px 150px 150px 0px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.half-three{
+    margin-bottom: var(--margin-marker-color);
+    width: var(--size-marker-color-full);
+    height: var(--size-marker-color-half);
+    border-radius:0px 0px 150px 150px;
+    opacity: var(--opacity-marker-color);
+}
+
+.chess-board .option-marker.red{
+    background: var(--color-value);
+}
+
+.chess-board .option-marker.blue{
+    background: #1B2BDB;
+}
+
+.chess-board .option-marker.green{
+    background: var(--color-secondary-main);
+}
+
+.chess-board .option-marker.yellow{
+    background: var(--color-coins);
+}
+
+.chess-board .option-marker.purple{
+    background: purple;
+}
+
+.chess-board .option-marker.black{
+    background: black;
 }
 
 .chess-board .check-marker{
@@ -2342,6 +2445,12 @@ textarea:focus, input:focus{
     padding: 16px;
 }
 
+.shop-piece-container .detail-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 @media (max-width: 640px){
     .shop-piece-container .main{
         display: flex;
@@ -2370,6 +2479,36 @@ textarea:focus, input:focus{
 
     .shop-piece-container .main .owned{
         font-size: 24px;
+    }
+}
+
+/************************************************************************
+* DISPLAY BEHAVIOR
+*************************************************************************/
+
+.display-behavior{
+    display: flex;
+    grid-column-gap: 16px;
+    width: 100%;
+    margin-top: 32px;
+}
+
+.display-behavior .comment{
+    margin-left: 10px;
+}
+
+@media(max-width: 800px){
+    .display-behavior{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        grid-row-gap: 16px;
+        width: 100%;
+        margin-top: 32px;
+    }
+
+    .display-behavior .comment{
+        margin-left: 10px;
     }
 }
 

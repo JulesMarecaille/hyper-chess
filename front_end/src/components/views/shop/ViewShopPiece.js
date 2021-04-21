@@ -6,10 +6,12 @@ import { Loader } from '../../navigation';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
+import Square from '../../chess/Square.js'
+import BehaviorDisplay from './BehaviorDisplay.js'
 
 class ViewShopPiece extends React.Component {
     constructor(props){
-        super(props)
+        super(props);
         this.state={
             is_loading: false
         }
@@ -83,7 +85,6 @@ class ViewShopPiece extends React.Component {
             } else {
                 buy = <div class="owned">Owned</div>
             }
-            console.log(new PIECE_MAPPING[this.props.piece.name](BLACK))
             content = (
                 <div class="shop-piece-container">
                     <div class="main">
@@ -103,10 +104,11 @@ class ViewShopPiece extends React.Component {
                             {buy}
                         </div>
                     </div>
-                    <div class="sub">
+                    <div class="sub detail-container">
                         <div class="description">
                             {this.props.piece.description}
                         </div>
+                        <BehaviorDisplay piece={this.props.piece}/>
                     </div>
                     <div class="bottom">
                         <div class="button" onClick={this.props.onReturn.bind(this, null)}>Back</div>
