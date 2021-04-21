@@ -34,7 +34,7 @@ class BehaviorDisplay extends React.Component {
                     <Square square={square}
                             color={square_color}
                             piece={piece_now}
-                            onClick={this.makeMoveAnimation.bind(this)}
+                            onClick={this.makeMove.bind(this)}
                             isSelected={false}
                             isAnOption={is_an_option}
                             dragStart={this.voidFunction.bind(this)}
@@ -56,7 +56,7 @@ class BehaviorDisplay extends React.Component {
         return (<div className="chessboard-container"><table className="chess-board">{chessboard}</table></div>);
     }
 
-    makeMoveAnimation(square){
+    makeMove(square){
         if (this.isTarget(this.piece.behavior, Math.floor(square / (this.board_len * 2)), square % this.board_len)){
             let move = {
                 to : square,
