@@ -15,7 +15,7 @@ class ViewShopPiece extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            is_loading: false,
+            is_loading: false
         }
     }
 
