@@ -14,6 +14,7 @@ class Game extends React.Component {
             dragged_square: -1,
             dragged_element: null,
             selected_square: -1,
+            selected_square_opponent: -1,
             mouse_over_square: -1,
             highlighted_squares: [],
             opponent_highlighted_squares: [],
@@ -49,6 +50,7 @@ class Game extends React.Component {
             this.setState({
                 boardObject: board_object,
                 selected_square: -1,
+                selected_square_opponent: -1,
                 highlighted_squares: [],
                 opponent_highlighted_squares: [],
                 game_over: board_object.game_over,
@@ -66,6 +68,7 @@ class Game extends React.Component {
                 dragged_square: -1,
                 dragged_element: null,
                 selected_square: -1,
+                selected_square_opponent: -1,
                 mouse_over_square: -1,
                 highlighted_squares: [],
                 opponent_highlighted_squares: [],
@@ -96,6 +99,7 @@ class Game extends React.Component {
             if(piece.color === this.props.side){
                 // Select player piece
                 this.setState({
+                    selected_square_opponent : -1,
                     selected_square: square,
                     highlighted_squares: legal_piece_moves,
                     opponent_highlighted_squares: []
@@ -103,6 +107,8 @@ class Game extends React.Component {
             } else {
                 // Select opponent piece
                 this.setState({
+                    selected_square_opponent : square,
+                    selected_square: -1,
                     highlighted_squares: [],
                     opponent_highlighted_squares: legal_piece_moves
                 });
@@ -127,6 +133,7 @@ class Game extends React.Component {
                     this.setState({
                         premove: move,
                         selected_square: -1,
+                        selected_square_opponent : -1,
                         highlighted_squares: [],
                         opponent_highlighted_squares: [],
                     });
@@ -136,6 +143,7 @@ class Game extends React.Component {
             // Reset click state
             this.setState({
                 selected_square: -1,
+                selected_square_opponent: -1,
                 highlighted_squares: [],
                 opponent_highlighted_squares: [],
                 premove: null
@@ -156,6 +164,7 @@ class Game extends React.Component {
             let legal_piece_moves = this.state.boardObject.getLegalMovesFromPiece(square).map(x => x.to);
             this.setState({
                 selected_square: square,
+                selected_square_opponent: square,
                 dragged_square: square,
                 dragged_element: evt.target,
                 highlighted_squares: legal_piece_moves,
@@ -195,6 +204,7 @@ class Game extends React.Component {
                 this.setState({
                     premove: move,
                     selected_square: -1,
+                    selected_square_opponent: -1,
                     highlighted_squares: [],
                     opponent_highlighted_squares: []
                 })
@@ -242,7 +252,9 @@ class Game extends React.Component {
     // Action
     makeMove(move, time_remaining=null, emit=false){
         let boardResponse;
-        if(this.state.boardObject.color_to_move !== move.player_color){ return; }
+        if(this.state.boardObject.color_to_move !== move.player_color
+            || this.state.boardObject.board[move.from].color !== this.state.boardObject.color_to_move)
+        { return; }
         boardResponse = this.state.boardObject.makeMove(move)
         if (boardResponse.is_check){
             this.check_sound.play()
@@ -263,6 +275,7 @@ class Game extends React.Component {
         this.props.onPlayerMoved(time_remaining)
         this.setState({
             selected_square: -1,
+            selected_square_opponent: -1,
             highlighted_squares: [],
             opponent_highlighted_squares: [],
             game_over: boardResponse.game_over,
@@ -302,7 +315,9 @@ class Game extends React.Component {
                 }
                 let piece = this.state.boardObject.board[square];
                 let is_an_option = (this.state.highlighted_squares.includes(square) || this.state.opponent_highlighted_squares.includes(square));
-                let is_selected = (this.state.selected_square === square);
+                let is_selected = (this.state.selected_square === square
+                    || this.isSelectedByLink(square)
+                    || this.state.selected_square_opponent === square);
                 let is_last_move = (last_move_squares.includes(square))
                 // The square can be clicked if it's a move option or if there's a piece on it
                 let is_clickable = (this.state.highlighted_squares.includes(square) || (piece));
@@ -389,6 +404,15 @@ class Game extends React.Component {
                         </div>);
         });
         return options;
+    }
+
+    isSelectedByLink(square){
+        if ((this.state.boardObject.board[this.state.selected_square] && this.state.boardObject.board[this.state.selected_square].linked_square === square)
+            || (this.state.boardObject.board[this.state.selected_square_opponent] && this.state.boardObject.board[this.state.selected_square_opponent].linked_square === square))
+        {
+            return true;
+        }
+        return false;
     }
 
     drawOverlaySelection(){

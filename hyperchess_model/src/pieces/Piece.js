@@ -1,5 +1,5 @@
 import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK} from '../constants'
-import {PIECE_MAPPING} from './index.js'
+import {PIECE_MAPPING, COLORS_NAME} from '../constants'
 
 function reverseBehavior(table){
 	let top = 0;
@@ -24,7 +24,7 @@ class Piece{
 	//
 	constructor(color, behavior, name, label, value, description, allowed, cost){
 		this.value = value;
-		this.rockable = false;
+		this.can_castel = false;
 		this.behavior = behavior;
 		this.behavior_size = 239;
 		this.behavior_offset = (this.behavior_size - 1) / 2;
@@ -33,17 +33,21 @@ class Piece{
 		this.is_pawn = false;
 		this.can_be_eaten = true;
 		this.name = name;
+		this.color = color;
+		this.image = "/assets/pieces/" + name + COLORS_NAME[color] + ".svg";
 		this.label = label;
 		this.allowed = allowed;
-    	this.color = color;
 		this.moved = false;
+		this.mark = null;
+		this.is_mark = false;
+		this.is_deadly = false;
+		this.linked_square = -1;
 		this.description = description;
 		this.set_name = "No set";
 		this.display_number = null;
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
-		this.image = "Error";
   	}
 
 	makeAction(move, selection){//will return a new, altered move to do according to the selection
@@ -82,13 +86,13 @@ class Piece{
 		if ((this.behavior[index] && this.isOnBoard(target_pos))){
 			if ((this.isAlly(board, target_pos) && this.canAttackAlly(index) && this.isEdible(board, target_pos) && !this.isKing(board, target_pos))
 				|| (this.isEnemy(board, target_pos) && this.canAttack(index) && this.isEdible(board, target_pos))
-				|| (this.isEmpty(board, target_pos) && this.canMove(index)))
+				|| (this.isEmpty(board, target_pos) && this.canMove(index) && !(this.is_king && this.isDeadly(board, target_pos))))
 			{
 				if (this.canSeeThrough(index) || this.isInSight(board, pos, target_pos)){
 					return (target_pos);
 				}
 			}
-			if (is_rock_check && this.isRockable(board, target_pos, pos, index, last_move)){
+			if (is_rock_check && this.CanCastel(board, target_pos, pos, index, last_move)){
 				return (target_pos);
 			}
 			if (this.checkPassant(board, target_pos, pos, last_move)){
@@ -126,7 +130,14 @@ class Piece{
 		return board[target_pos].can_be_eaten;
 	}
 
-	isRockable(board, target_pos, pos){
+	isDeadly(board, target_pos){
+		if (board[target_pos]){
+			return board[target_pos].is_deadly;
+		}
+		return false;
+	}
+
+	CanCastel(board, target_pos, pos){
 		return (false);
 	}
 
@@ -148,15 +159,18 @@ class Piece{
 	}
 
 	isEmpty(board, target_pos){
-		return board[target_pos] ? false : true;
+		if (board[target_pos] && !board[target_pos].is_mark){
+			return false;
+		}
+		return true;
 	}
 
 	isAlly(board, target_pos){
-		return (board[target_pos] && board[target_pos].color === this.color);
+		return (board[target_pos] && board[target_pos].color === this.color && !board[target_pos].is_mark);
 	}
 
 	isEnemy(board, target_pos){
-		return (board[target_pos] && board[target_pos].color !== this.color);
+		return (board[target_pos] && board[target_pos].color !== this.color && !board[target_pos].is_mark);
 	}
 
 
@@ -176,7 +190,7 @@ class Piece{
 		let min = Math.min(pos, target_pos) + 16;
 		let max = Math.max(pos, target_pos);
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
 			min += 16;
@@ -188,7 +202,7 @@ class Piece{
 		let min = Math.min(pos, target_pos) + 1;
 		let max = Math.max(pos, target_pos);
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
 			min += 1;
@@ -207,7 +221,7 @@ class Piece{
 		}
 		min += increment;
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
 			min += increment;
@@ -215,8 +229,23 @@ class Piece{
 		return true;
 	}
 
+	deleteElementFromMove(move, board){
+		return board;
+	}
+
+	deleteElementFromSquare(square, board){
+		board[square] = null;
+		return board;
+	}
+
 	move(move, board, last_move){
 		this.moved = true;
+		if (board[move.to]){
+			board = board[move.to].deleteElementFromMove(move, board);
+			if (board[move.to]){//si la pièce est toujours la
+				board = board[move.to].deleteElementFromSquare(move.to, board);
+			}
+		}
 		board[move.to] = board[move.from];
 		board[move.from] = null;
 		if (move.action){

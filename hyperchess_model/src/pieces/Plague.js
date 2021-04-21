@@ -1,6 +1,5 @@
 import ClassicPawn from './ClassicPawn.js'
 import {ALLOWED} from '../constants'
-import {PIECE_MAPPING} from './index.js'
 
 class Plague extends ClassicPawn{
 	constructor(color,
@@ -30,7 +29,7 @@ class Plague extends ClassicPawn{
         this.description = description;
         this.allowed = allowed;
 		this.value = size;
-        this.cost = 400;
+        this.cost = 750;
 		this.display_number = size;
 		this.image = null;
 		this.is_type_plague = true;
@@ -100,11 +99,8 @@ class Plague extends ClassicPawn{
         if (this.isPlague(board, move.to) && this.isAlly(board, move.to)){
 			this.actualizePlague(board[move.from], board[move.from].size + board[move.to].size);
 		}
-		board[move.to] = board[move.from];
-		board[move.from] = the_rest;
-		if (move.action && move.action.into){
-			board[move.to] = new PIECE_MAPPING[move.action.into](board[move.to].color);
-		}
+		board = super.move(move, board, last_move);
+		board[move.from] = the_rest; //replace the rest of the plague
 		return board;
 	}
 }
