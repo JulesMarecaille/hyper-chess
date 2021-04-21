@@ -88,7 +88,7 @@ class Piece{
 	// return le nom de la case si possible, null sinon
 	checkAvailableSquare(pos, index, board, last_move, is_rock_check){
 		let target_pos = this.getTargetPos(index, pos);
-		if ((board && this.behavior[index] && this.isOnBoard(target_pos, board))){
+		if (this.behavior[index] && this.isOnBoard(target_pos, board)){
 			if ((this.isAlly(board, target_pos) && this.canAttackAlly(index) && this.isEdible(board, target_pos) && !this.isKing(board, target_pos))
 				|| (this.isEnemy(board, target_pos) && this.canAttack(index) && this.isEdible(board, target_pos))
 				|| (this.isEmpty(board, target_pos) && this.canMove(index) && !(this.is_king && this.isDeadly(board, target_pos))))

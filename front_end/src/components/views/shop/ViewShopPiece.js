@@ -116,14 +116,12 @@ class ViewShopPiece extends React.Component {
                         </div>
                     </div>
                     <PerfectScrollbar className="shop-piece-container">
-                        <div class="sub">
-                            <div class="detail-container">
-                                <div class="description">
-                                    {this.props.piece.description}
-                                </div>
-                                <BehaviorDisplay piece={this.props.piece}/>
-                                {this.drawLinkedBehavior(this.props.piece)}
+                        <div class="sub detail-container">
+                            <div class="description">
+                                {this.props.piece.description}
                             </div>
+                            <BehaviorDisplay piece={this.props.piece}/>
+                            {this.drawLinkedBehavior(this.props.piece)}
                         </div>
                         <div class="bottom">
                             <div class="button" onClick={this.props.onReturn.bind(this, null)}>Back</div>
