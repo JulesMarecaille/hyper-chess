@@ -2445,17 +2445,6 @@ textarea:focus, input:focus{
     padding: 16px;
 }
 
-.shop-piece-container .detail-container .display-behavior{
-    display: flex;
-    grid-column-gap: 16px;
-    width: 100%;
-    margin-top: 32px;
-}
-
-.shop-piece-container .detail-container .display-behavior .comment{
-    margin-left: 10px;
-}
-
 .shop-piece-container .detail-container{
     display: flex;
     flex-direction: column;
@@ -2491,6 +2480,21 @@ textarea:focus, input:focus{
     .shop-piece-container .main .owned{
         font-size: 24px;
     }
+}
+
+/************************************************************************
+* DISPLAY BEHAVIOR
+*************************************************************************/
+
+.display-behavior{
+    display: flex;
+    grid-column-gap: 16px;
+    width: 100%;
+    margin-top: 32px;
+}
+
+.display-behavior .comment{
+    margin-left: 10px;
 }
 
 /************************************************************************

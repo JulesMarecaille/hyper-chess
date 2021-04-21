@@ -16,7 +16,7 @@ class BehaviorDisplay extends React.Component {
 
     voidFunction(){return null;}
 
-    drawBehavior(piece){
+    drawChessboard(piece){
         let chessboard = [];
         let files = [];
         for (let i = 0; i < this.board_len; i += 1) {
@@ -114,7 +114,7 @@ class BehaviorDisplay extends React.Component {
                 isCheck={false}
                 isDraggable={false}
                 isPremove={false}
-                key={0}
+                key={color}
             />
         );
     }
@@ -134,7 +134,7 @@ class BehaviorDisplay extends React.Component {
         return (
         <React.Fragment>
             <div className="display-behavior">
-                {this.drawBehavior(this.props.piece)}
+                {this.drawChessboard(this.props.piece)}
                 {this.drawLegend()}
             </div>
         </React.Fragment>);

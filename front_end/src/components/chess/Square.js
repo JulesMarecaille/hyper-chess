@@ -43,7 +43,7 @@ class Square extends React.Component {
             <div className="overlay-number">{number}</div>);
     }
 
-    getQuarterOrHalf(indice, size){
+    getMarkerClass(indice, size){
         let part = "";
         if (size === 1){
             return "whole";
@@ -68,7 +68,7 @@ class Square extends React.Component {
                 let options = this.props.optionMarkerColor.split(" ");
                 let k = 0;
                 for (let option of options){
-                    let option_marker_class_color = "option-marker " + option + " " + this.getQuarterOrHalf(k, options.length);
+                    let option_marker_class_color = option_marker_class + " " + option + " " + this.getMarkerClass(k, options.length);
                     marker.push(<div className="option marker-container"><div className={option_marker_class_color}></div></div>);
                     k++;
                 }
