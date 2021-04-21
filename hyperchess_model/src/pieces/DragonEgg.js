@@ -19,7 +19,7 @@ class DragonEgg extends Piece {
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		let description = "A dragon egg that may hatch into a Dragon if surrounded.";
+		let description = "A dragon egg that may hatch into a Dragon if surrounded by pieces.";
 		super(color, behavior, 'DragonEgg', 'Dragon Egg', 5, description, ALLOWED.ROOK, 1500);
         this.linked_piece = new Dragon(color);
     }
