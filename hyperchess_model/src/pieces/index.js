@@ -11,7 +11,11 @@ import Archimage from './Archimage'
 import Empress from './Empress'
 import Princess from './Princess'
 import FearfulPawn from './FearfulPawn'
+import { PixelPawn, PixelRook, PixelKnight, PixelBishop, PixelQueen, PixelKing} from './Pixel'
 import { PlagueOne, PlagueThree, PlagueFive, PlagueNine } from './Plague'
+import DragonEgg from './DragonEgg'
+import Reaper from './Reaper'
+import GuardianPawn from './GuardianPawn'
 
 export const PIECE_MAPPING = {
     "ClassicBishop": ClassicBishop,
@@ -30,5 +34,14 @@ export const PIECE_MAPPING = {
     "PlagueOne" : PlagueOne,
     "PlagueThree" : PlagueThree,
     "PlagueFive" : PlagueFive,
-    "PlagueNine" : PlagueNine
+    "PlagueNine" : PlagueNine,
+    "PixelBishop": PixelBishop,
+    "PixelPawn": PixelPawn,
+    "PixelRook": PixelRook,
+    "PixelKnight": PixelKnight,
+    "PixelKing": PixelKing,
+    "PixelQueen": PixelQueen,
+    "DragonEgg": DragonEgg,
+    "Reaper": Reaper,
+    "GuardianPawn" : GuardianPawn
  }

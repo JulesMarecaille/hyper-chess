@@ -6,10 +6,14 @@ import { Loader } from '../../navigation';
 import { FaChessPawn, FaChessKing, FaChessQueen, FaChessRook, FaChessKnight, FaChessBishop } from 'react-icons/fa';
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
+import Square from '../../chess/Square.js'
+import BehaviorDisplay from './BehaviorDisplay.js'
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 class ViewShopPiece extends React.Component {
     constructor(props){
-        super(props)
+        super(props);
         this.state={
             is_loading: false
         }
@@ -62,6 +66,15 @@ class ViewShopPiece extends React.Component {
         return positions;
     }
 
+    drawLinkedBehavior(piece){
+        if (piece.linked_piece){
+            let return_behavior = [];
+            return_behavior.push(<div className="name-container"><div class="name">{piece.linked_piece.label}</div>{piece.linked_piece.description}</div>);
+            return_behavior.push(<BehaviorDisplay piece={piece.linked_piece}/>);
+            return (return_behavior);
+        }
+    }
+
     render() {
         let content = <Loader/>
         if(!this.state.is_loading){
@@ -83,7 +96,6 @@ class ViewShopPiece extends React.Component {
             } else {
                 buy = <div class="owned">Owned</div>
             }
-            console.log(new PIECE_MAPPING[this.props.piece.name](BLACK))
             content = (
                 <div class="shop-piece-container">
                     <div class="main">
@@ -103,14 +115,18 @@ class ViewShopPiece extends React.Component {
                             {buy}
                         </div>
                     </div>
-                    <div class="sub">
-                        <div class="description">
-                            {this.props.piece.description}
+                    <PerfectScrollbar className="shop-piece-container">
+                        <div class="sub detail-container">
+                            <div class="description">
+                                {this.props.piece.description}
+                            </div>
+                            <BehaviorDisplay piece={this.props.piece}/>
+                            {this.drawLinkedBehavior(this.props.piece)}
                         </div>
-                    </div>
-                    <div class="bottom">
-                        <div class="button" onClick={this.props.onReturn.bind(this, null)}>Back</div>
-                    </div>
+                        <div class="bottom">
+                            <div class="button" onClick={this.props.onReturn.bind(this, null)}>Back</div>
+                        </div>
+                    </PerfectScrollbar>
                 </div>
             );
         }

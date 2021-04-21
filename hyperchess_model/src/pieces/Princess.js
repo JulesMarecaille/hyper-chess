@@ -9,9 +9,9 @@ class Princess extends Piece{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 7, 3, 7, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 7, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 3, 3, 7, 0, 7, 3, 3, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 7, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 7, 0, 3, 0, 7, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 3, 3, 3, 0, 3, 3, 3, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 7, 0, 3, 0, 7, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 7, 3, 7, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -19,8 +19,8 @@ class Princess extends Piece{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "Similar to the Empress but with a limited range on the straight lines.";
-		super(color, behavior, 'Princess', 'Princess', 7, description, ALLOWED.ROOK, 200);
-		this.rockable = true;
+		super(color, behavior, 'Princess', 'Princess', 7, description, ALLOWED.ROOK, 250);
+		this.can_castel = true;
 	}
 }
 

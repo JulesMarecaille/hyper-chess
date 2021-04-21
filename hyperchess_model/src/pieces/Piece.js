@@ -1,4 +1,4 @@
-import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK} from '../constants'
+import { WHITE, BLACK, SQUARES, ALLOWED, ALLOWED_MAPPING, MOVE_MASK, COLORS_NAME } from '../constants'
 import {PIECE_MAPPING} from './index.js'
 
 function reverseBehavior(table){
@@ -24,7 +24,7 @@ class Piece{
 	//
 	constructor(color, behavior, name, label, value, description, allowed, cost){
 		this.value = value;
-		this.rockable = false;
+		this.can_castel = false;
 		this.behavior = behavior;
 		this.behavior_size = 239;
 		this.behavior_offset = (this.behavior_size - 1) / 2;
@@ -33,17 +33,21 @@ class Piece{
 		this.is_pawn = false;
 		this.can_be_eaten = true;
 		this.name = name;
+		this.color = color;
+		this.image = "/assets/pieces/" + name + COLORS_NAME[color] + ".svg";
 		this.label = label;
 		this.allowed = allowed;
-    	this.color = color;
 		this.moved = false;
+		this.mark = null;
+		this.is_mark = false;
+		this.is_deadly = false;
+		this.linked_square = -1;
 		this.description = description;
 		this.set_name = "No set";
 		this.display_number = null;
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
-		this.image = "Error";
   	}
 
 	makeAction(move, selection){//will return a new, altered move to do according to the selection
@@ -56,6 +60,11 @@ class Piece{
 
 	getDisplayNumber(){
 		return this.display_number;
+	}
+
+	//some pieces can check where they cannot go
+	getLegalCheckSquares(board, square, last_move, is_rock_check = true){
+		return this.getLegalSquares(board, square, last_move, is_rock_check = true);
 	}
 	//pour une BOARD donnée et une case SQUARE donnée, verifie toute les cases atteignables
 	//return une liste de case possible sous forme texte.
@@ -79,23 +88,30 @@ class Piece{
 	// return le nom de la case si possible, null sinon
 	checkAvailableSquare(pos, index, board, last_move, is_rock_check){
 		let target_pos = this.getTargetPos(index, pos);
-		if ((this.behavior[index] && this.isOnBoard(target_pos))){
+		if (this.behavior[index] && this.isOnBoard(target_pos, board)){
 			if ((this.isAlly(board, target_pos) && this.canAttackAlly(index) && this.isEdible(board, target_pos) && !this.isKing(board, target_pos))
 				|| (this.isEnemy(board, target_pos) && this.canAttack(index) && this.isEdible(board, target_pos))
-				|| (this.isEmpty(board, target_pos) && this.canMove(index)))
+				|| (this.isEmpty(board, target_pos) && this.canMove(index) && !(this.is_king && this.isDeadly(board, target_pos))))
 			{
 				if (this.canSeeThrough(index) || this.isInSight(board, pos, target_pos)){
 					return (target_pos);
 				}
 			}
-			if (is_rock_check && this.isRockable(board, target_pos, pos, index, last_move)){
+			if (is_rock_check && this.CanCastel(board, target_pos, pos, index, last_move)){
 				return (target_pos);
 			}
-			if (this.checkPassant(board, target_pos, pos, last_move)){
+			if (this.checkPassant(board, target_pos, pos, last_move) && this.canAttack(index)){
+				return (target_pos);
+			}
+			if (this.canMoveSpecial(index) && this.isSpecialPossible(board, target_pos, pos)){
 				return (target_pos);
 			}
 		}
 		return -1;
+	}
+
+	updateStatusFromBoard(board, square){
+		return board;
 	}
 
 	checkPassant(board, target_pos, pos, last_move){//to be overwrite by pawn
@@ -122,11 +138,27 @@ class Piece{
 		return target & MOVE_MASK.MOVE;
 	}
 
+	canMoveSpecial(index){
+		let target = this.behavior[index];
+		return target & MOVE_MASK.SPECIAL_MOVE;
+	}
+
 	isEdible(board, target_pos){
 		return board[target_pos].can_be_eaten;
 	}
 
-	isRockable(board, target_pos, pos){
+	isSpecialPossible(board, target_pos, pos){
+		return false;
+	}
+
+	isDeadly(board, target_pos){
+		if (board[target_pos]){
+			return board[target_pos].is_deadly;
+		}
+		return false;
+	}
+
+	CanCastel(board, target_pos, pos){
 		return (false);
 	}
 
@@ -134,10 +166,11 @@ class Piece{
 		return board[target_pos].is_king;
 	}
 
-	isOnBoard(pos){
+	isOnBoard(pos, board){
+		let board_width = Math.sqrt(board.length / 2);
 		if (pos < 0
-			|| pos > 127
-			|| pos % 16 > 7){
+			|| pos > board.length - board_width
+			|| pos % (board_width * 2) >= board_width){
 			return false;
 		}
 		return true;
@@ -148,24 +181,28 @@ class Piece{
 	}
 
 	isEmpty(board, target_pos){
-		return board[target_pos] ? false : true;
+		if (board[target_pos] && !board[target_pos].is_mark){
+			return false;
+		}
+		return true;
 	}
 
 	isAlly(board, target_pos){
-		return (board[target_pos] && board[target_pos].color === this.color);
+		return (board[target_pos] && board[target_pos].color === this.color && !board[target_pos].is_mark);
 	}
 
 	isEnemy(board, target_pos){
-		return (board[target_pos] && board[target_pos].color !== this.color);
+		return (board[target_pos] && board[target_pos].color !== this.color && !board[target_pos].is_mark);
 	}
 
 
 	isInSight(board, pos, target_pos){
-		if (pos % 8 === target_pos % 8 && this.isInSightCol(board, pos, target_pos)){
+		let board_width = Math.sqrt(board.length / 2);
+		if (pos % board_width === target_pos % board_width && this.isInSightCol(board, pos, target_pos)){
 			return true;
-		} else if (Math.abs(pos - target_pos) < 8 && this.isInSightLine(board, pos, target_pos)){
+		} else if (Math.abs(pos - target_pos) < board_width && this.isInSightLine(board, pos, target_pos)){
 			return true;
-		} else if (	Math.abs(Math.floor(pos / 16) - Math.floor(target_pos / 16)) == Math.abs(pos % 8 - target_pos % 8)
+		} else if (	Math.abs(Math.floor(pos / (board_width * 2)) - Math.floor(target_pos / (board_width * 2))) == Math.abs(pos % board_width - target_pos % board_width)
 					&& this.isInSightDiag(board, pos, target_pos)){
 			return true;
 		}
@@ -173,13 +210,14 @@ class Piece{
 	}
 
 	isInSightCol(board, pos, target_pos){
-		let min = Math.min(pos, target_pos) + 16;
+		let board_width = Math.sqrt(board.length / 2);
+		let min = Math.min(pos, target_pos) + board_width * 2;
 		let max = Math.max(pos, target_pos);
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
-			min += 16;
+			min += board_width * 2;
 		}
 		return true;
 	}
@@ -188,7 +226,7 @@ class Piece{
 		let min = Math.min(pos, target_pos) + 1;
 		let max = Math.max(pos, target_pos);
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
 			min += 1;
@@ -197,17 +235,18 @@ class Piece{
 	}
 
 	isInSightDiag(board, pos, target_pos){
+		let board_width = Math.sqrt(board.length / 2);
 		let min = Math.min(pos, target_pos);
 		let max = Math.max(pos, target_pos);
 		let increment;
-		if (min % 8 > max % 8){
-			increment = 15;
+		if (min % board_width > max % board_width){
+			increment = board_width * 2 - 1;
 		} else {
-			increment = 17;
+			increment = board_width * 2 + 1;
 		}
 		min += increment;
 		while (min < max){
-			if (board[min]){
+			if (board[min] && !board[min].is_mark){
 				return false;
 			}
 			min += increment;
@@ -215,8 +254,25 @@ class Piece{
 		return true;
 	}
 
+	deleteElementFromMove(move, board){
+		if (board[move.to]){//si la pièce est toujours la
+			board = board[move.to].deleteElementFromSquare(move.to, board);
+		}
+		return board;
+	}
+
+	deleteElementFromSquare(square, board){
+		if (this.can_be_eaten){
+			board[square] = null;
+		}
+		return board;
+	}
+
 	move(move, board, last_move){
 		this.moved = true;
+		if (board[move.to]){
+			board = board[move.to].deleteElementFromMove(move, board);
+		}
 		board[move.to] = board[move.from];
 		board[move.from] = null;
 		if (move.action){

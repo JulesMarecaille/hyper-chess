@@ -1,19 +1,20 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants'
 
-function isSquareChecked(board, square, color, last_move){
+function canNotBeCrossedForCastle(board, square, color, last_move){
 	let index = 0;
 	let list = [];
 
-	while (index < 128)
-	{
-		if (board[index] && board[index].color !== color && board[index])
-		{
+	while (index < 128){
+		if (board[index] && board[index].color !== color && board[index]){
 			list = board[index].getLegalSquares(board, index, last_move, 0);
 			if (list.includes(square))
 				return (true);
 		}
 		index++;
+	}
+	if (board[square] && board[square].is_mark){
+		return true;
 	}
 	return false;
 }
@@ -26,9 +27,9 @@ class ClassicKing extends Piece{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 16, 7, 0, 7, 16, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 16, 3, 0, 3, 16, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -41,14 +42,14 @@ class ClassicKing extends Piece{
 		this.set_name = "Classic"
 	}
 
-	isRockable(board, target_pos, pos, index, last_move){
+	CanCastel(board, target_pos, pos, index, last_move){
 		let target = this.behavior[index];
 		if (target & (1 << 4) && !this.moved){
 			let mate;
 			if (target_pos < pos){
 				mate = board[target_pos - 2];
 				for (let k = 1; k <  4; k++){
-					if (isSquareChecked(board, pos - k, this.color, last_move)
+					if (canNotBeCrossedForCastle(board, pos - k, this.color, last_move)
 						|| !this.isEmpty(board, pos - k))
 					{
 						return false;
@@ -57,7 +58,7 @@ class ClassicKing extends Piece{
 			} else {
 				mate = board[target_pos + 1];
 				for (let k = 1; k <  3; k++){
-					if (isSquareChecked(board, pos + k, this.color, last_move)
+					if (canNotBeCrossedForCastle(board, pos + k, this.color, last_move)
 						|| !this.isEmpty(board, pos + k))
 					{
 						return false;
@@ -66,9 +67,9 @@ class ClassicKing extends Piece{
 			}
 			if (!mate)
 				return false;
-			if (mate.moved || !mate.rockable)
+			if (mate.moved || !mate.can_castel)
 				return false;
-			if (isSquareChecked(board, pos))
+			if (canNotBeCrossedForCastle(board, pos))
 				return false;
 			return (true);
 		}

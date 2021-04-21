@@ -39,6 +39,11 @@ module.exports.initCollection = (connection) => {
             allowNull: false,
             defaultValue: true
         },
+        GuardianPawn: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
         Unicorn: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -91,6 +96,47 @@ module.exports.initCollection = (connection) => {
             defaultValue: false
         },
         PlagueNine: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        //Pixel Set
+        PixelKing: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        PixelQueen: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        PixelRook: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        PixelBishop: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        PixelKnight: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        PixelPawn: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        DragonEgg: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        Reaper: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false

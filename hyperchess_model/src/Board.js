@@ -44,13 +44,23 @@ class Board {
 				this.board[square] = new PIECE_MAPPING[piece_name](WHITE);
 			}
 		}
-
 		for (const [square, piece_name] of Object.entries(black_pieces)){
 			if (piece_name){
 				this.board[square] = new PIECE_MAPPING[piece_name](BLACK);
 			}
 		}
 		this.updateKingPosition();
+	}
+
+	updatePieces(){
+		let square = 0;
+		for (let piece of this.board){
+			if (piece) {
+				piece.updateStatusFromBoard(this.board, square);
+			}
+			square++;
+		}
+		return this.board;
 	}
 
 	getAction(move){
@@ -70,6 +80,7 @@ class Board {
 		let is_capture = (!!this.board[move.to]);
 		// Move the piece
 		this.board = this.board[move.from].move(move, this.board, this.getLastMove());
+		this.board = this.updatePieces();
 		this.updateHistory(move);
 		this.updateKingPosition();
 		// Change turn
@@ -148,7 +159,7 @@ function isCheckFromBoard(
 		const piece = board[square]
 		// If there's a piece on this square and this piece belongs to the player
 		if (piece && piece.color === opponent_color){
-			let piece_moves = piece.getLegalSquares(board, square, opponent_last_move);
+			let piece_moves = piece.getLegalCheckSquares(board, square, opponent_last_move);
 			if (piece_moves.includes(kings_positions[color])) {
 				return true;
 			}

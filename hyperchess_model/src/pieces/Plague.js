@@ -1,6 +1,5 @@
 import ClassicPawn from './ClassicPawn.js'
 import {ALLOWED} from '../constants'
-import {PIECE_MAPPING} from './index.js'
 
 class Plague extends ClassicPawn{
 	constructor(color,
@@ -14,7 +13,7 @@ class Plague extends ClassicPawn{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 14, 13, 14, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 26, 25, 26, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -30,7 +29,7 @@ class Plague extends ClassicPawn{
         this.description = description;
         this.allowed = allowed;
 		this.value = size;
-        this.cost = 400;
+        this.cost = 750;
 		this.display_number = size;
 		this.image = null;
 		this.is_type_plague = true;
@@ -59,7 +58,7 @@ class Plague extends ClassicPawn{
 
 	checkAvailableSquare(pos, index, board, last_move){
 		let target_pos = this.getTargetPos(index, pos);
-		if ((this.behavior[index] && this.isOnBoard(target_pos))){
+		if ((this.behavior[index] && this.isOnBoard(target_pos, board))){
 			if ((this.isAlly(board, target_pos)
 					&& this.canAttackAlly(index)
 					&& this.isPlague(board, target_pos)
@@ -88,10 +87,11 @@ class Plague extends ClassicPawn{
 		this.moved = true;
 		let the_rest = null;
 		let size;
+		let board_width = Math.sqrt(board.length / 2);
 		if (this.checkPassant(board, move.to, move.from, last_move)){
 			board[last_move.to] = null;
 		}
-		if (move.from % 8 != move.to % 8 && board[move.from].size !== 1){
+		if (move.from % board_width !== move.to % board_width && board[move.from].size !== 1){
 			size = board[move.from].size;
 			this.actualizePlague(board[move.from], Math.floor(size / 2));
 			the_rest = new Plague(this.color, size - board[move.from].size);
@@ -100,11 +100,8 @@ class Plague extends ClassicPawn{
         if (this.isPlague(board, move.to) && this.isAlly(board, move.to)){
 			this.actualizePlague(board[move.from], board[move.from].size + board[move.to].size);
 		}
-		board[move.to] = board[move.from];
-		board[move.from] = the_rest;
-		if (move.action && move.action.into){
-			board[move.to] = new PIECE_MAPPING[move.action.into](board[move.to].color);
-		}
+		board = super.move(move, board, last_move);
+		board[move.from] = the_rest; //replace the rest of the plague
 		return board;
 	}
 }
