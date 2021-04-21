@@ -124,8 +124,8 @@ class BehaviorDisplay extends React.Component {
             <div className="chessboard-container"><table className="chess-board">
                 <tr>{this.drawSquareOptionColor("green", "dark")}<span className="comment">Can move on square</span></tr>
                 <tr>{this.drawSquareOptionColor("red", "light")}<span className="comment">Can attack on square</span></tr>
-                <tr>{this.drawSquareOptionColor("yellow", "dark")}<span className="comment">Can jump over on square</span></tr>
-                <tr>{this.drawSquareOptionColor("blue", "light")}<span className="comment">Can do a special action on square</span></tr>
+                <tr>{this.drawSquareOptionColor("yellow", "dark")}<span className="comment">Jump over on square</span></tr>
+                <tr>{this.drawSquareOptionColor("blue", "light")}<span className="comment">Do a special action on square</span></tr>
             </table></div>
         );
     }
