@@ -47,11 +47,11 @@ class DragonEgg extends Piece {
         return true;
     }
 
-    updateStatusFromBoard(board, square){
+    updateStatusFromBoard(board, square, game_events, nbr_captures){
         if (this.isSurroundedByPieces(board, square)){
             board[square] = this.linked_piece;
         }
-        return board;
+        return this.getMoveResult(board, nbr_captures, game_events);
     }
 }
 
@@ -106,18 +106,24 @@ class Dragon extends Piece {
         return legal_squares;
 	}
 
-    move(move, board, last_move){
+    move(move, board, last_move, game_events){
+        let nb_captures = !this.isEmpty(board, move.to) ? 1 : 0;
+        if (board[move.to]){
+            board = board[move.to].deleteElementFromMove(move, board);
+        }
         let squares_passed = squaresPassed(move);
         squares_passed.push(move.to);
-        squares_passed.forEach((square, i) => {
+        squares_passed(move).forEach((square, i) => {
             if (board[square] && board[square].can_be_eaten){
                 board = board[square].deleteElementFromSquare(square, board);
+                nb_captures += 1;
             }
         });
         if (distanceFromMove(move, board) <= 1){
-            board = super.move(move, board, last_move);
+            board[move.to] = board[move.from];
+            board[move.from] = null;
         }
-        return board;
+        return this.getMoveResult(board, nb_captures, game_events);
     }
 }
 

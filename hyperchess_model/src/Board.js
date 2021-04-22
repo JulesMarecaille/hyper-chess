@@ -14,6 +14,7 @@ class Board {
 		this.game_over = false;
 		this.is_draw = false;
 		this.winner = null;
+		this.game_events = {}
 		this.initializeBoard(this.player_white, this.player_black);
 	}
 
@@ -50,17 +51,18 @@ class Board {
 			}
 		}
 		this.updateKingPosition();
+		this.game_events = getDefaultGameEvents();
 	}
 
-	updatePieces(){
+	updatePieces(move_result){
 		let square = 0;
-		for (let piece of this.board){
+		for (let piece of board){
 			if (piece) {
-				piece.updateStatusFromBoard(this.board, square);
+				move_result = piece.updateStatusFromBoard(move_result.board.board, square, move_result.game_events, move_results.nbr_captures);
 			}
 			square++;
 		}
-		return this.board;
+		return move_result;
 	}
 
 	getAction(move){
@@ -76,13 +78,16 @@ class Board {
 		if (this.game_over){
 			return this.game_over, this.is_draw, this.winner, false, false;
 		}
-		// Check if this move captures a piece
-		let is_capture = (!!this.board[move.to]);
+
 		// Move the piece
-		this.board = this.board[move.from].move(move, this.board, this.getLastMove());
-		this.board = this.updatePieces();
+		let move_result = this.board[move.from].move(move, this.board, this.getLastMove(), this.game_events);
+		move_result = this.updatePieces(move_result);
+		this.board = move_result.board;
+		this.board = this.updatePieces();//move result ? include into move ?
+		let nb_captures = move_result.nb_captures;
 		this.updateHistory(move);
 		this.updateKingPosition();
+
 		// Change turn
 		this.color_to_move = swapColor(this.color_to_move);
 		let is_check = this.is_check[this.color_to_move];
@@ -90,7 +95,15 @@ class Board {
 		let game_over = this.game_over;
 		let is_draw = this.is_draw;
 		let winner = this.winner;
+		let is_capture = (nb_captures >= 1);
 		let pack = {game_over, is_draw, winner, is_capture, is_check};
+
+		// Events
+		this.game_events = move_result.game_events;
+		if(is_check){
+			this.game_events[swapColor(this.color_to_move)]["GiveCheck"] += 1;
+		}
+		this.game_events[swapColor(this.color_to_move)]["CapturePiece"] += nb_captures;
 		return pack;
 	}
 
@@ -118,6 +131,7 @@ class Board {
 			if (is_checkmate){
 				// The winner made the last move
 				this.winner = swapColor(this.color_to_move);
+				this.game_events[this.winner]["GiveCheckmate"] += 1;
 			} else {
 				this.is_draw = true
 			}
@@ -134,10 +148,7 @@ class Board {
 	}
 
 	getEvents(){
-		let events = {};
-		events[WHITE] = {"PlayGame" : 1}
-		events[BLACK] = {"PlayGame" : 1}
-		return events;
+		return this.game_events;
 	}
 
 	static buildFromHistory(deck_white, deck_black, history){
@@ -171,7 +182,8 @@ function isCheckFromBoard(
 function isMoveStillLegalFromBoard(board, kings_positions, move, opponent_last_move, piece){
 	let tmp_board = cloneDeep(board)
 	let tmp_kings_positions = cloneDeep(kings_positions)
-	tmp_board = tmp_board[move.from].move(move, tmp_board, opponent_last_move);
+	let move_result = tmp_board[move.from].move(move, tmp_board, opponent_last_move, getDefaultGameEvents());
+	tmp_board = move_result.board;
 	// The king can escape
 	if (piece.is_king){
 		tmp_kings_positions[piece.color] = move.to;
@@ -259,6 +271,20 @@ function getLegalMovesFromPlayerFromBoard(
 		}
 	}
 	return all_legal_moves;
+}
+
+function getDefaultGameEvents(){
+	let game_events = {}
+	let default_events = {
+		"PlayGame": 1,
+		"GiveCheck": 0,
+		"CapturePiece": 0,
+		"PromotePawn": 0,
+		"GiveCheckmate": 0
+	}
+	game_events[WHITE] = {...default_events}
+	game_events[BLACK] = {...default_events}
+	return game_events
 }
 
 export default Board

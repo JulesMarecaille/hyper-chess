@@ -195,7 +195,6 @@ class Piece{
 		return (board[target_pos] && board[target_pos].color !== this.color && !board[target_pos].is_mark);
 	}
 
-
 	isInSight(board, pos, target_pos){
 		let board_width = Math.sqrt(board.length / 2);
 		if (pos % board_width === target_pos % board_width && this.isInSightCol(board, pos, target_pos)){
@@ -268,8 +267,9 @@ class Piece{
 		return board;
 	}
 
-	move(move, board, last_move){
+	move(move, board, last_move, game_events){
 		this.moved = true;
+		let nb_captures = this.isEmpty(board, move.to) ? 0 : 1
 		if (board[move.to]){
 			board = board[move.to].deleteElementFromMove(move, board);
 		}
@@ -277,11 +277,23 @@ class Piece{
 		board[move.from] = null;
 		if (move.action){
 			if (move.action.into){ //transformation
+				if(board[move.to].is_pawn){
+					game_events[board[move.to].color]["PromotePawn"] += 1;
+				}
 				board[move.to] = new PIECE_MAPPING[move.action.into](board[move.to].color);
 			}
 			// <- other kind of global action
 		}
-		return board;
+		return this.getMoveResult(board, nb_captures, game_events);
+	}
+
+	getMoveResult(board, nb_captures, game_events){
+		let move_result = {
+			board: board,
+			nb_captures: nb_captures,
+			game_events: game_events
+		}
+		return move_result;
 	}
 }
 

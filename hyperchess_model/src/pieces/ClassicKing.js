@@ -76,8 +76,9 @@ class ClassicKing extends Piece{
 		return (false);
 	}
 
-	move(move_struct, board){
-		board = super.move(move_struct, board);
+	move(move_struct, board, last_move, game_events){
+		let move_result = super.move(move_struct, board, last_move, game_events);
+		board = move_result.board;
 		if (Math.abs(move_struct.to - move_struct.from) === 2){
 			if (move_struct.to > move_struct.from){
 				board[move_struct.to - 1] = board[move_struct.to + 1];
@@ -87,7 +88,7 @@ class ClassicKing extends Piece{
 				board[move_struct.to - 2] = null;
 			}
 		}
-		return board;
+		return this.getMoveResult(board, move_result.nb_captures, move_result.game_events);
 	}
 
 }
