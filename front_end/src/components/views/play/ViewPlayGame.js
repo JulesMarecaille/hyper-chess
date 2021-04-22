@@ -499,13 +499,6 @@ class ViewPlayGame extends React.Component {
         socket.emit("playerResign", {game_id: this.props.game_id})
     }
 
-    handleGameOver(winner){
-        this.setState({
-            winner: winner,
-            is_game_over: true,
-        })
-    }
-
     closeOverlay(){
         this.setState({
             is_overlay_open: false
@@ -542,7 +535,6 @@ class ViewPlayGame extends React.Component {
                               blackPlayer={this.state.players[BLACK]}
                               whiteDeck={Deck.buildFromPayload(this.state.decks[WHITE])}
                               blackDeck={Deck.buildFromPayload(this.state.decks[BLACK])}
-                              onGameOver={this.handleGameOver.bind(this)}
                               onPlayerMoved={this.handlePlayerMoved.bind(this)}
                         />
                         {this.state.side === BLACK ? this.drawPlayerInfo(this.state.players[BLACK], BLACK) : this.drawPlayerInfo(this.state.players[WHITE], WHITE)}
