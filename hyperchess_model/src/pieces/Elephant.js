@@ -1,6 +1,6 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants'
-import { squaresPassed, distanceFromMove } from '../utils.js'
+import { squaresPassed, distanceTraveledFromMove } from '../utils.js'
 
 class Elephant extends Piece{
 	constructor(color){
@@ -31,7 +31,7 @@ class Elephant extends Piece{
 				to: target_square,
                 from: square,
 			};
-			if (distanceFromMove(move, board) === 3){
+			if (distanceTraveledFromMove(move, board) === 3){
             	let squares_passed = squaresPassed(move);
             	check_squares = check_squares.concat(squares_passed);
 			}

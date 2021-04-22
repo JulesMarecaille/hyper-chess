@@ -45,6 +45,7 @@ class Piece{
 		this.description = description;
 		this.set_name = "No set";
 		this.display_number = null;
+		this.pieces_linked = [];
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
@@ -110,11 +111,15 @@ class Piece{
 		return -1;
 	}
 
-	updateStatusFromBoard(board, square, game_events, nbr_captures){
-        return this.getMoveResult(board, nbr_captures, game_events);
+	//update the status of the piece related to the board_width
+	//override to update a piece on a special board configuration, exemple : DragonEgg.svg
+	updateStatusFromBoard(board, square, game_events, nb_captures){
+        return this.getMoveResult(board, nb_captures, game_events);
     }
 
-	checkPassant(board, target_pos, pos, last_move){//to be overwrite by pawn
+	//check if En Passant is possible
+	//override in Pawn classes, exemple : ClassicPawn.svg
+	checkPassant(board, target_pos, pos, last_move){
 		return false;
 	}
 
@@ -147,6 +152,8 @@ class Piece{
 		return board[target_pos].can_be_eaten;
 	}
 
+	//Check if the targeted position for the piece in pos position ca n do a special action
+	//override to make a condition on a special move : exemple Reaper.svg, DragonEgg.svg
 	isSpecialPossible(board, target_pos, pos){
 		return false;
 	}
@@ -253,13 +260,17 @@ class Piece{
 		return true;
 	}
 
+	//deleteElementFromMove delete an element because a piece made a move on it.
+	//override to do a special action when steppedOver : exemple DeadlyMark.svg
 	deleteElementFromMove(move, board){
-		if (board[move.to]){//si la pièce est toujours la
+		if (board[move.to]){//if there is a piece
 			board = board[move.to].deleteElementFromSquare(move.to, board);
 		}
 		return board;
 	}
 
+	//deleteElementFromSquare delete an element but not related to a move.
+	//override to do a special action when the piece die : exemple Pixel.svg
 	deleteElementFromSquare(square, board){
 		if (this.can_be_eaten){
 			board[square] = null;

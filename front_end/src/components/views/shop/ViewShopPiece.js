@@ -67,12 +67,14 @@ class ViewShopPiece extends React.Component {
     }
 
     drawLinkedBehavior(piece){
-        if (piece.linked_piece){
-            let return_behavior = [];
-            return_behavior.push(<div className="name-container"><div class="name">{piece.linked_piece.label}</div>{piece.linked_piece.description}</div>);
-            return_behavior.push(<BehaviorDisplay piece={piece.linked_piece}/>);
-            return (return_behavior);
+        let return_behavior = [];
+        if (piece.pieces_linked){
+            piece.pieces_linked.forEach((piece_linked, i) => {
+                return_behavior.push(<div className="name-container"><div class="name">{piece_linked.label}</div>{piece_linked.description}</div>);
+                return_behavior.push(<BehaviorDisplay piece={piece_linked}/>);
+    		});
         }
+        return (return_behavior);
     }
 
     render() {

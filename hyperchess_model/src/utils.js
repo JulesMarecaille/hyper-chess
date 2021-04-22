@@ -1,6 +1,6 @@
 import {ALLOWED_POS, ALLOWED } from './constants'
 
-export function distanceFromMove(move, board){
+export function distanceTraveledFromMove(move, board){
 	let board_width = Math.sqrt(board.length / 2);
 	let distance_x = Math.abs(Math.floor(move.to / (board_width * 2)) - Math.floor(move.from / (board_width * 2)));
 	let distance_y = Math.abs(move.to % (board_width * 2) - move.from % (board_width * 2));
