@@ -283,9 +283,6 @@ class Game extends React.Component {
             winner: boardResponse.winner,
             is_check: boardResponse.is_check
         });
-        if (this.state.game_over){
-            this.props.onGameOver(boardResponse.winner);
-        }
     }
 
     // Rendering

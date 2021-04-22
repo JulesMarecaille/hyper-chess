@@ -72,6 +72,7 @@ class Board {
 		// Move the piece
 		let move_result = this.board[move.from].move(move, this.board, this.getLastMove(), this.game_events);
 		this.board = move_result.board;
+		this.game_events = move_result.game_events;
 		let nb_captures = move_result.nb_captures;
 		this.updateHistory(move);
 		this.updateKingPosition();
@@ -87,7 +88,6 @@ class Board {
 		let pack = {game_over, is_draw, winner, is_capture, is_check};
 
 		// Events
-		this.game_events = move_result.game_events;
 		if(is_check){
 			this.game_events[swapColor(this.color_to_move)]["GiveCheck"] += 1;
 		}
