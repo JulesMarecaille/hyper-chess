@@ -1,13 +1,34 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet'
-import DailyReward from './rewards/DailyReward';
+import { DailyReward, Missions } from './rewards';
 import PlayStats from './play/PlayStats';
 import { BiCoin } from 'react-icons/bi'
 import { MdShowChart } from 'react-icons/md';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 class ViewHome extends React.Component {
-    state = {
+    constructor(props){
+        super(props);
+        this.state={
+            rewards: null
+        }
+    }
+
+    componentWillMount(){
+        this.props.api.getUserRewards(this.props.user.id).then((rewards) => {
+            this.setState({
+                rewards: rewards
+            })
+        }).catch((err) => {
+        });
+    }
+
+    handleUpdateRewards(rewards){
+        this.setState({
+            rewards: rewards
+        })
     }
 
     render() {
@@ -19,6 +40,7 @@ class ViewHome extends React.Component {
             </Helmet>
             <div className="home-container">
                 <img src={img} className="background"></img>
+
                 <div class="box">
                     <div class="title">Welcome, {this.props.user.name}!</div>
                     <div class="content">
@@ -34,15 +56,6 @@ class ViewHome extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div class="box">
-                    <div class="title">Rewards</div>
-                    <div class="content centered">
-                        <DailyReward api={this.props.api}
-                                     user={this.props.user}
-                                     onUpdateUser={this.props.onUpdateUser}
-                                     hasTitle={false}/>
-                    </div>
-                </div>
 
                 <div class="box">
                     <div class="title">Play</div>
@@ -55,6 +68,27 @@ class ViewHome extends React.Component {
                                 </div>
                             </Link>
                         </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="title">Daily reward</div>
+                    <div class="content centered">
+                        <DailyReward api={this.props.api}
+                                     user={this.props.user}
+                                     onUpdateUser={this.props.onUpdateUser}
+                                     rewards={this.state.rewards}
+                                     hasTitle={false}/>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="title">Daily missions</div>
+                    <div class="content centered">
+                        <Missions api={this.props.api}
+                                     user={this.props.user}
+                                     onUpdateRewards={this.handleUpdateRewards.bind(this)}
+                                     rewards={this.state.rewards}/>
                     </div>
                 </div>
             </div>

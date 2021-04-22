@@ -9,6 +9,8 @@ import { BiCoin } from 'react-icons/bi'
 import { Deck } from 'hyperchess_model/lib'
 import { WHITE, BLACK, swapColor } from 'hyperchess_model/lib/constants';
 import { socket } from '../../../connection/socket';
+import { MISSION_MAPPING } from 'hyperchess_model/lib/missions';
+import { ACHIEVEMENT_MAPPING } from 'hyperchess_model/lib/achievements';
 
 class ViewPlayGame extends React.Component {
     constructor(props){
@@ -33,7 +35,8 @@ class ViewPlayGame extends React.Component {
             can_offer_rematch: true,
             offered_rematch: false,
             player_rejected_offer: false,
-            player_clicked_resign: false
+            player_clicked_resign: false,
+            rewards: null
         }
         this.game_start_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/GameStart.mp3")
         this.game_end_sound = new Audio(process.env.PUBLIC_URL + "/assets/sounds/GameEnd.mp3")
@@ -70,20 +73,28 @@ class ViewPlayGame extends React.Component {
             });
             this.game_start_sound.play()
             this.disconnection_interval_obj = null;
+            this.props.api.getUserRewards(this.props.user.id).then((rewards) => {
+                this.setState({
+                    rewards: rewards
+                })
+            }).catch((err) => {
+            });
         })
 
         socket.on("gameOver", (data) => {
-            console.log(data)
             this.setState({
                 winner: data.winner,
                 is_game_over: true,
                 time_remaining: data.time_remaining,
                 game_over_reason: data.reason,
                 elo_differences: data.elo_differences,
-                coins_won: data.coins_won
+                coins_won: data.coins_won,
+                game_events: data.game_events[this.state.side]
             })
             this.game_end_sound.play()
-            if (data.elo_differences){
+
+            // If the game wasn't canceled
+            if(data.elo_differences){
                 for(const [color, player] of Object.entries(this.state.players)){
                     this.state.players[color].elo = this.state.players[color].elo + data.elo_differences[color];
                 }
@@ -228,21 +239,7 @@ class ViewPlayGame extends React.Component {
                     <span class="info"><span class="">{this.state.players[this.state.side].elo}</span>{elo_difference_el}</span>
                 </div>);
         }
-        let update_coins = '';
-        if(this.state.coins_won && this.state.coins_won[this.state.side] > 0){
-            update_coins = (
-                <div class="update">
-                    <span class="update-title">Coins collected</span>
-                    <span class="info"><span class="info">+{this.state.coins_won[this.state.side]}</span><BiCoin class="icon-coin"/></span>
-                </div>
-            );
-        } else if (this.state.winner === this.state.side){
-            update_coins = (
-                <div class="update">
-                    <span class="limit">You've reach the maximum number of coins you can win today</span>
-                </div>
-            );
-        }
+
         let rematch_infos = '';
         if (this.state.opponent_offer_rematch){
             rematch_infos = <div class="rematch-infos">Your opponent offered a rematch.</div>
@@ -277,12 +274,107 @@ class ViewPlayGame extends React.Component {
                 {box_title}
                 <div className="content">
                     {update_elo}
-                    {update_coins}
+                    {this.drawRewards()}
                     {rematch_infos}
                     {actions}
                 </div>
             </div>
         )
+    }
+
+    drawRewards(){
+        let update_coins = []
+        let daily_wins_limit_reached = false;
+
+        // Daily coins
+        if(this.state.coins_won && this.state.coins_won[this.state.side] > 0){
+            update_coins.push(
+                <div class="entry">
+                    <div class="name">Daily wins</div>
+                    <div class="value">+{this.state.coins_won[this.state.side]}<BiCoin class="icon"/></div>
+                </div>
+            );
+        } else if (this.state.winner === this.state.side){
+            update_coins.push(
+                <div class="entry">
+                    <div class="name">Daily wins</div>
+                    <div class="limit">Limit reached</div>
+                </div>
+            );
+            daily_wins_limit_reached = true;
+        }
+
+        // Missions
+        function readMission(mission_name, mission_value, update_coins, game_events){
+            let mission = new MISSION_MAPPING[mission_name](mission_value);
+            for(let event_target of mission.events_target){
+                if(game_events[event_target]){
+                    if(mission.current_value + game_events[event_target] >= mission.goal){
+                        update_coins.push(
+                            <div class="entry">
+                                <div class="name">Daily mission "{mission.label}" complete!</div>
+                                <div class="value">+{mission.reward}<BiCoin class="icon"/></div>
+                            </div>
+                        );
+                        break
+                    } else {
+                        mission.current_value += game_events[event_target]
+                    }
+                }
+            }
+            return update_coins
+        }
+
+        if(this.state.rewards.mission_1_name){
+            update_coins = readMission(this.state.rewards.mission_1_name,
+                                       this.state.rewards.mission_1_value,
+                                       update_coins,
+                                       this.state.game_events)
+        }
+
+        if(this.state.rewards.mission_2_name){
+            update_coins = readMission(this.state.rewards.mission_2_name,
+                                       this.state.rewards.mission_2_value,
+                                       update_coins,
+                                       this.state.game_events)
+        }
+
+        if(this.state.rewards.mission_3_name){
+            update_coins = readMission(this.state.rewards.mission_3_name,
+                                       this.state.rewards.mission_3_value,
+                                       update_coins,
+                                       this.state.game_events)
+        }
+
+        // Achievements
+        let all_achievements = [];
+        for(let [achievement_name, achievement_class] of Object.entries(ACHIEVEMENT_MAPPING)){
+            let achievement = new achievement_class(this.state.rewards[achievement_name]);
+            for(let event_target of achievement.events_target){
+                if(this.state.game_events[event_target]){
+                    if(achievement.getNextStep() && achievement.current_value + this.state.game_events[event_target] >= achievement.getNextStep()){
+                        update_coins.push(
+                            <div class="entry">
+                                <div class="name">Mission "{achievement.getLabel()}" complete!</div>
+                                <div class="value">+{achievement.getNextReward()}<BiCoin class="icon"/></div>
+                            </div>
+                        );
+                    }
+                    achievement.current_value += this.state.game_events[event_target]
+                }
+            }
+        }
+
+        if ((update_coins.length > 0) && !(daily_wins_limit_reached && update_coins.length === 1)){
+            return (
+                <div class="update">
+                    <span class="update-title">Coins collected</span>
+                    {update_coins}
+                </div>
+            );
+
+        }
+        return ''
     }
 
     drawWaitingScreen(){

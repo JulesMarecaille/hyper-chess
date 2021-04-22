@@ -5,6 +5,8 @@ var gameSocket;
 var io;
 var sequelize;
 const { WHITE, BLACK, MAX_DAILY_GAME_COINS, COINS_PER_WIN } = require("hyperchess_model/constants")
+const { ACHIEVEMENT_MAPPING } = require("hyperchess_model/achievements")
+const { MISSION_MAPPING } = require("hyperchess_model/missions")
 const logger = require("../logging/logger")
 
 function connection(sio, socket, sequelize_connection, user_id) {
@@ -221,7 +223,7 @@ function onRequestStats(){
 }
 
 // Utils
-async function gameOver(game_id, winner, time_remaining, reason, players, elo_differences, time, increment, nb_half_moves){
+async function gameOver(game_id, winner, time_remaining, reason, players, elo_differences, time, increment, nb_half_moves, game_events){
     try{
         const { Rewards } = require("../entities")(sequelize)
         // Give money to the winner if there's a winner and if the game wasn't canceled
@@ -247,13 +249,14 @@ async function gameOver(game_id, winner, time_remaining, reason, players, elo_di
             time_remaining: time_remaining,
             reason: reason,
             elo_differences: elo_differences,
-            coins_won: coins_won
+            coins_won: coins_won,
+            game_events: game_events
         };
         io.sockets.in(game_id).emit('gameOver', payload);
 
         // If game wasn't canceled, handle game results and user changes
         if(elo_differences){
-            gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won);
+            gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won, game_events);
         } else {
             delete games_state[game_id];
         }
@@ -275,8 +278,8 @@ function leaveGame(game_id, socket){
     socket.leave(game_id)
 }
 
-function gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won){
-    const { User, GameResult } = require("../entities")(sequelize)
+function gameResults(players, elo_differences, winner, time, increment, nb_half_moves, coins_won, game_events){
+    const { User, GameResult, Rewards } = require("../entities")(sequelize)
 
     // Store game gameResults
     let white_won = (winner === WHITE);
@@ -302,12 +305,59 @@ function gameResults(players, elo_differences, winner, time, increment, nb_half_
         number_of_half_moves: nb_half_moves
     })
 
-    // Update Elos
+
     for(const [color, player] of Object.entries(players)){
+        // Update Elos
         User.findOne({where: {id: player.id}}).then((user) => {
             user.elo += elo_differences[color];
             user.coins += coins_won[color];
-            user.save()
+
+            let evts = game_events[color]
+            // Update Missions & Achievements
+            Rewards.findOne({where: {UserId: player.id}}).then((reward) => {
+                // Achievements
+                for(let [achievement_name, achievement_class] of Object.entries(ACHIEVEMENT_MAPPING)){
+                    let achievement = new achievement_class(reward[achievement_name])
+                    for(let event_target of achievement.events_target){
+                        if(evts[event_target]){
+                            if(achievement.getNextStep() && achievement.current_value + evts[event_target] >= achievement.getNextStep()){
+                                user.coins += achievement.getNextReward()
+                            }
+                            reward[achievement_name] += evts[event_target]
+                        }
+                    }
+                }
+
+                function updateMission(mission_name_string, mission_value_string, mission_name, mission_value){
+                    let mission = new MISSION_MAPPING[mission_name](mission_value);
+                    for(let event_target of mission.events_target){
+                        if(evts[event_target]){
+                            if(mission.current_value + evts[event_target] >= mission.goal){
+                                user.coins += mission.reward
+                                reward[mission_value_string] = 0;
+                                reward[mission_name_string] = null;
+                            } else {
+                                reward[mission_value_string] += evts[event_target]
+                            }
+                        }
+                    }
+                }
+
+                // Missions
+                if(reward.mission_1_name){
+                    updateMission("mission_1_name", "mission_1_value", reward.mission_1_name, reward.mission_1_value)
+                }
+
+                if(reward.mission_2_name){
+                    updateMission("mission_2_name", "mission_2_value", reward.mission_2_name, reward.mission_2_value)
+                }
+
+                if(reward.mission_3_name){
+                    updateMission("mission_3_name", "mission_3_value", reward.mission_3_name, reward.mission_3_value)
+                }
+                reward.save()
+                user.save()
+            })
         })
     }
 }

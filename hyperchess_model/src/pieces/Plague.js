@@ -83,26 +83,30 @@ class Plague extends ClassicPawn{
 		plagued.name = this.getNameOfSize(size);
 	}
 
-    move(move, board, last_move){
+    move(move, board, last_move, game_events){
 		this.moved = true;
 		let the_rest = null;
-		let size;
 		let board_width = Math.sqrt(board.length / 2);
+		let nb_captures = 0
 		if (this.checkPassant(board, move.to, move.from, last_move)){
 			board[last_move.to] = null;
+			nb_captures = 1;
 		}
-		if (move.from % board_width !== move.to % board_width && board[move.from].size !== 1){
-			size = board[move.from].size;
+		if (move.from % board_width != move.to % board_width && board[move.from].size !== 1){
+			let size = board[move.from].size;
 			this.actualizePlague(board[move.from], Math.floor(size / 2));
 			the_rest = new Plague(this.color, size - board[move.from].size);
 			the_rest.name = this.getNameOfSize(the_rest.size);
 		}
         if (this.isPlague(board, move.to) && this.isAlly(board, move.to)){
 			this.actualizePlague(board[move.from], board[move.from].size + board[move.to].size);
+		} else if (!this.isEmpty(board, move.to) && !this.isAlly(board, move.to)){
+			nb_captures = 1
 		}
-		board = super.move(move, board, last_move);
+		let move_result = super.move(move, board, last_move, game_events);
+		board = move_result.board;
 		board[move.from] = the_rest; //replace the rest of the plague
-		return board;
+		return this.getMoveResult(board, nb_captures, move_result.game_events);
 	}
 }
 

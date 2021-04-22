@@ -9,7 +9,9 @@
   "exports": {
     ".": "./lib/index.js",
     "./constants": "./lib/constants/index.js",
-    "./pieces": "./lib/pieces/index.js"
+    "./pieces": "./lib/pieces/index.js",
+    "./achievements": "./lib/achievements/index.js",
+    "./missions": "./lib/missions/index.js"
   },
   "author": "",
   "license": "ISC",

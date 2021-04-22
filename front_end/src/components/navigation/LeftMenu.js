@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
-import { MdHome, MdVideogameAsset, MdStore, MdPowerSettingsNew, MdPerson, MdShowChart } from 'react-icons/md';
-import { FaChessBishop } from 'react-icons/fa';
+import { MdHome, MdVideogameAsset, MdPowerSettingsNew, MdPerson, MdShowChart } from 'react-icons/md';
+import { FaChessBishop, FaAward } from 'react-icons/fa';
 import { GiLockedChest } from 'react-icons/gi';
 import { BiCoin } from 'react-icons/bi'
 import { ImTrophy } from 'react-icons/im';
+import { IoStorefrontSharp } from 'react-icons/io5';
 import { HiChevronDoubleLeft } from 'react-icons/hi';
 import '../style.css'
 import { withRouter } from 'react-router-dom';
@@ -50,8 +51,14 @@ class LeftMenu extends React.Component {
                     </Link>
                     <Link to="/shop" data-tip="Shop">
                         <div className={`entry ${this.isSelected("/shop")}`}>
-                            <MdStore className="icon"/>
+                            <IoStorefrontSharp className="icon"/>
                             <span className="name">Shop</span>
+                        </div>
+                    </Link>
+                    <Link to="/missions" data-tip="Missions">
+                        <div className={`entry ${this.isSelected("/missions")}`}>
+                            <FaAward className="icon"/>
+                            <span className="name">Missions</span>
                         </div>
                     </Link>
                     <Link to="/leaderboard" data-tip="Leaderboard">

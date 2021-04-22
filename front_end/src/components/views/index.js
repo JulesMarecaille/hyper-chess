@@ -7,6 +7,7 @@ import ViewNewAccount from './ViewNewAccount'
 import ViewProfile from './ViewProfile'
 import ViewLeaderboard from './ViewLeaderboard'
 import ViewResetPassword from './ViewResetPassword'
+import ViewRewards from './ViewRewards'
 
 export {
     ViewDecks,
@@ -17,5 +18,6 @@ export {
     ViewNewAccount,
     ViewProfile,
     ViewLeaderboard,
-    ViewResetPassword
+    ViewResetPassword,
+    ViewRewards
 }

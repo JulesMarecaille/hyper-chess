@@ -83,6 +83,10 @@ class HyperChessAPI {
         return this._get("rewards/collect_daily_reward");
     }
 
+    getNewMission(){
+        return this._get("rewards/get_new_mission");
+    }
+
     /*UTILS*/
     _get(route) {
         const that = this;

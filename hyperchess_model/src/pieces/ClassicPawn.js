@@ -44,13 +44,16 @@ class ClassicPawn extends Piece{
 		return new_move;
 	}
 
-	move(move, board, last_move){
+	move(move, board, last_move, game_events){
 		this.behavior[87] = 0;
 		this.behavior[151] = 0;
+		let nb_captures = 0
 		if (this.checkPassant(board, move.to, move.from, last_move)){
 			board[last_move.to] = null;
+			nb_captures = 1
 		}
-		return super.move(move, board, last_move);
+		let move_result = super.move(move, board, last_move, game_events)
+		return this.getMoveResult(move_result.board, move_result.nb_captures + nb_captures, move_result.game_events);
 	}
 
 	checkPassant(board, target_pos, pos, last_move){
