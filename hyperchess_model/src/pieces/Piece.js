@@ -110,9 +110,9 @@ class Piece{
 		return -1;
 	}
 
-	updateStatusFromBoard(board, square){
-		return board;
-	}
+	updateStatusFromBoard(board, square, game_events, nbr_captures){
+        return this.getMoveResult(board, nbr_captures, game_events);
+    }
 
 	checkPassant(board, target_pos, pos, last_move){//to be overwrite by pawn
 		return false;

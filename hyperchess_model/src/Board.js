@@ -56,9 +56,10 @@ class Board {
 
 	updatePieces(move_result){
 		let square = 0;
+		let board = move_result.board;
 		for (let piece of board){
 			if (piece) {
-				move_result = piece.updateStatusFromBoard(move_result.board.board, square, move_result.game_events, move_results.nbr_captures);
+				move_result = piece.updateStatusFromBoard(board, square, move_result.game_events, move_result.nbr_captures);
 			}
 			square++;
 		}
@@ -83,11 +84,9 @@ class Board {
 		let move_result = this.board[move.from].move(move, this.board, this.getLastMove(), this.game_events);
 		move_result = this.updatePieces(move_result);
 		this.board = move_result.board;
-		this.board = this.updatePieces();//move result ? include into move ?
 		let nb_captures = move_result.nb_captures;
 		this.updateHistory(move);
 		this.updateKingPosition();
-
 		// Change turn
 		this.color_to_move = swapColor(this.color_to_move);
 		let is_check = this.is_check[this.color_to_move];
@@ -97,7 +96,6 @@ class Board {
 		let winner = this.winner;
 		let is_capture = (nb_captures >= 1);
 		let pack = {game_over, is_draw, winner, is_capture, is_check};
-
 		// Events
 		this.game_events = move_result.game_events;
 		if(is_check){

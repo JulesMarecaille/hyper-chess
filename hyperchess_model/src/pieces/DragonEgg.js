@@ -113,7 +113,7 @@ class Dragon extends Piece {
         }
         let squares_passed = squaresPassed(move);
         squares_passed.push(move.to);
-        squares_passed(move).forEach((square, i) => {
+        squares_passed.forEach((square, i) => {
             if (board[square] && board[square].can_be_eaten){
                 board = board[square].deleteElementFromSquare(square, board);
                 nb_captures += 1;
