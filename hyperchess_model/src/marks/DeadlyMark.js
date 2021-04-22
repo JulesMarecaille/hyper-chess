@@ -17,9 +17,9 @@ class DeadlyMark extends Mark{
     }
 
     deleteElementFromSquare(square, board){
-		if (this.can_be_eaten){
-			board[square] = null;
-		}
+        if (this.can_be_eaten){
+            board[square] = null;
+        }
         if (this.linked_square >= 0 && board[this.linked_square]){
             board[this.linked_square].linked_square = -1;
         }

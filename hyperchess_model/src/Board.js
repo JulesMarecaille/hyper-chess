@@ -271,7 +271,7 @@ function getLegalMovesFromPlayerFromBoard(
 	return all_legal_moves;
 }
 
-function getDefaultGameEvents(){
+export function getDefaultGameEvents(){
 	let game_events = {}
 	let default_events = {
 		"PlayGame": 1,

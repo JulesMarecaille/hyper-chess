@@ -26,18 +26,18 @@ class Elephant extends Piece{
 	getLegalCheckSquares(board, square, last_move, is_rock_check = true){
 		let legal_squares = this.getLegalSquares(board, square, last_move, is_rock_check = true);
         let check_squares = [];
-        legal_squares.forEach((target_square, i) => {
-            let move = {
-                to: target_square,
+		legal_squares.forEach((target_square, i) => {
+			let move = {
+				to: target_square,
                 from: square,
-            };
+			};
 			if (distanceFromMove(move, board) === 3){
             	let squares_passed = squaresPassed(move);
             	check_squares = check_squares.concat(squares_passed);
 			}
-        });
-        legal_squares = legal_squares.concat(check_squares);
-        return legal_squares;
+		});
+		legal_squares = legal_squares.concat(check_squares);
+		return legal_squares;
 	}
 
     move(move, board, last_move, game_events){

@@ -107,10 +107,7 @@ class Dragon extends Piece {
 	}
 
     move(move, board, last_move, game_events){
-        let nb_captures = !this.isEmpty(board, move.to) ? 1 : 0;
-        if (board[move.to]){
-            board = board[move.to].deleteElementFromMove(move, board);
-        }
+        let nb_captures = 0;
         let squares_passed = squaresPassed(move);
         squares_passed.push(move.to);
         squares_passed.forEach((square, i) => {

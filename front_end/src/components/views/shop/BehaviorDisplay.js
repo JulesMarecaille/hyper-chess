@@ -2,20 +2,7 @@ import React from 'react'
 import Square from '../../chess/Square.js'
 import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
-
-function getDefaultGameEvents(){
-	let game_events = {}
-	let default_events = {
-		"PlayGame": 1,
-		"GiveCheck": 0,
-		"CapturePiece": 0,
-		"PromotePawn": 0,
-		"GiveCheckmate": 0
-	}
-	game_events[WHITE] = {...default_events}
-	game_events[BLACK] = {...default_events}
-	return game_events
-}
+import { getDefaultGameEvents } from 'hyperchess_model/lib/Board.js'
 
 class BehaviorDisplay extends React.Component {
     constructor(props){
