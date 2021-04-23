@@ -45,6 +45,7 @@ class Piece{
 		this.description = description;
 		this.set_name = "No set";
 		this.display_number = null;
+		this.pieces_linked = [];
 		if (this.color === BLACK){
 			this.behavior = reverseBehavior(this.behavior);
 		}
@@ -60,6 +61,11 @@ class Piece{
 
 	getDisplayNumber(){
 		return this.display_number;
+	}
+
+	//some pieces can check where they cannot go
+	getLegalCheckSquares(board, square, last_move, is_rock_check = true){
+		return this.getLegalSquares(board, square, last_move, is_rock_check = true);
 	}
 	//pour une BOARD donnée et une case SQUARE donnée, verifie toute les cases atteignables
 	//return une liste de case possible sous forme texte.
@@ -95,14 +101,25 @@ class Piece{
 			if (is_rock_check && this.CanCastel(board, target_pos, pos, index, last_move)){
 				return (target_pos);
 			}
-			if (this.checkPassant(board, target_pos, pos, last_move)){
+			if (this.checkPassant(board, target_pos, pos, last_move) && this.canAttack(index)){
+				return (target_pos);
+			}
+			if (this.canMoveSpecial(index) && this.isSpecialPossible(board, target_pos, pos)){
 				return (target_pos);
 			}
 		}
 		return -1;
 	}
 
-	checkPassant(board, target_pos, pos, last_move){//to be overwrite by pawn
+	//update the status of the piece related to the board_width
+	//override to update a piece on a special board configuration, exemple : DragonEgg.svg
+	updateStatusFromBoard(board, square, game_events, nb_captures){
+        return this.getMoveResult(board, nb_captures, game_events);
+    }
+
+	//check if En Passant is possible
+	//override in Pawn classes, exemple : ClassicPawn.svg
+	checkPassant(board, target_pos, pos, last_move){
 		return false;
 	}
 
@@ -126,8 +143,19 @@ class Piece{
 		return target & MOVE_MASK.MOVE;
 	}
 
+	canMoveSpecial(index){
+		let target = this.behavior[index];
+		return target & MOVE_MASK.SPECIAL_MOVE;
+	}
+
 	isEdible(board, target_pos){
 		return board[target_pos].can_be_eaten;
+	}
+
+	//Check if the targeted position for the piece in pos position ca n do a special action
+	//override to make a condition on a special move : exemple Reaper.svg, DragonEgg.svg
+	isSpecialPossible(board, target_pos, pos){
+		return false;
 	}
 
 	isDeadly(board, target_pos){
@@ -232,12 +260,21 @@ class Piece{
 		return true;
 	}
 
+	//deleteElementFromMove delete an element because a piece made a move on it.
+	//override to do a special action when steppedOver : exemple DeadlyMark.svg
 	deleteElementFromMove(move, board){
+		if (board[move.to]){//if there is a piece
+			board = board[move.to].deleteElementFromSquare(move.to, board);
+		}
 		return board;
 	}
 
+	//deleteElementFromSquare delete an element but not related to a move.
+	//override to do a special action when the piece die : exemple Pixel.svg
 	deleteElementFromSquare(square, board){
-		board[square] = null;
+		if (this.can_be_eaten){
+			board[square] = null;
+		}
 		return board;
 	}
 
@@ -246,9 +283,6 @@ class Piece{
 		let nb_captures = this.isEmpty(board, move.to) ? 0 : 1
 		if (board[move.to]){
 			board = board[move.to].deleteElementFromMove(move, board);
-			if (board[move.to]){//si la pièce est toujours la
-				board = board[move.to].deleteElementFromSquare(move.to, board);
-			}
 		}
 		board[move.to] = board[move.from];
 		board[move.from] = null;

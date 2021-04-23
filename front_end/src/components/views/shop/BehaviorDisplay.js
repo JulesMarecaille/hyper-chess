@@ -1,15 +1,18 @@
 import React from 'react'
 import Square from '../../chess/Square.js'
+import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
+import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
+import { getDefaultGameEvents } from 'hyperchess_model/lib/Board.js'
 
 class BehaviorDisplay extends React.Component {
     constructor(props){
         super(props);
-        this.board_len = 7; //modify to rescale
+        this.board_width = 7; //modify to rescale
         this.state={
             is_loading: false,
-            piece_position : Math.floor(this.board_len / 2) * this.board_len * 2 + Math.floor(this.board_len / 2)
+            piece_position : Math.floor(this.board_width / 2) * this.board_width * 2 + Math.floor(this.board_width / 2)
         }
-        this.board = new Array(this.board_len * this.board_len * 2);
+        this.board = new Array(this.board_width * this.board_width * 2);
         this.board[this.state.piece_position] = this.props.piece;
         this.piece = this.props.piece;
     }
@@ -19,10 +22,10 @@ class BehaviorDisplay extends React.Component {
     drawChessboard(piece){
         let chessboard = [];
         let files = [];
-        for (let i = 0; i < this.board_len; i += 1) {
+        for (let i = 0; i < this.board_width; i += 1) {
             let row = [];
-            for (let j = 0; j < this.board_len; j += 1) {
-                let square = ((i * this.board_len * 2) + j)
+            for (let j = 0; j < this.board_width; j += 1) {
+                let square = ((i * this.board_width * 2) + j)
                 let square_color = "dark"
                 if ((i + j) % 2 === 0){
                     square_color = "light"
@@ -57,7 +60,7 @@ class BehaviorDisplay extends React.Component {
     }
 
     makeMove(square){
-        if (this.isTarget(this.piece.behavior, Math.floor(square / (this.board_len * 2)), square % this.board_len)){
+        if (this.isTarget(this.piece.behavior, Math.floor(square / (this.board_width * 2)), square % this.board_width)){
             let move = {
                 to : square,
                 from : this.state.piece_position
@@ -65,7 +68,7 @@ class BehaviorDisplay extends React.Component {
             this.setState({
                 piece_position :square
             });
-            this.piece.move(move, this.board, move)
+            this.piece.move(move, this.board, move, getDefaultGameEvents());
         } else if (this.board[square]) {
             this.piece = this.board[square];
             this.setState({
@@ -77,22 +80,24 @@ class BehaviorDisplay extends React.Component {
     isTarget(behavior, i, j){
         if (!this.board[this.state.piece_position]) {return null;}
         let behavior_len = 16;
-        let square = ((i + 3 + (4 - Math.floor(this.state.piece_position / (this.board_len * 2)))) * behavior_len) + j + 3 + (4 - this.state.piece_position % this.board_len);
+        let behavior_index = ((i + 3 + (4 - Math.floor(this.state.piece_position / (this.board_width * 2)))) * behavior_len) + j + 3 + (4 - this.state.piece_position % this.board_width);
         let color = "";
-        if (behavior[square] & 2){
+        if (behavior[behavior_index] & 2){
             color += "red";
         }
-        if (behavior[square] & 1){
+        if (behavior[behavior_index] & 1){
             if (color){color += " "}
             color += "green";
         }
-        if (behavior[square] & 4){
+        if (behavior[behavior_index] & 4){
             if (color){color += " "}
             color += "yellow";
         }
-        if (behavior[square] & 16){
-            if (color){color += " "}
-            color += "blue";
+        if (behavior[behavior_index] & 16){
+            if (this.piece.isSpecialPossible(this.board, i * this.board_width * 2 + j, this.state.piece_position)){
+                if (color){color += " "}
+                color += "blue";
+            }
         }
         return (color);
     }
@@ -124,13 +129,14 @@ class BehaviorDisplay extends React.Component {
             <div className="chessboard-container"><table className="chess-board">
                 <tr>{this.drawSquareOptionColor("green", "dark")}<span className="comment">Can move on square</span></tr>
                 <tr>{this.drawSquareOptionColor("red", "light")}<span className="comment">Can attack on square</span></tr>
-                <tr>{this.drawSquareOptionColor("yellow", "dark")}<span className="comment">Jump over on square</span></tr>
-                <tr>{this.drawSquareOptionColor("blue", "light")}<span className="comment">Do a special action on square</span></tr>
+                <tr>{this.drawSquareOptionColor("yellow", "dark")}<span className="comment">Doesn't need a line of sight</span></tr>
+                <tr>{this.drawSquareOptionColor("blue", "light")}<span className="comment">Do a special action</span></tr>
             </table></div>
         );
     }
 
     render() {
+        if (!this.props.piece) {return ;}
         return (
         <React.Fragment>
             <div className="display-behavior">

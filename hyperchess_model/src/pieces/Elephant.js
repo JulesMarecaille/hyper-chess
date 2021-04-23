@@ -1,6 +1,6 @@
 import Piece from './Piece.js'
 import {ALLOWED} from '../constants'
-import { squaresPassed } from '../utils.js'
+import { squaresPassed, distanceTraveledFromMove } from '../utils.js'
 
 class Elephant extends Piece{
 	constructor(color){
@@ -23,18 +23,31 @@ class Elephant extends Piece{
 		super(color, behavior, 'Elephant', 'Elephant', 5, description, ALLOWED.ROOK, 1000);
 	}
 
+	getLegalCheckSquares(board, square, last_move, is_rock_check = true){
+		let legal_squares = this.getLegalSquares(board, square, last_move, is_rock_check = true);
+        let check_squares = [];
+		legal_squares.forEach((target_square, i) => {
+			let move = {
+				to: target_square,
+                from: square,
+			};
+			if (distanceTraveledFromMove(move, board) === 3){
+            	let squares_passed = squaresPassed(move);
+            	check_squares = check_squares.concat(squares_passed);
+			}
+		});
+		legal_squares = legal_squares.concat(check_squares);
+		return legal_squares;
+	}
+
     move(move, board, last_move, game_events){
-		this.moved = true;
-		let nb_captures = !this.isEmpty(board, move.to) ? 1 : 0
+		let nb_captures = !this.isEmpty(board, move.to) ? 1 : 0;
 		if (board[move.to]){
 			board = board[move.to].deleteElementFromMove(move, board);
-			if (board[move.to]){//si la pièce est toujours la
-				board = board[move.to].deleteElementFromSquare(move.to, board);
-			}
 		}
         squaresPassed(move).forEach((square, i) => {
             if (board[square] && board[square].can_be_eaten){
-                board[square] = null;
+                board = board[square].deleteElementFromSquare(square, board);
 				nb_captures += 1;
             }
         });

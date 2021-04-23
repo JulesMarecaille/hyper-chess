@@ -8,6 +8,8 @@ import { PIECE_MAPPING } from 'hyperchess_model/lib/pieces'
 import { WHITE, BLACK } from 'hyperchess_model/lib/constants'
 import Square from '../../chess/Square.js'
 import BehaviorDisplay from './BehaviorDisplay.js'
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 class ViewShopPiece extends React.Component {
     constructor(props){
@@ -64,6 +66,17 @@ class ViewShopPiece extends React.Component {
         return positions;
     }
 
+    drawLinkedBehavior(piece){
+        let return_behavior = [];
+        if (piece.pieces_linked){
+            piece.pieces_linked.forEach((piece_linked, i) => {
+                return_behavior.push(<div className="name-container"><div class="name">{piece_linked.label}</div>{piece_linked.description}</div>);
+                return_behavior.push(<BehaviorDisplay piece={piece_linked}/>);
+    		});
+        }
+        return (return_behavior);
+    }
+
     render() {
         let content = <Loader/>
         if(!this.state.is_loading){
@@ -104,15 +117,18 @@ class ViewShopPiece extends React.Component {
                             {buy}
                         </div>
                     </div>
-                    <div class="sub detail-container">
-                        <div class="description">
-                            {this.props.piece.description}
+                    <PerfectScrollbar className="shop-piece-container">
+                        <div class="sub detail-container">
+                            <div class="description">
+                                {this.props.piece.description}
+                            </div>
+                            <BehaviorDisplay piece={this.props.piece}/>
+                            {this.drawLinkedBehavior(this.props.piece)}
                         </div>
-                        <BehaviorDisplay piece={this.props.piece}/>
-                    </div>
-                    <div class="bottom">
-                        <div class="button" onClick={this.props.onReturn.bind(this, null)}>Back</div>
-                    </div>
+                        <div class="bottom">
+                            <div class="button" onClick={this.props.onReturn.bind(this, null)}>Back</div>
+                        </div>
+                    </PerfectScrollbar>
                 </div>
             );
         }

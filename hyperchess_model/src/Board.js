@@ -45,7 +45,6 @@ class Board {
 				this.board[square] = new PIECE_MAPPING[piece_name](WHITE);
 			}
 		}
-
 		for (const [square, piece_name] of Object.entries(black_pieces)){
 			if (piece_name){
 				this.board[square] = new PIECE_MAPPING[piece_name](BLACK);
@@ -53,6 +52,18 @@ class Board {
 		}
 		this.updateKingPosition();
 		this.game_events = getDefaultGameEvents();
+	}
+
+	updatePieces(move_result){
+		let square = 0;
+		let board = move_result.board;
+		for (let piece of board){
+			if (piece) {
+				move_result = piece.updateStatusFromBoard(board, square, move_result.game_events, move_result.nbr_captures);
+			}
+			square++;
+		}
+		return move_result;
 	}
 
 	getAction(move){
@@ -71,12 +82,12 @@ class Board {
 
 		// Move the piece
 		let move_result = this.board[move.from].move(move, this.board, this.getLastMove(), this.game_events);
+		move_result = this.updatePieces(move_result);
 		this.board = move_result.board;
 		this.game_events = move_result.game_events;
 		let nb_captures = move_result.nb_captures;
 		this.updateHistory(move);
 		this.updateKingPosition();
-
 		// Change turn
 		this.color_to_move = swapColor(this.color_to_move);
 		let is_check = this.is_check[this.color_to_move];
@@ -86,7 +97,6 @@ class Board {
 		let winner = this.winner;
 		let is_capture = (nb_captures >= 1);
 		let pack = {game_over, is_draw, winner, is_capture, is_check};
-
 		// Events
 		if(is_check){
 			this.game_events[swapColor(this.color_to_move)]["GiveCheck"] += 1;
@@ -158,7 +168,7 @@ function isCheckFromBoard(
 		const piece = board[square]
 		// If there's a piece on this square and this piece belongs to the player
 		if (piece && piece.color === opponent_color){
-			let piece_moves = piece.getLegalSquares(board, square, opponent_last_move);
+			let piece_moves = piece.getLegalCheckSquares(board, square, opponent_last_move);
 			if (piece_moves.includes(kings_positions[color])) {
 				return true;
 			}
@@ -261,7 +271,7 @@ function getLegalMovesFromPlayerFromBoard(
 	return all_legal_moves;
 }
 
-function getDefaultGameEvents(){
+export function getDefaultGameEvents(){
 	let game_events = {}
 	let default_events = {
 		"PlayGame": 1,

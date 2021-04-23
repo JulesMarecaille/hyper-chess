@@ -39,6 +39,11 @@ module.exports.initCollection = (connection) => {
             allowNull: false,
             defaultValue: true
         },
+        GuardianPawn: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
         Unicorn: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -122,6 +127,16 @@ module.exports.initCollection = (connection) => {
             defaultValue: false
         },
         PixelPawn: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        DragonEgg: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        Reaper: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
