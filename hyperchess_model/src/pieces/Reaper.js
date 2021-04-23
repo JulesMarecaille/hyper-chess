@@ -19,7 +19,7 @@ class Reaper extends Piece{
 			16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
 			16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16];
 		let description = "The Reaper can go anywhere to move or kill except for the enemy last lane. It cannot take or check the king";
-		super(color, behavior, 'Reaper', 'The Reaper', 15, description, ALLOWED.QUEEN, 6000);
+		super(color, behavior, 'Reaper', 'The Reaper', 15, description, ALLOWED.QUEEN, 6000, 0);
 	}
 
     isSpecialPossible(board, target_pos, pos){

@@ -20,7 +20,7 @@ class DragonEgg extends Piece {
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "A dragon egg that may hatch into a Dragon if surrounded by pieces.";
-		super(color, behavior, 'DragonEgg', 'Dragon Egg', 5, description, ALLOWED.ROOK, 1500);
+		super(color, behavior, 'DragonEgg', 'Dragon Egg', 5, description, ALLOWED.ROOK, 1500, 0);
         this.pieces_linked.push(new Dragon(color));
     }
 
@@ -73,7 +73,7 @@ class Dragon extends Piece {
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0];
 		let description = "A dragon that can throw a line of fire on the board at maximum range and destroying everything on its way, without moving.";
-		super(color, behavior, 'Dragon', 'Dragon', 0, description, 0, 10000);
+		super(color, behavior, 'Dragon', 'Dragon', 0, description, 0, 10000, 2);
     }
 
     isSpecialPossible(board, target_pos, pos){

@@ -24,9 +24,10 @@ class ClassicPawn extends Piece{
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		}
-		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN, 0);
+		super(color, behavior, 'ClassicPawn', 'Classic Pawn', 1, description, ALLOWED.PAWN, 0, 2);
 		this.is_pawn = true;
-		this.set_name = "Classic"
+		this.set_name = "Classic";
+		this.can_promote = true;
 	}
 
 	getAction(move){
