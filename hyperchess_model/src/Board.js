@@ -14,10 +14,11 @@ class Board {
 		this.game_over = false;
 		this.is_draw = false;
 		this.winner = null;
-		this.hash_log = [];
+		this.hash_map = new Map();
 		this.game_events = {};
-		this.hash_id_max = 2;
+		this.hash_id_max = 1;
 		this.nb_moves_rule = 0;
+		this.last_hash = null;//will be set in initialize board
 		this.initializeBoard(this.player_white, this.player_black);
 	}
 
@@ -55,23 +56,27 @@ class Board {
 		}
 		this.updateKingPosition();
 		this.game_events = getDefaultGameEvents();
-		this.hash_id_max = 2;//1 is used for empty squares 0 is for End of string
+		this.hash_id_max = 1;//1 is used for empty squares 0 is for End of string
 		this.nb_moves_rule = 0;
+		this.updateHashMap();//add the initial board to the hash map
 	}
 
 	customHash(){
 		let hash_result = "";
-		this.board.forEach((piece, i) => {
-			if (piece){
-				if (piece.hash_id === ""){//if the piece still doesn't have an unique id, set one
-					piece.hash_id = String.fromCharCode(this.hash_id_max);
-					this.hash_id_max++;
+		for (let i = 0; i < this.board.length; i++){
+			if (i % 16 < 8){
+				let piece = this.board[i];
+				if (piece){
+					if (piece.hash_id === ""){//if the piece still doesn't have an unique id, set one
+						piece.hash_id = String.fromCharCode(this.hash_id_max);
+						this.hash_id_max++;
+					}
+					hash_result += piece.hash_id;
+				} else {
+					hash_result += String.fromCharCode(1);
 				}
-				hash_result += piece.hash_id;
-			} else {
-				hash_result += String.fromCharCode(1);
 			}
-		});
+		}
 		return hash_result;
 	}
 
@@ -107,7 +112,7 @@ class Board {
 		this.game_events = move_result.game_events;
 		let nb_captures = move_result.nb_captures;
 		this.updateHistory(move);
-		this.updateHashBoardLog();
+		this.updateHashMap();
 		this.update50MoveRule(nb_captures, move);
 		this.updateKingPosition();
 		// Change turn
@@ -131,8 +136,13 @@ class Board {
 		this.history.push(move);
 	}
 
-	updateHashBoardLog(){
-		this.hash_log.push(this.customHash());
+	updateHashMap(){
+		this.last_hash = this.customHash();
+		let new_repetition = 1;
+		if (this.hash_map.has(this.last_hash)){
+			new_repetition += this.hash_map.get(this.last_hash).repetition;
+		}
+		this.hash_map.set(this.last_hash, {repetition : new_repetition})
 	}
 
 	update50MoveRule(nb_captures, move){
@@ -156,12 +166,7 @@ class Board {
 	}
 
 	isThereRepetitionDraw(){
-		let last_hash_board = this.hash_log[this.hash_log.length - 1];
-		let repetition = 0;
-		this.hash_log.forEach((hash_board, i) => {
-			if (hash_board === last_hash_board){ repetition++; }
-		});
-		return (repetition > 2);
+		return (this.hash_map.get(this.last_hash).repetition > 2);
 	}
 
 	isThere50MoveDraw(){
@@ -175,9 +180,9 @@ class Board {
 		this.board.forEach((piece, i) => {
 			if (piece){
 				if (piece.color === BLACK){
-					black_side_sum += piece.mat_strength;
+					black_side_sum += piece.mate_strength;
 				} else if (piece.color === WHITE){
-					white_side_sum += piece.mat_strength;
+					white_side_sum += piece.mate_strength;
 				}
 			}
 		});

@@ -22,7 +22,7 @@ class Piece{
 	//matrice des déplacement des différente pièces en bitwise : pour chaque pièce deux bits sont assigné, un de poids faible pour la capacité de se mouvoir,
 	//l'autre pour la capacité de manger. Le centre en 7,7 représente la piece, et au tour les différents codes.
 	//
-	constructor(color, behavior, name, label, value, description, allowed, cost, mat_strength=1){
+	constructor(color, behavior, name, label, value, description, allowed, cost, mate_strength=1){
 		this.value = value;
 		this.can_castel = false;
 		this.behavior = behavior;
@@ -33,7 +33,7 @@ class Piece{
 		this.is_pawn = false;
 		this.can_promote = false;
 		this.can_be_eaten = true;
-		this.mat_strength = mat_strength;
+		this.mate_strength = mate_strength;
 		this.name = name;
 		this.color = color;
 		this.image = "/assets/pieces/" + name + COLORS_NAME[color] + ".svg";
