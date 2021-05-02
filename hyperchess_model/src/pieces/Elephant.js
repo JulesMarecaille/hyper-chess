@@ -20,7 +20,7 @@ class Elephant extends Piece{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let description = "It can go up to 3 squares, the last one is a charge. It can only take a piece when he charges, and destroys everything on its way";
-		super(color, behavior, 'Elephant', 'Elephant', 5, description, ALLOWED.ROOK, 1000);
+		super(color, behavior, 'Elephant', 'Elephant', 5, description, ALLOWED.ROOK, 1000, 2);
 	}
 
 	getLegalCheckSquares(board, square, last_move, is_rock_check = true){

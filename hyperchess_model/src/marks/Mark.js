@@ -1,4 +1,5 @@
 import Piece from '../pieces/Piece.js'
+import { NEUTRAL } from '../constants' 
 
 class Mark extends Piece{
     constructor(name, label, description){
@@ -22,6 +23,7 @@ class Mark extends Piece{
         this.is_mark = true;
         this.linked_square = -1;
         this.image = "/assets/marks/" + name + ".svg";
+        this.color = NEUTRAL;
     }
 }
 

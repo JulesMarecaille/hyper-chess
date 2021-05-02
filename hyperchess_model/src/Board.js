@@ -14,7 +14,11 @@ class Board {
 		this.game_over = false;
 		this.is_draw = false;
 		this.winner = null;
-		this.game_events = {}
+		this.hash_map = new Map();
+		this.game_events = {};
+		this.hash_id_max = 1;
+		this.nb_moves_rule = 0;
+		this.last_hash = null;//will be set in initialize board
 		this.initializeBoard(this.player_white, this.player_black);
 	}
 
@@ -52,6 +56,28 @@ class Board {
 		}
 		this.updateKingPosition();
 		this.game_events = getDefaultGameEvents();
+		this.hash_id_max = 1;//1 is used for empty squares 0 is for End of string
+		this.nb_moves_rule = 0;
+		this.updateHashMap();//add the initial board to the hash map
+	}
+
+	customHash(){
+		let hash_result = "";
+		for (let i = 0; i < this.board.length; i++){
+			if (i % 16 < 8){
+				let piece = this.board[i];
+				if (piece){
+					if (piece.hash_id === ""){//if the piece still doesn't have an unique id, set one
+						piece.hash_id = String.fromCharCode(this.hash_id_max);
+						this.hash_id_max++;
+					}
+					hash_result += piece.hash_id;
+				} else {
+					hash_result += String.fromCharCode(1);
+				}
+			}
+		}
+		return hash_result;
 	}
 
 	updatePieces(move_result){
@@ -79,7 +105,6 @@ class Board {
 		if (this.game_over){
 			return this.game_over, this.is_draw, this.winner, false, false;
 		}
-
 		// Move the piece
 		let move_result = this.board[move.from].move(move, this.board, this.getLastMove(), this.game_events);
 		move_result = this.updatePieces(move_result);
@@ -87,16 +112,18 @@ class Board {
 		this.game_events = move_result.game_events;
 		let nb_captures = move_result.nb_captures;
 		this.updateHistory(move);
+		this.updateHashMap();
+		this.update50MoveRule(nb_captures, move);
 		this.updateKingPosition();
 		// Change turn
 		this.color_to_move = swapColor(this.color_to_move);
 		let is_check = this.is_check[this.color_to_move];
-		this.updateHasGameEnded();
+		let end_game_message = this.updateHasGameEnded();
 		let game_over = this.game_over;
 		let is_draw = this.is_draw;
 		let winner = this.winner;
 		let is_capture = (nb_captures >= 1);
-		let pack = {game_over, is_draw, winner, is_capture, is_check};
+		let pack = {game_over, is_draw, winner, is_capture, is_check, end_game_message};
 		// Events
 		if(is_check){
 			this.game_events[swapColor(this.color_to_move)]["GiveCheck"] += 1;
@@ -106,7 +133,26 @@ class Board {
 	}
 
 	updateHistory(move){
-		this.history.push(move)
+		this.history.push(move);
+	}
+
+	updateHashMap(){
+		this.last_hash = this.customHash();
+		let new_repetition = 1;
+		if (this.hash_map.has(this.last_hash)){
+			new_repetition += this.hash_map.get(this.last_hash).repetition;
+		}
+		this.hash_map.set(this.last_hash, {repetition : new_repetition})
+	}
+
+	update50MoveRule(nb_captures, move){
+		if (nb_captures >= 1
+			|| (this.board[move.to] && this.board[move.to].can_promote))
+		{
+			this.nb_moves_rule = 0;
+		} else {
+			this.nb_moves_rule++;
+		}
 	}
 
 	updateKingPosition(){
@@ -119,21 +165,60 @@ class Board {
 		}
 	}
 
+	isThereRepetitionDraw(){
+		return (this.hash_map.get(this.last_hash).repetition > 2);
+	}
+
+	isThere50MoveDraw(){
+		if (this.nb_moves_rule >= 50){ return true; }
+		return false;
+	}
+
+	isThereDeadPositionDraw(){
+		let black_side_sum = 0;
+		let white_side_sum = 0;
+		this.board.forEach((piece, i) => {
+			if (piece){
+				if (piece.color === BLACK){
+					black_side_sum += piece.mate_strength;
+				} else if (piece.color === WHITE){
+					white_side_sum += piece.mate_strength;
+				}
+			}
+		});
+		if (black_side_sum < 3 && white_side_sum < 3) { return true; }
+		return false;
+	}
+
 	updateHasGameEnded(){
 		let is_check = this.isCheck(this.color_to_move);
 		let is_there_a_legal_move = this.isThereALegalMoveFromPlayer(this.color_to_move);
 		let is_checkmate = !is_there_a_legal_move && is_check;
 		let is_stalemate = !is_there_a_legal_move && !is_check;
-		if (is_checkmate || is_stalemate){
+		let is_repetition_draw = this.isThereRepetitionDraw();
+		let is_50_move_draw = this.isThere50MoveDraw();
+		let is_dead_position_draw = this.isThereDeadPositionDraw();
+		if (is_checkmate || is_stalemate || is_repetition_draw || is_50_move_draw || is_dead_position_draw){
 			this.game_over = true
 			if (is_checkmate){
 				// The winner made the last move
 				this.winner = swapColor(this.color_to_move);
 				this.game_events[this.winner]["GiveCheckmate"] += 1;
+				return "By checkmate.";
 			} else {
-				this.is_draw = true
+				this.is_draw = true;
+				if (is_repetition_draw) {
+					return "By repetition.";
+				} else if (is_stalemate){
+					return "By stalemate.";
+				} else if (is_50_move_draw){
+					return "By 50-Move Rule.";
+				} else {
+					return "By dead position.";
+				}
 			}
 		}
+		return "";
 	}
 
 	isCheck(color){

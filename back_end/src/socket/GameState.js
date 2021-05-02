@@ -121,11 +121,7 @@ class GameState {
             this.is_game_over = result.game_over;
             this.winner = result.winner;
             if(this.is_game_over){
-                if(this.winner !== null){
-                    this.gameOver(this.winner, "By checkmate.")
-                } else {
-                    this.gameOver(this.winner, "By repetition.")
-                }
+                this.gameOver(this.winner, result.end_game_message);
             }
         }
     }

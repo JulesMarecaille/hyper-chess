@@ -26,6 +26,7 @@ class Plague extends ClassicPawn{
 		this.name = 'Plague';
         this.label = 'Plague';
         this.size = size;
+		this.mate_strength = size * 2;
         this.description = description;
         this.allowed = allowed;
 		this.value = size;
@@ -80,6 +81,7 @@ class Plague extends ClassicPawn{
 	actualizePlague(plagued, size){
 		plagued.size = size;
 		plagued.display_number = size;
+		plagued.mate_strength = size * 2;
 		plagued.name = this.getNameOfSize(size);
 	}
 
